@@ -4,36 +4,33 @@
   <meta charset="UTF-8">
   <title>طلب إجازة</title>
   <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body>
 
 <!-- Top Header -->
-    <header class="main-header">
-  <div class="logo">
-    <a href="home.html">
-      <img src="Logo.png" alt="مركز التعليم المستمر">
-    </a>
-  </div>
-
-  <div class="nav-right">
-    <a href="homepage.html">الرئيسية</a>
-    <span>|</span>
-    <a href="">العقود</a>
-    <span>|</span>
-    <a href="vacation-emp.html">الإجازات</a>
-  </div>
-
-  <div class="nav-left">
-    <span class="username">مشاعل الخالدي</span>
-    <span class="user-icon">👤</span>
-  </div>
-</header>
+    <header>
+    <div class="logo">
+      <img src="logo_white_no_bg.png" alt="مركز التعليم المستمر">
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="#">الرئيسية</a></li>
+        <li><a href="#">العقود</a></li>
+        <li><a href="empReq.html">الإجازات</a></li>
+      </ul>
+    </nav>
+     <div class="admin-icon">
+     <a href="login.html"><i class="fa-solid fa-user"></i> </a>
+    </div>
+  </header>
 
     
   <!-- Leave Request Form -->
   <main class="request-page">
     <h2 class="form-title">طلب إجازة</h2>
-    <form class="leave-form">
+    <form class="leave-form" action="#" method="post" onsubmit="return redirectAfterSubmit()">
       <div class="form-group">
         <label>نوع الإجازة:</label>
         <input type="radio" name="type" value="اعتيادية" id="regular">
@@ -69,8 +66,8 @@
       </div>
 
       <div class="form-buttons">
-        <button type="reset" class="cancel-button">إلغاء</button>
-        <button type="submit" class="submit-button">إرسال الطلب</button>
+        <button type="reset" class="buttons">إلغاء</button>
+        <button type="submit" class="buttons">إرسال الطلب</button>
       </div>
     </form>
   </main>
@@ -79,6 +76,16 @@
   <footer class="main-footer">
     جميع الحقوق محفوظة © مركز التعليم المستمر - جامعة الإمام عبدالرحمن بن فيصل
   </footer>
+
+  <script>
+  function redirectAfterSubmit() {
+    // إذا كنتِ ترغبين بإرسال النموذج فعلاً:
+    setTimeout(function () {
+      window.location.href = 'thankyou.html';
+    }, 100); // تأخير بسيط يسمح للنموذج بالإرسال
+    return true; // يسمح بالإرسال
+  }
+</script>
 
 </body>
 </html>
