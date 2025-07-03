@@ -12,7 +12,7 @@
 <body>
   <header>
     <div class="logo">
-      <a href="homepage.php">
+      <a href="homepage.php"></a>
       <img src="logo_white_no_bg.png" alt="مركز التعليم المستمر">
     </div>
     <nav class="main-nav">
