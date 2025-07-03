@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 02, 2025 at 12:09 PM
+-- Generation Time: Jul 03, 2025 at 10:10 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -85,6 +85,7 @@ INSERT INTO `manager` (`emp_id`, `name`, `sign`) VALUES
 --
 
 CREATE TABLE `sign` (
+  `role` varchar(15) NOT NULL,
   `emp_id` int(9) NOT NULL,
   `password` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -93,10 +94,10 @@ CREATE TABLE `sign` (
 -- Dumping data for table `sign`
 --
 
-INSERT INTO `sign` (`emp_id`, `password`) VALUES
-(111, 'Emp_111'),
-(222, 'Fin_222'),
-(333, 'Mgr_333');
+INSERT INTO `sign` (`role`, `emp_id`, `password`) VALUES
+('employee', 111, 'Emp_111'),
+('finance', 222, 'Fin_222'),
+('manager', 333, 'Mgr_333');
 
 -- --------------------------------------------------------
 
