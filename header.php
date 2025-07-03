@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <title>Saturn</title>
   <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-bGqGt43gdleZyx2yfD+w7eLEyRJ3lVZybKSKGZKMx1OvxFtUSss4co2+/qxUWL+VYYnAFcLC8K0lZqROUOYizg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+
 
 </head>
 <body>
@@ -18,11 +20,11 @@
         <li><a href="homepage.php">الرئيسية</a></li>
         <li><a href="#">العقود</a></li>
         <li><a href="empReq.php">الإجازات</a></li>
-      </ul>
+</ul>
     </nav>
-     <div class="admin-icon">
-     <a href="login.php"><i class="fa-solid fa-user"></i> </a>
-    </div>
+  <div class="admin-icon">
+    <a href="#"><i class="fa-solid fa-user"></i></a>
+  </div>
   </header>
 </body>
 </html>
