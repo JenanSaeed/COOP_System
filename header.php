@@ -8,12 +8,12 @@
 <body>
   <header>
     <div class="logo">
-      <a href="home.html">
+      <a href="homepage.php">
       <img src="logo_white_no_bg.png" alt="مركز التعليم المستمر">
     </div>
     <nav class="main-nav">
       <ul>
-        <li><a href="#">الرئيسية</a></li>
+        <li><a href="homepage.php">الرئيسية</a></li>
         <li><a href="#">العقود</a></li>
         <li><a href="empReq.php">الإجازات</a></li>
       </ul>
