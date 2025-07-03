@@ -7,27 +7,9 @@
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="main-header">
-    <div class="logo">
-      <a href="home.html">
-        <img src="Logo.png" alt="مركز التعليم المستمر">
-      </a>
-    </div>
-
-    <div class="nav-right">
-      <a href="homepage.html">الرئيسية</a>
-      <span>|</span>
-      <a href="contracts.html">العقود</a>
-      <span>|</span>
-      <a href="vacation-fin.html">الإجازات</a>
-    </div>
-
-    <div class="nav-left">
-      <span class="username">محمد القحطاني</span>
-      <span class="user-icon">👤</span>
-    </div>
-  </header>
+<?php
+  include 'header.php';
+  ?>
 
   <!-- Vacation Requests List -->
   <main class="vacation-list-page">
@@ -59,10 +41,9 @@
 
   </main>
 
-  <!-- Footer -->
-  <footer class="main-footer">
-    جميع الحقوق محفوظة © مركز التعليم المستمر - جامعة الإمام عبدالرحمن بن فيصل
-  </footer>
+<?php
+  include 'footer.php';
+  ?>
 
 </body>
 </html>

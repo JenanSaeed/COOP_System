@@ -7,27 +7,15 @@
 </head>
 <body>
 
-<header>
-    <div class="logo">
-      <img src="logo_white_no_bg.png" alt="مركز التعليم المستمر">
-    </div>
-    <nav class="main-nav">
-      <ul>
-        <li><a href="#">الرئيسية</a></li>
-        <li><a href="#">العقود</a></li>
-        <li><a href="empReq.html">الإجازات</a></li>
-      </ul>
-    </nav>
-     <div class="admin-icon">
-     <a href="login.html"><i class="fa-solid fa-user"></i> </a>
-    </div>
-  </header>
+<?php
+  include 'header.php';
+  ?>
 
   <!-- Main Vacation Section -->
   <main class="vacation-page">
     <div class="vacation-container">
       <div class="vacation-title">
-        <a href="empForm.html" class="new-vacation-link">
+        <a href="empForm.php" class="new-vacation-link">
           <h3>طلب إجازة جديدة + </h3></a>
       </div>
         
@@ -53,10 +41,9 @@
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="main-footer">
-    جميع الحقوق محفوظة © مركز التعليم المستمر - جامعة الإمام عبدالرحمن بن فيصل
-  </footer>
+<?php
+  include 'footer.php';
+  ?>
 
 </body>
 </html>

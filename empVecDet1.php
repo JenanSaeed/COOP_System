@@ -7,28 +7,9 @@
 </head>
 <body>
 
-<!-- Top Header -->
-<header class="main-header">
-  <div class="logo">
-    <a href="home.html">
-      <img src="Logo.png" alt="مركز التعليم المستمر">
-    </a>
-  </div>
-
-  <div class="nav-right">
-    <a href="homepage.html">الرئيسية</a>
-    <span>|</span>
-    <a href="">العقود</a>
-    <span>|</span>
-    <a href="vacation-emp.html">الإجازات</a>
-  </div>
-
-  <div class="nav-left">
-    <span class="username">مشاعل الخالدي</span>
-    <span class="user-icon">👤</span>
-  </div>
-</header>
-
+<?php
+  include 'footer.php';
+  ?>
 <!-- Leave Request Display -->
 <main class="request-page">
   <h2 class="form-title">طلب إجازة</h2>
@@ -61,10 +42,8 @@
   </div>
 </main>
 
-<!-- Footer -->
-<footer class="main-footer">
-  جميع الحقوق محفوظة © مركز التعليم المستمر - جامعة الإمام عبدالرحمن بن فيصل
-</footer>
-
+<?php
+  include 'footer.php';
+  ?>
 </body>
 </html>

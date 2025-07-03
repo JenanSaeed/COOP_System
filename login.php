@@ -9,21 +9,9 @@
   </head>
   
 <body>
-    <header>
-    <div class="logo">
-      <img src="logo_white_no_bg.png" alt="مركز التعليم المستمر">
-    </div>
-    <nav class="main-nav">
-      <ul>
-        <li><a href="#">الرئيسية</a></li>
-        <li><a href="#">العقود</a></li>
-        <li><a href="empReq.html">الإجازات</a></li>
-      </ul>
-    </nav>
-     <div class="admin-icon">
-     <a href="login.html"><i class="fa-solid fa-user"></i> </a>
-    </div>
-  </header>
+<?php
+  include 'header.php';
+  ?>
 
   <h2 class="form-title">تسجيل الدخول</h2>
 
@@ -38,6 +26,10 @@
     <input class="buttons" type="submit" value="تسجيل الدخول">
   </form>
   </div>
+
+  <?php
+  include 'footer.php';
+  ?>
 
 </body>
 </html>

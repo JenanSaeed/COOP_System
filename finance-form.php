@@ -7,22 +7,9 @@
   <link rel="stylesheet" href="style.css" />
 
 <body>
-    <header>
-        <div class="logo">
-          <img src="logo.png" alt="مركز التعليم المستمر">
-        </div>
-        <nav class="main-nav">
-          <ul>
-            <li><a href="#">الرئيسية</a></li>
-            <li><a href="#">العقود</a></li>
-            <li><a href="#">الإجازات</a></li>
-          </ul>
-        </nav>
-        <div class="admin-icon">
-            <span class="username">الجوهرة الغامدي</span>
-            <span class="user-icon">👤</span>
-        </div>
-      </header>
+    <?php
+  include 'header.php';
+  ?>
     
 
   <!-- Main Content -->
@@ -57,16 +44,15 @@
       </div>
 
       <div class="form-buttons">
-        <button type="button" class="buttons">عودة</button>
-        <button type="submit" class="buttons">اعتماد</button>
+        <button type="submit" class="submit-button">إرسال الطلب</button>
+        <button type="button" class="cancel-button">عودة</button>
       </div>
     </form>
   </main>
 
-  <!-- Footer -->
-  <footer class="main-footer">
-    جميع الحقوق محفوظة © مركز التعليم المستمر - جامعة الإمام عبدالرحمن بن فيصل
-  </footer>
+ <?php
+  include 'footer.php';
+  ?>
 
 </body>
 </html>

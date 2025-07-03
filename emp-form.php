@@ -9,22 +9,9 @@
 </head>
 <body>
 
-<!-- Top Header -->
-    <header>
-    <div class="logo">
-      <img src="logo_white_no_bg.png" alt="مركز التعليم المستمر">
-    </div>
-    <nav class="main-nav">
-      <ul>
-        <li><a href="#">الرئيسية</a></li>
-        <li><a href="#">العقود</a></li>
-        <li><a href="empReq.html">الإجازات</a></li>
-      </ul>
-    </nav>
-     <div class="admin-icon">
-     <a href="login.html"><i class="fa-solid fa-user"></i> </a>
-    </div>
-  </header>
+<?php
+  include 'header.php';
+  ?>
 
     
   <!-- Leave Request Form -->
@@ -81,11 +68,13 @@
   function redirectAfterSubmit() {
     // إذا كنتِ ترغبين بإرسال النموذج فعلاً:
     setTimeout(function () {
-      window.location.href = 'thankyou.html';
+      window.location.href = 'thankyou.php';
     }, 100); // تأخير بسيط يسمح للنموذج بالإرسال
     return true; // يسمح بالإرسال
   }
 </script>
-
+<?php
+  include 'footer.php';
+  ?>
 </body>
 </html>
