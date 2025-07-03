@@ -14,7 +14,7 @@
   <!-- Main Home Section -->
   <main class="home-main">
     <div class="home-buttons">
-      <a href="vacation-emp.php" class="home-btn">
+      <a href="empReqs.php" class="home-btn">
         🗓️ الإجازات
       </a>
       <a href="contracts.php" class="home-btn">

@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Saturn</title>
   <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-bGqGt43gdleZyx2yfD+w7eLEyRJ3lVZybKSKGZKMx1OvxFtUSss4co2+/qxUWL+VYYnAFcLC8K0lZqROUOYizg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 <body>
   <header>
