@@ -1,3 +1,9 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +25,7 @@
       <ul>
         <li><a href="homepage.php">الرئيسية</a></li>
         <li><a href="#">العقود</a></li>
-        <li><a href="#">الإجازات</a></li>
+        <li><a href="EmpReqs.php">الإجازات</a></li>
 </ul>
     </nav>
   <div class="admin-icon">

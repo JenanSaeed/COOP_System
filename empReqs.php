@@ -1,8 +1,8 @@
 <?php
 session_start();
-include("db_connection.php");
+include("db_connect.php");
 
-$user_id = $_SESSION['user_id'] ?? null;
+$user_id = $_SESSION['emp_id'] ?? null;
 
 if (!$user_id) {
     header("Location: login.php");
@@ -17,11 +17,11 @@ if (isset($_POST['new_request'])) {
 }
 
 // Fetch user-specific vacations
-$stmt = $conn->prepare("SELECT * FROM vacations WHERE user_id = ? ORDER BY id DESC");
+/*$stmt = $conn->prepare("SELECT * FROM vacations WHERE user_id = ? ORDER BY id DESC");
 $stmt->bind_param("s", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
-$vacations = $result->fetch_all(MYSQLI_ASSOC);
+$vacations = $result->fetch_all(MYSQLI_ASSOC); */
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +42,7 @@ $vacations = $result->fetch_all(MYSQLI_ASSOC);
     <div class="vacation-title">
       <form method="POST">
         <button type="submit" name="new_request" class="new-vacation-link">
-          <h3>طلب إجازة جديدة +</h3>
+          <h3 >طلب إجازة جديدة +</h3>
         </button>
       </form>
     </div>
