@@ -3,8 +3,8 @@ session_start();
 include 'db_connect.php'; // الاتصال بقاعدة البيانات coop_db
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $emp_id = $_POST['id']; // اسم المستخدم في الفورم
-    $password = $_POST['password']; // كلمة المرور
+    $emp_id = trim($_POST['id']); // اسم المستخدم في الفورم
+    $password = trim($_POST['password']); // كلمة المرور
 
     // التحقق باستخدام prepared statements لمنع SQL Injection
     $stmt = $conn->prepare("SELECT * FROM sign WHERE emp_id = ?");
@@ -15,18 +15,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows === 1) {
         $row = $result->fetch_assoc();
 
-        if ($password === $row['password']) {
+        if ($password === trim($row['password'])) {
             $_SESSION['emp_id'] = $row['emp_id'];
             $_SESSION['logged_in'] = true;
 
-            // احصل على أول صفين من جدول sign لمعرفة ترتيب المستخدم
-            $order = $conn->query("SELECT emp_id FROM sign ORDER BY id ASC LIMIT 2");
+            // جلب أول صفين بناءً على emp_id كرقم (مرتب تصاعدي)
+            $order = $conn->query("SELECT emp_id FROM sign ORDER BY emp_id ASC LIMIT 2");
+
+            if (!$order) {
+                die("خطأ في الاستعلام: " . $conn->error);
+            }
+
             $topRows = $order->fetch_all(MYSQLI_ASSOC);
 
-            if ($row['emp_id'] === $topRows[0]['emp_id']) {
+            $loggedEmp = trim((string)$row['emp_id']);
+            $firstEmp = trim((string)$topRows[0]['emp_id'] ?? '');
+            $secondEmp = trim((string)$topRows[1]['emp_id'] ?? '');
+
+            if ($loggedEmp == $firstEmp) {
                 header("Location: empReqs.php");
                 exit();
-            } elseif ($row['emp_id'] === $topRows[1]['emp_id']) {
+            } elseif ($loggedEmp == $secondEmp) {
                 header("Location: finMain.php");
                 exit();
             } else {
