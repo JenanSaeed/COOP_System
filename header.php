@@ -29,7 +29,17 @@ if (session_status() === PHP_SESSION_NONE) {
 </ul>
     </nav>
   <div class="admin-icon">
-    <a href="login.php"><i class="fa-solid fa-user"></i></a>
+          <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+        <!-- إذا كان مسجل دخول، نعرض زر تسجيل الخروج -->
+        <form action="logout.php" method="post" style="display: inline;">
+          <button type="submit" style="background: none; border: none; color: white; cursor: pointer;">
+            <i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج
+          </button>
+        </form>
+      <?php else: ?>
+        <!-- إذا ما كان مسجل دخول، نعرض أيقونة الدخول -->
+        <a href="login.php"><i class="fa-solid fa-user"></i></a>
+      <?php endif; ?>
   </div>
   </header>
 </body>
