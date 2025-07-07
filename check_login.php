@@ -2,10 +2,16 @@
 session_start();
 include 'db_connect.php';
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $emp_id = trim($_POST['id']);
     $password = trim($_POST['password']);
+
+    // ✅ تحقق إذا الحقول فاضية
+    if (empty($emp_id) || empty($password)) {
+        $error = "الرجاء إدخال رقم الموظف وكلمة المرور";
+        header("Location: login.php?error=" . urlencode($error));
+        exit();
+    }
 
     // جلب بيانات الموظف مع الدور من جدول sign
     $stmt = $conn->prepare("SELECT * FROM sign WHERE emp_id = ?");
@@ -21,6 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['logged_in'] = true;
             $_SESSION['role'] = $row['role'];
 
+            $role = $row['role']; // لازم نضيفه
+
             // بناء على الدور نوجه المستخدم
             if ($role === 'employee') {
                 header("Location: empReqs.php");
@@ -32,8 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: validation.php");
                 exit();
             } else {
-                // دور غير معروف، ممكن توجه لصفحة افتراضية
-                header("Location: login.php?error=" . urlencode("دور المستخدم غير معروف"));
+                $error = "دور المستخدم غير معروف";
+                header("Location: login.php?error=" . urlencode($error));
                 exit();
             }
 
@@ -48,5 +56,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 }
-
 ?>

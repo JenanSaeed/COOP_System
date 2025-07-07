@@ -16,6 +16,25 @@
   <h2 class="form-title">تسجيل الدخول</h2>
 
 <div class="container">
+<?php
+if (isset($_GET['error'])) {
+    echo "
+    <div style='
+        background-color: #ffe0e0;
+        color: #b00020;
+        padding: 12px;
+        border: 1px solid #b00020;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        text-align: center;
+        font-weight: bold;
+    '>
+        " . htmlspecialchars($_GET['error']) . "
+    </div>";
+}
+?>
+
+
   <form class="logform" action="check_login.php" method="post">
     <label class="loglabels" for="emp_id">اسم المستخدم:</label>
     <input class="loginputs" type="text" id="emp_id" name="id" placeholder="اسم المسنخدم" required>
