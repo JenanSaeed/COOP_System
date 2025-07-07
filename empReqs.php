@@ -26,7 +26,7 @@ if (!$user_id) {
 
 
 $error = '';
-$vacations = [];
+$vacation = [];
 
 
 try {
@@ -37,7 +37,7 @@ try {
     $stmt->bind_param("s", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    $vacations = $result->fetch_all(MYSQLI_ASSOC);
+    $vacation = $result->fetch_all(MYSQLI_ASSOC);
 } catch (Exception $e) {
     $error = "حدث خطأ أثناء جلب سجل الإجازات: " . $e->getMessage();
 }
@@ -107,10 +107,10 @@ $conn->close();
             <div class="error-message"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <?php if (empty($vacations)): ?>
+        <?php if (empty($vacation)): ?>
             <p>لا توجد طلبات إجازة مسجلة.</p>
         <?php else: ?>
-            <?php foreach ($vacations as $vac): ?>
+            <?php foreach ($vacation as $vac): ?>
                 <?php
                 $status_class = match($vac['approval']) {
                     'مقبول' => 'status-approved',
