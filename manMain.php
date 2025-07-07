@@ -7,15 +7,16 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit();
 }
 
-// إذا الدور ليس "finance"، وجهه حسب نوعه
-if ($_SESSION['role'] === 'manager') {
-    header("Location: validation.php");
+// إذا الدور ليس "manager"، وجهه حسب نوعه
+if ($_SESSION['role'] === 'finance') {
+    header("Location: finMain.php");
     exit();
 } elseif ($_SESSION['role'] === 'employee') {
     header("Location: EmpReqs.php");
     exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">

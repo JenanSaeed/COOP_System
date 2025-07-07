@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: finMain.php");
                 exit();
             } elseif ($role === 'manager') {
-                header("Location: validation.php");
+                header("Location: manMain.php");
                 exit();
             } else {
                 // دور غير معروف، ممكن توجه لصفحة افتراضية

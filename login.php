@@ -18,7 +18,7 @@
 <div class="container">
   <form class="logform" action="check_login.php" method="post">
     <label class="loglabels" for="emp_id">اسم المستخدم:</label>
-    <input class="loginputs" type="text" id="emp_id" name="id" placeholder="اسم المسنخدم" required>
+    <input class="loginputs" type="text" id="emp_id" name="id" placeholder="اسم المستخدم" required>
 
     <label class="loglabels" for="emp_pass">كلمة المرور:</label>
     <input class="loginputs" type="password" id="emp_pass" name="password" placeholder="كلمة المرور" required>

@@ -31,8 +31,8 @@ if (session_status() === PHP_SESSION_NONE) {
   <div class="admin-icon">
           <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
         <form action="logout.php" method="post" style="display: inline;">
-          <button type="submit" style="background: red; color: white; padding: 5px; border-radius: 5px;">
-            <i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج
+          <button type="submit" style="background: none; border: none; color: white; cursor: pointer;">
+            <i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج 
           </button>
         </form>
       <?php else: ?>
