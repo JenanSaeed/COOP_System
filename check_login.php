@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // جلب بيانات الموظف مع الدور من جدول sign
-    $stmt = $conn->prepare("SELECT * FROM sign WHERE emp_id = ?");
+    $stmt = $conn->prepare("SELECT * FROM employee WHERE emp_id = ?");
     $stmt->bind_param("s", $emp_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['logged_in'] = true;
             $_SESSION['role'] = $row['role'];
 
-            $role = $row['role']; // لازم نضيفه
+            $role = $row['role'];
 
             // بناء على الدور نوجه المستخدم
             if ($role === 'employee') {

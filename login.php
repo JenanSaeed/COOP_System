@@ -45,7 +45,7 @@ if (isset($_GET['error'])) {
     <input class="loginputs" type="text" id="emp_id" name="id" placeholder="اسم المستخدم" required>
 
     <label class="loglabels" for="emp_pass">كلمة المرور:</label>
-    <input class="loginputs" type="password" id="emp_pass" name="password" placeholder="كلمة المرور" required>
+    <input class="loginputs" type="password" id="password" name="password" placeholder="كلمة المرور" required>
 
     <input class="buttons" type="submit" value="تسجيل الدخول">
   </form>
