@@ -1,59 +1,38 @@
 <?php 
 session_start();
-include 'db_connect.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
-  <link rel='stylesheet' href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  </head>
-  
+  <title>تسجيل الدخول</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-<?php
-  include 'header.php';
-  ?>
 
-  <h2 class="form-title">تسجيل الدخول</h2>
+<h2>تسجيل الدخول</h2>
 
 <div class="container">
 <?php
-if (isset($_GET['error'])) {
-    echo "
-    <div style='
-        background-color: #ffe0e0;
-        color: #b00020;
-        padding: 12px;
-        border: 1px solid #b00020;
-        border-radius: 5px;
-        margin-bottom: 15px;
-        text-align: center;
-        font-weight: bold;
-    '>
-        " . htmlspecialchars($_GET['error']) . "
-    </div>";
+if (isset($_GET['error_message'])) {
+    echo "<div style='color: red; font-weight: bold; text-align: center; margin-bottom: 15px;'>" 
+        . htmlspecialchars($_GET['error_message']) . 
+        "</div>";
 }
 ?>
 
 
-  <form class="logform" action="check_login.php" method="post">
-    <label class="loglabels" for="emp_id">اسم المستخدم:</label>
-    <input class="loginputs" type="text" id="emp_id" name="id" placeholder="اسم المستخدم" required>
+<form action="check_login.php" method="POST">
+  <label for="emp_id">رقم الموظف:</label>
+  <input type="text" name="id" id="emp_id" required><br>
 
-    <label class="loglabels" for="emp_pass">كلمة المرور:</label>
-    <input class="loginputs" type="password" id="emp_pass" name="password" placeholder="كلمة المرور" required>
+  <label for="password">كلمة المرور:</label>
+  <input type="password" name="password" id="password" required><br>
 
-    <input class="buttons" type="submit" value="تسجيل الدخول">
-  </form>
-  </div>
-
-  <?php
-  include 'footer.php';
-  ?>
+  <input type="submit" value="تسجيل الدخول">
+</form>
+</div>
 
 </body>
 </html>
