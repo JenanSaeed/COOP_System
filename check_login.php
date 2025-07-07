@@ -2,6 +2,7 @@
 session_start();
 include 'db_connect.php';
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $emp_id = trim($_POST['id']);
     $password = trim($_POST['password']);
@@ -18,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($password === trim($row['password'])) {
             $_SESSION['emp_id'] = $row['emp_id'];
             $_SESSION['logged_in'] = true;
-            $role = $row['role']; // جلب الدور
+            $_SESSION['role'] = $row['role'];
 
             // بناء على الدور نوجه المستخدم
             if ($role === 'employee') {

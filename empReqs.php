@@ -4,6 +4,14 @@ include("db_connect.php");
 
 $user_id = $_SESSION['emp_id'] ?? null;
 
+
+// تأكد أن المستخدم مسجل دخول وله دور "employee"
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || $_SESSION['role'] !== 'employee') {
+    header("Location: homepage.php");
+    exit();
+}
+
+
 if (!$user_id) {
     header("Location: login.php");
     exit();
