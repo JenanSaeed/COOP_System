@@ -2,16 +2,21 @@
 session_start();
 include("db_connect.php");
 
-$user_id = $_SESSION['emp_id'] ?? null;
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+  $_SESSION['redirect_after_login'] = 'empReqs.php';
+  header("Location: login.php");
+  exit();
+}
 
-
-// تأكد أن المستخدم مسجل دخول وله دور "employee"
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || $_SESSION['role'] !== 'employee') {
-    header("Location: homepage.php");
+if ($_SESSION['role'] === 'finance') {
+    header("Location: finMain.php");
+    exit();
+} elseif ($_SESSION['role'] === 'manager') {
+    header("Location: manMain.php");
     exit();
 }
 
-
+$user_id = $_SESSION['emp_id'] ?? null;
 if (!$user_id) {
     header("Location: login.php");
     exit();
