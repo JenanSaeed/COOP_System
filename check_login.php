@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST['password']);
 
     // جلب بيانات الموظف مع الدور من جدول sign
-    $stmt = $conn->prepare("SELECT emp_id, password, role FROM sign WHERE emp_id = ?");
+    $stmt = $conn->prepare("SELECT * FROM sign WHERE emp_id = ?");
     $stmt->bind_param("s", $emp_id);
     $stmt->execute();
     $result = $stmt->get_result();
