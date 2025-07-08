@@ -13,17 +13,6 @@ if (isset($_POST['emp_id']) && isset($_POST['password'])) {
         exit;
     }
 
-<<<<<<< HEAD
-    // ⚠️ استعلام التحقق باستخدام emp_id و password
-    $sql = "SELECT * FROM users WHERE emp_id='$emp_id' AND password='$password'";
-    $result = mysqli_query($conn, $sql);
-
-    if ($result && mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $_SESSION['emp_id'] = $row['emp_id']; // حفظ رقم الموظف في السيشن
-        header("Location: traveldestination.php");
-        exit();
-=======
     // جلب بيانات الموظف مع الدور من جدول sign
     $stmt = $conn->prepare("SELECT * FROM employee WHERE emp_id = ?");
     $stmt->bind_param("s", $emp_id);
@@ -61,7 +50,6 @@ if (isset($_POST['emp_id']) && isset($_POST['password'])) {
             header("Location: login.php?error=" . urlencode($error));
             exit();
         }
->>>>>>> f3cb3ca76cae25356f9b8cabd450a7fc6ac1e481
     } else {
         // رقم الموظف أو كلمة المرور غير صحيحة
         header('Location: login.php?error_message=' . urlencode("رقم الموظف أو كلمة المرور غير صحيحة."));
