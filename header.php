@@ -20,25 +20,26 @@ if (session_status() === PHP_SESSION_NONE) {
     <div class="logo">
       <a href="homepage.php">
       <img src="logo_white_no_bg.png" alt="مركز التعليم المستمر">
+      </a>
     </div>
     <nav class="main-nav">
-      <ul>
+      <ul class="nav-links">
         <li><a href="homepage.php">الرئيسية</a></li>
         <li><a href="#">العقود</a></li>
         <li><a href="EmpReqs.php">الإجازات</a></li>
-</ul>
-    </nav>
-  <div class="admin-icon">
-          <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-        <form action="logout.php" method="post" style="display: inline;">
-          <button type="submit" style="background: none; border: none; color: white; cursor: pointer;">
-            <i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج 
-          </button>
-        </form>
-      <?php else: ?>
+      </ul>
+      
+      <div class="logging">
+        <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+          <a href="logout.php" class="logged">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <?= htmlspecialchars($_SESSION['name']) ?>
+          </a>
+        <?php else: ?>
         <a href="login.php"><i class="fa-solid fa-user"></i></a>
-      <?php endif; ?>
-  </div>
+        <?php endif; ?>
+        </div>
+      </nav>
   </header>
 </body>
 </html>

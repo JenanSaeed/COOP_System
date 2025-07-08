@@ -19,36 +19,6 @@ header {
   margin-bottom: 0%;
 }
 
-.main-nav {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end; 
-  background-color: #154746;
-  padding: 10px 30px;
-}
-
-.main-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  right: 80px;
-  top: 100px;
-}
-
-.main-nav a {
-  color: white;
-  text-decoration: none;
-  font-size: 18px;
-}
-
-.main-nav a:hover {
-  color: #ae863c;
-  text-decoration: underline;
-}
-
 .logo {
   position: absolute;
   top: 15px;
@@ -60,36 +30,57 @@ header {
   height: 70px;
 }
 
-header nav a {
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #154746;
+  padding: 10px 30px;
+  direction: rtl;
+}
+
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.logging {
+  justify-content: flex-end;
+  position: relative;
+  left: 10px;
+  list-style: none;
+}
+
+.main-nav a {
   color: white;
   text-decoration: none;
-  margin-left: 20px;
   font-size: 18px;
 }
 
-nav a:hover {
-  text-decoration: none;
+.main-nav a:hover {
   color: #ae863c;
+  text-decoration: none;
 }
 
-.admin-icon {
-  position: absolute;
-  top: 90px;
-  left: 90px;
-  font-size: 20px;
+.nav-links:hover {
+  text-decoration: none;
+}
+
+.logged {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
   color: white;
-  z-index: 1000;
 }
 
-.admin-icon:hover {
-    color: #ae863c;
-}
-
-.admin-icon a {
+.logged:hover {
   color: #ae863c;
   text-decoration: none;
 }
-
 
 /* Employee page */
 .vacation-page {
