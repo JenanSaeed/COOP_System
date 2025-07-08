@@ -13,6 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // استخدم prepared statement لحماية من SQL Injection
+    // جلب بيانات الموظف مع الدور من جدول sign
     $stmt = $conn->prepare("SELECT * FROM employee WHERE emp_id = ?");
     $stmt->bind_param("s", $emp_id);
     $stmt->execute();
