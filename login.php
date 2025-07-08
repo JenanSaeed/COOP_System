@@ -52,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 }
+?>
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -78,10 +79,10 @@ if (isset($_GET['error_message'])) {
 
 <form class="logform" action="check_login.php" method="post">
     <label class="loglabels" for="emp_id">اسم المستخدم:</label>
-    <input class="loginputs" type="text" id="emp_id" name="id" placeholder="اسم المستخدم" required>
+    <input class="loginputs" type="text" id="emp_id" name="emp_id" placeholder="اسم المستخدم" required>
 
-    <label class="loglabels" for="emp_pass">كلمة المرور:</label>
-    <input class="loginputs" type="password" id="emp_pass" name="password" placeholder="كلمة المرور" required>
+    <label class="loglabels" for="password">كلمة المرور:</label>
+    <input class="loginputs" type="password" id="password" name="password" placeholder="كلمة المرور" required>
 
     <input class="buttons" type="submit" value="تسجيل الدخول">
   </form>
