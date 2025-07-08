@@ -2,46 +2,38 @@
 session_start();
 require_once("db_connect.php");
 
-
+// Authentication checks
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    $_SESSION['redirect_after_login'] = 'empReqs.php';
     header("Location: login.php");
     exit();
 }
 
-
-if ($_SESSION['role'] === 'finance') {
-    header("Location: finMain.php");
-    exit();
-} elseif ($_SESSION['role'] === 'manager') {
-    header("Location: manMain.php");
-    exit();
-}
-
-$user_id = $_SESSION['emp_id'] ?? null;
-if (!$user_id) {
+$emp_id = $_SESSION['emp_id'] ?? null;
+if (!$emp_id) {
     header("Location: login.php");
     exit();
 }
 
-
-$error = '';
-$vacation = [];
-
-
+// Fetch vacation history
 try {
-    $select_sql = "SELECT type, application_date, approval FROM vacation WHERE emp_id = ? ORDER BY application_date DESC";
-    $stmt = $conn->prepare($select_sql);
-    if (!$stmt) throw new Exception("Database error: " . $conn->error);
-
-    $stmt->bind_param("s", $user_id);
+    $stmt = $conn->prepare("SELECT 
+        vac_id, 
+        type, 
+        days, 
+        DATE_FORMAT(start_date, '%Y-%m-%d') as start_date,
+        DATE_FORMAT(end_date, '%Y-%m-%d') as end_date,
+        DATE_FORMAT(application_date, '%Y-%m-%d') as app_date,
+        fin_approval, 
+        man_approval 
+        FROM vacation 
+        WHERE emp_id = ? 
+        ORDER BY application_date DESC");
+    $stmt->bind_param("s", $emp_id);
     $stmt->execute();
-    $result = $stmt->get_result();
-    $vacation = $result->fetch_all(MYSQLI_ASSOC);
+    $vacations = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 } catch (Exception $e) {
-    $error = "حدث خطأ أثناء جلب سجل الإجازات: " . $e->getMessage();
+    $error = "حدث خطأ في تحميل البيانات: " . $e->getMessage();
 }
-
 $conn->close();
 ?>
 
@@ -49,90 +41,123 @@ $conn->close();
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>طلبات الإجازات</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <style>
-        .status-dot {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-left: 8px;
+        .vacation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        .status-pending { background-color: coral; }
-        .status-approved { background-color: green; }
-        .status-rejected { background-color: red; }
-        .error-message { color: red; margin: 15px 0; }
-        .vacation-card {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
+        .vacation-table th, .vacation-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #dee2e6;
         }
-        .vac-date {
-            margin-right: auto;
-            color: #666;
-        }
-        .new-vacation-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #f2f2f2;
-            border-radius: 8px;
+        .vacation-table th {
+            background-color: #f8f9fa;
             font-weight: bold;
-            color: black;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-            font-size: 18px;
         }
-        .new-vacation-link:hover {
-            background-color: #e0e0e0;
+        .vacation-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .vacation-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .new-request-btn {
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .vacation-table {
+                font-size: 0.85rem;
+            }
+            .vacation-table th, .vacation-table td {
+                padding: 8px 10px;
+            }
         }
     </style>
 </head>
-<body>
+<body class="bg-light">
+    <?php include 'header.php'; ?>
 
-<?php include 'header.php'; ?>
-
-<main class="vacation-page">
-    <div class="vacation-container">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1>الإجازات السابقة</h1>
-            <a href="emp-form.php" class="new-vacation-link">طلب إجازة جديدة +</a>
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>طلبات الإجازات</h2>
+            <a href="emp-form.php" class="btn btn-primary new-request-btn">
+                <i class="fas fa-plus"></i> طلب إجازة جديدة
+            </a>
         </div>
 
-        <?php if ($error): ?>
-            <div class="error-message"><?= htmlspecialchars($error) ?></div>
+        <?php if (!empty($error)): ?>
+            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <?php if (empty($vacation)): ?>
-            <p>لا توجد طلبات إجازة مسجلة.</p>
+        <?php if (empty($vacations)): ?>
+            <div class="alert alert-info">لا توجد طلبات إجازة مسجلة</div>
         <?php else: ?>
-            <?php foreach ($vacation as $vac): ?>
-                <?php
-                $status_class = match($vac['approval']) {
-                    'مقبول' => 'status-approved',
-                    'مرفوض' => 'status-rejected',
-                    default => 'status-pending'
-                };
-                ?>
-                <div class="vacation-card">
-                    <span class="status-dot <?= $status_class ?>"></span>
-                    <span>
-    <?= htmlspecialchars(!empty($vac['approval']) ? $vac['approval'] : 'معلق') ?>
-</span>                    <span class="vac-date">
-                        النوع: <?= htmlspecialchars($vac['type']) ?> |
-                        التاريخ: <?= htmlspecialchars($vac['application_date']) ?>
-                    </span>
-                </div>
-            <?php endforeach; ?>
+            <div class="table-responsive">
+                <table class="vacation-table">
+                    <thead>
+                        <tr>
+                            <th>رقم الطلب</th>
+                            <th>نوع الإجازة</th>
+                            <th>المدة</th>
+                            <th>من تاريخ</th>
+                            <th>إلى تاريخ</th>
+                            <th>تاريخ الطلب</th>
+                            <th>حالة الموافقة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($vacations as $vac): ?>
+                            <tr>
+                                <td><?= $vac['vac_id'] ?></td>
+                                <td><?= htmlspecialchars($vac['type']) ?></td>
+                                <td><?= $vac['days'] ?> يوم</td>
+                                <td><?= $vac['start_date'] ?></td>
+                                <td><?= $vac['end_date'] ?></td>
+                                <td><?= $vac['app_date'] ?></td>
+                                <td>
+                                    <?php
+                                    $status = 'معلق';
+                                    $class = 'status-pending';
+                                    if ($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'مقبول') {
+                                        $status = 'مقبول';
+                                        $class = 'status-approved';
+                                    } elseif ($vac['fin_approval'] === 'مرفوض' || $vac['man_approval'] === 'مرفوض') {
+                                        $status = 'مرفوض';
+                                        $class = 'status-rejected';
+                                    }
+                                    ?>
+                                    <span class="status-badge <?= $class ?>"><?= $status ?></span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php endif; ?>
     </div>
-</main>
 
-<?php include 'footer.php'; ?>
-
+    <?php include 'footer.php'; ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
