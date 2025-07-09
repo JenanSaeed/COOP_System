@@ -50,82 +50,58 @@ $conn->close();
     <meta charset="UTF-8">
     <title>تفاصيل طلب الإجازة</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-    <style>
-        .detail-label {
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .detail-value {
-            margin-bottom: 15px;
-            color: #333;
-        }
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-        .status-approved {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-        .status-rejected {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-    </style>
+    <link href="style.css" rel="stylesheet">
 </head>
-<body class="bg-light">
+
+
+<body>
 <?php include 'header.php'; ?>
 
-<div class="container py-4">
-    <h2 class="mb-4">تفاصيل طلب الإجازة رقم <?= htmlspecialchars($vac['vac_id']) ?></h2>
+<div class="container">
+    <div class="detail-box">
+        <h2 class="mb-4 text-center">تفاصيل طلب الإجازة</h2>
+        <div class="mb-3">
+            <div class="detail-label">اسم الموظف:</div>
+            <div class="detail-value"><?= htmlspecialchars($vac['employee_name']) ?></div>
 
-    <div class="mb-3">
-        <div class="detail-label">اسم الموظف:</div>
-        <div class="detail-value"><?= htmlspecialchars($vac['employee_name']) ?></div>
+            <div class="detail-label">نوع الإجازة:</div>
+            <div class="detail-value"><?= htmlspecialchars($vac['type']) ?></div>
 
-        <div class="detail-label">نوع الإجازة:</div>
-        <div class="detail-value"><?= htmlspecialchars($vac['type']) ?></div>
+            <div class="detail-label">عدد الأيام:</div>
+            <div class="detail-value"><?= htmlspecialchars($vac['days']) ?> يوم</div>
 
-        <div class="detail-label">عدد الأيام:</div>
-        <div class="detail-value"><?= htmlspecialchars($vac['days']) ?> يوم</div>
+            <div class="detail-label">من تاريخ:</div>
+            <div class="detail-value"><?= $vac['start_date'] ?></div>
 
-        <div class="detail-label">من تاريخ:</div>
-        <div class="detail-value"><?= $vac['start_date'] ?></div>
+            <div class="detail-label">إلى تاريخ:</div>
+            <div class="detail-value"><?= $vac['end_date'] ?></div>
 
-        <div class="detail-label">إلى تاريخ:</div>
-        <div class="detail-value"><?= $vac['end_date'] ?></div>
+            <div class="detail-label">تاريخ تقديم الطلب:</div>
+            <div class="detail-value"><?= $vac['app_date'] ?></div>
 
-        <div class="detail-label">تاريخ تقديم الطلب:</div>
-        <div class="detail-value"><?= $vac['app_date'] ?></div>
+            <div class="detail-label">اسم المكلف أثناء الإجازة:</div>
+            <div class="detail-value"><?= htmlspecialchars($vac['assigned_emp'] ?? '—') ?></div>
 
-        <div class="detail-label">اسم المكلف أثناء الإجازة:</div>
-        <div class="detail-value"><?= htmlspecialchars($vac['assigned_emp'] ?? '—') ?></div>
-
-        <div class="detail-label">حالة الموافقة من الشؤون المالية:</div>
-        <div class="detail-value">
-            <span class="<?= $vac['fin_approval'] === 'مقبول' ? 'status-approved' : ($vac['fin_approval'] === 'مرفوض' ? 'status-rejected' : 'status-pending') ?>">
-                <?= $vac['fin_approval'] ?? 'معلق' ?>
-            </span>
+            <div class="detail-label">حالة الموافقة من الشؤون المالية:</div>
+            <div class="detail-value">
+                <span class="<?= $vac['fin_approval'] === 'مقبول' ? 'status-approved' : ($vac['fin_approval'] === 'مرفوض' ? 'status-rejected' : 'status-pending') ?>">
+                    <?= $vac['fin_approval'] ?? 'معلق' ?>
+                </span>
+            </div>
+            <div class="detail-label">حالة الموافقة من المدير:</div>
+            <div class="detail-value">
+                <span class="<?= $vac['man_approval'] === 'مقبول' ? 'status-approved' : ($vac['man_approval'] === 'مرفوض' ? 'status-rejected' : 'status-pending') ?>">
+                    <?= $vac['man_approval'] ?? 'معلق' ?>
+                </span>
+            </div>
         </div>
-        <div class="detail-label">حالة الموافقة من المدير:</div>
-        <div class="detail-value">
-            <span class="<?= $vac['man_approval'] === 'مقبول' ? 'status-approved' : ($vac['man_approval'] === 'مرفوض' ? 'status-rejected' : 'status-pending') ?>">
-                <?= $vac['man_approval'] ?? 'معلق' ?>
-            </span>
+        <div class="form-buttons text-center">
+            <a href="javascript:history.back()" class="buttons">عودة</a>
+            <a href="finance-form.php?vac_id=<?= $vac['vac_id'] ?>" class="buttons">متابعة</a>
         </div>
     </div>
-<div class="form-buttons">
-    <a href="javascript:history.back()" class="cancel-button">عودة</a>
-    <a href="finance-form.php?vac_id=<?= $vac['vac_id'] ?>" class="cancel-button ms-2">متابعة</a>
 </div>
 
-</div>
 <?php include 'footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
