@@ -364,3 +364,24 @@ body {
     border-radius: 8px;
    text-align: center;
 }
+
+.reset {
+  margin-top: 20px;
+  width: 70%;
+  padding: 10px;
+  background-color: #154746;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  margin: 20px auto 0;
+  display: block;
+}
+
+.reset-form {
+  margin-top: 20px;      /* Reduce this if the form is too far down */
+  display: flex;
+  justify-content: center;
+}

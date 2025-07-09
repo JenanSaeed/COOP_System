@@ -25,8 +25,8 @@ if($_SERVER[ 'REQUEST_METHOD']=== 'POST'){
 
             // Send reset email
             $resetLink = "https://yourdomain.com/reset-password.php?token=$token";
-            $subject = "Password Reset Request";
-            $message = "To reset your password, click the following link:\n\n$resetLink\n\nThis link will expire in 1 hour.";
+            $subject = "اعادة تعيين كلمة المرور";
+            $message = "لاعادة تعيين كلمة المرور :\n\n$resetLink\n\nThis link will expire in 1 hour.";
             // mail($email, $subject, $message); // Uncomment this in production
         }
     }
@@ -46,7 +46,7 @@ if($_SERVER[ 'REQUEST_METHOD']=== 'POST'){
 include 'header.php';
 ?>
 <h2 class="form-title">اعادة تعيين كلمة المرور</h2>
-<div class="container">
+<div class="reset-form">
 <?php if (!empty($showMessage)) echo "<p>$showMessage</p>"; ?>
    <form method="POST" action="">
         <label class="loglabels" for="user_id">الرقم الوظيفي</label><br>
@@ -55,7 +55,7 @@ include 'header.php';
         <label class="loglabels" for="email">البريد الالكتروني</label><br>
         <input class="loginputs" type="email" name="email" required><br><br>
 
-        <input class= "buttons" type="submit" value="اعادة تعيين كلمة المرور">
+        <input class= "reset" type="submit" value="اعادة تعيين كلمة المرور">
     </form>
 </div>
 <?php
