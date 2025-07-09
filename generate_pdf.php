@@ -126,7 +126,7 @@ $pdf->Image($img_file, 160, 10, 40, '', 'JPG', '', 'T', false, 300, '', false, f
 
 
 $html = '
-<h3 align="center">خاص بالموظفـ/ـة:</h3>
+<h3 align="right">خاص بالموظفـ/ـة:</h3>
 <p align="right">سعادة/ مديرة مركز التعليم المستمر                   سلمه الله</p>
 <p align="right">السلام عليكم ورحمة الله وبركاته،،،</p>
 <p align="right">أتقدم بطلب إجازة <strong>(' . htmlspecialchars($type) . ')</strong></p>
@@ -142,7 +142,7 @@ $html = '
 
 <p align="right">اسم الشخص المكلف: ' . htmlspecialchars($assigned) . ' | التوقيع: ________________</p>
 <hr>
-<h3 align="center">خاص بالشؤون الإدارية والمالية:</h3>
+<h3 align="right">خاص بالشؤون الإدارية والمالية:</h3>
 <p align="right">- رصيد الموظف المستهلك: ' . $used . ' يوم</p>
 <p align="right">- رصيد الموظف المتبقي: ' . $remaining . ' يوم</p>
 <p align="right">- تاريخ آخر إجازة: ' . $last_vac_date . ' | مدتها: ' . $last_vac_days . ' يوم</p>
@@ -150,7 +150,7 @@ $html = '
 <p align="right">مكتب مدير الشؤون الإدارية والمالية</p>
 <table cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
 <tr>
-    <td style="width: 50%; vertical-align: top; border-top: 1px solid #000; text-align: center; padding-top: 8px;">
+    <td style="width: 50%; vertical-align: top; border-top: 1px solid #000; text-align: right; padding-top: 8px;">
         الاسم: ' . htmlspecialchars($finance['name'] ?? '________________') . '<br />
         ' . $fin_signature_tag . '<br />
         التوقيع: 
@@ -158,8 +158,8 @@ $html = '
 </tr>
 <table cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
 <tr>
-    <td style="width: 50%; vertical-align: top; border-top: 1px solid #000; text-align: center; padding-top: 8px;">
-        <strong>الاعتماد</strong><br />
+    <td style="width: 50%; vertical-align: top; border-top: 1px solid #000; text-align: right; padding-top: 8px;">
+        <strong>اعتماد صاحب الصلاحية</strong><br />
         مديرة مركز التعليم المستمر<br />
         الاسم: ' . htmlspecialchars($manager['name'] ?? '________________') . '<br />
         ' . $man_signature_tag . '<br />
