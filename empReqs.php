@@ -24,13 +24,15 @@ try {
         DATE_FORMAT(end_date, '%Y-%m-%d') as end_date,
         DATE_FORMAT(application_date, '%Y-%m-%d') as app_date,
         fin_approval, 
-        man_approval 
+        man_approval,
+        assigned_emp
         FROM vacation 
         WHERE emp_id = ? 
         ORDER BY application_date DESC");
-    $stmt->bind_param("s", $emp_id);
-    $stmt->execute();
-    $vacations = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->bind_param("s", $emp_id);
+        $stmt->execute();
+        $vacations = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 } catch (Exception $e) {
     $error = "حدث خطأ في تحميل البيانات: " . $e->getMessage();
 }
@@ -123,6 +125,7 @@ $conn->close();
                             <th>من تاريخ</th>
                             <th>إلى تاريخ</th>
                             <th>تاريخ الطلب</th>
+                            <th>اسم المكلف</th>
                             <th>حالة الموافقة</th>
                         </tr>
                     </thead>
@@ -135,6 +138,7 @@ $conn->close();
                                 <td><?= $vac['start_date'] ?></td>
                                 <td><?= $vac['end_date'] ?></td>
                                 <td><?= $vac['app_date'] ?></td>
+                                <td><?= htmlspecialchars($vac['assigned_emp'] ?? '—') ?></td>
                                 <td>
                                     <?php
                                     $status = 'معلق';
