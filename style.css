@@ -294,23 +294,6 @@ body {
   background-color: #346463;
 }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-/* Thank you page */
-.thank {
-    display: grid;
-    position: relative;
-    width: 90%;
-    height: 100%;
-    background: white;
-    padding: 20px;
-    justify-self: center;
-    margin: 20px;
-    border-radius: 8px;
-   text-align: center;
-}
-
 .reset {
   margin-top: 20px;
   width: 70%;
@@ -331,11 +314,7 @@ body {
   display: flex;
   justify-content: center;
 }
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
 /* Leave details page */
 .container {
   min-height: 100vh;
@@ -385,13 +364,4 @@ body {
   color: #721c24;
   padding: 5px 10px;
   border-radius: 5px;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 }
->>>>>>> Stashed changes
-=======
-}
->>>>>>> Stashed changes
-=======
-}
->>>>>>> Stashed changes
