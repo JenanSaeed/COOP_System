@@ -84,10 +84,10 @@ function toHijri($gDate)
 // Convert signatures (blob) to base64 for embedding
 function getSignatureImageTag($signature_blob) {
     if (!$signature_blob) {
-        return ''; // no image
+        return '<span style="font-style: italic; color: #999;">(لا يوجد توقيع)</span>';
     }
     $img64 = base64_encode($signature_blob);
-    return '<img src="@' . $img64 . '" style="height:60px;"/>';
+    return '<img src="@' . $img64 . '" style="height:60px;" />';
 }
 
 // Extract info
@@ -113,24 +113,34 @@ $man_signature_tag = getSignatureImageTag($manager['signature'] ?? null);
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->setRTL(true);
 $pdf->SetTitle('طلب إجازة');
-$pdf->SetHeaderData('', 0, 'طلب إجازة', '');
-$pdf->setHeaderFont([PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN]);
-$pdf->setFooterFont([PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA]);
-$pdf->SetMargins(15, 20, 15);
-$pdf->SetAutoPageBreak(true, 20);
-$pdf->SetFont('aealarabiya', '', 14);
+$pdf->SetMargins(15, 30, 15);
+$pdf->SetHeaderMargin(10);
+$pdf->SetFooterMargin(15);
+$pdf->SetAutoPageBreak(true, 25);
+$pdf->SetFont('aealarabiya', '', 11);
 $pdf->AddPage();
+
+// Add logo top-right
+$img_file = 'logo_black.jpg';
+$pdf->Image($img_file, 160, 10, 40, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+
 
 $html = '
 <h3 align="center">خاص بالموظفـ/ـة:</h3>
-<p align="right">سعادة/ مديرة مركز التعليم المستمر سلمه الله</p>
+<p align="right">سعادة/ مديرة مركز التعليم المستمر                   سلمه الله</p>
 <p align="right">السلام عليكم ورحمة الله وبركاته،،،</p>
-<p align="right">أتقدم بطلب إجازة <strong>(' . $type . ')</strong></p>
+<p align="right">أتقدم بطلب إجازة <strong>(' . htmlspecialchars($type) . ')</strong></p>
 <p align="right">وذلك لمدة: <strong>(' . $days . ')</strong> يوم اعتبارًا من تاريخ <strong>(' . $hijri_start . ')</strong> الموافق <strong>(' . $start_date . ')</strong>
 وحتى تاريخ <strong>(' . $hijri_end . ')</strong> الموافق <strong>(' . $end_date . ')</strong></p>
-<p align="right">الاسم: ' . $name . ' | الوظيفة: ' . $role . ' | الرقم الوظيفي: ' . $emp_id . '</p>
-<p align="right">التوقيع: ' . $emp_signature_tag . ' | تاريخ التقديم: ' . date('Y-m-d', strtotime($applied_on)) . '</p>
-<p align="right">اسم الشخص المكلف: ' . $assigned . ' | التوقيع: ________________</p>
+<p align="right">الاسم: ' . htmlspecialchars($name) . ' | الوظيفة: ' . htmlspecialchars($role) . ' | الرقم الوظيفي: ' . htmlspecialchars($emp_id) . '</p>
+
+<p align="right" style="margin:0 0 10px 0;">
+    التوقيع:  <br>
+    ' . $emp_signature_tag . '<br>
+    تاريخ التقديم: ' . date('Y-m-d', strtotime($applied_on)) . '
+</p>
+
+<p align="right">اسم الشخص المكلف: ' . htmlspecialchars($assigned) . ' | التوقيع: ________________</p>
 <hr>
 <h3 align="center">خاص بالشؤون الإدارية والمالية:</h3>
 <p align="right">- رصيد الموظف المستهلك: ' . $used . ' يوم</p>
@@ -138,12 +148,27 @@ $html = '
 <p align="right">- تاريخ آخر إجازة: ' . $last_vac_date . ' | مدتها: ' . $last_vac_days . ' يوم</p>
 <p align="right">الإجازة: [ ] مستحقة نظامًا    [ ] غير مستحقة نظامًا</p>
 <p align="right">مكتب مدير الشؤون الإدارية والمالية</p>
-<p align="right">الاسم: ' . htmlspecialchars($finance['name'] ?? '________________') . ' | التوقيع: ' . $fin_signature_tag . '</p>
-<hr>
-<h3 align="center">اعتماد صاحب الصلاحية:</h3>
-<p align="right">مديرة مركز التعليم المستمر</p>
-<p align="right">الاسم: ' . htmlspecialchars($manager['name'] ?? '________________') . ' | التوقيع: ' . $man_signature_tag . '</p>
+<table cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+<tr>
+    <td style="width: 50%; vertical-align: top; border-top: 1px solid #000; text-align: center; padding-top: 8px;">
+        الاسم: ' . htmlspecialchars($finance['name'] ?? '________________') . '<br />
+        ' . $fin_signature_tag . '<br />
+        التوقيع: 
+    </td>
+</tr>
+<table cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+<tr>
+    <td style="width: 50%; vertical-align: top; border-top: 1px solid #000; text-align: center; padding-top: 8px;">
+        <strong>الاعتماد</strong><br />
+        مديرة مركز التعليم المستمر<br />
+        الاسم: ' . htmlspecialchars($manager['name'] ?? '________________') . '<br />
+        ' . $man_signature_tag . '<br />
+        التوقيع: 
+    </td>
+</tr>
+</table>
 ';
 
 $pdf->writeHTML($html, true, false, true, false, '');
-$pdf->Output('vacation_request_' . $vac_id . '.pdf', 'D');
+
+$pdf->Output('vacation_request_' . $vac_id . '.pdf', 'I');
