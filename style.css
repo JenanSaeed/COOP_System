@@ -295,6 +295,7 @@ body {
 }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 /* Thank you page */
 .thank {
     display: grid;
@@ -330,6 +331,8 @@ body {
   justify-content: center;
 }
 =======
+=======
+>>>>>>> Stashed changes
 /* Leave details page */
 .container {
   min-height: 100vh;
@@ -379,5 +382,9 @@ body {
   color: #721c24;
   padding: 5px 10px;
   border-radius: 5px;
+<<<<<<< Updated upstream
+}
+>>>>>>> Stashed changes
+=======
 }
 >>>>>>> Stashed changes
