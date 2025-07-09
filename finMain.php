@@ -23,7 +23,6 @@ try {
         v.vac_id,
         v.application_date,
         v.fin_approval,
-        v.man_approval,
         e.name AS employee_name
     FROM vacation v
     JOIN employee e ON v.emp_id = e.emp_id
@@ -106,10 +105,11 @@ $conn->close();
                         <?php
                             $status = 'معلق';
                             $class = 'status-pending';
-                            if ($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'مقبول') {
+
+                            if ($vac['fin_approval'] === 'مقبول') {
                                 $status = 'مقبول';
                                 $class = 'status-approved';
-                            } elseif ($vac['fin_approval'] === 'مرفوض' || $vac['man_approval'] === 'مرفوض') {
+                            } elseif ($vac['fin_approval'] === 'مرفوض') {
                                 $status = 'مرفوض';
                                 $class = 'status-rejected';
                             }

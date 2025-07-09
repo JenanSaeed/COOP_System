@@ -107,25 +107,24 @@ $conn->close();
         <div class="detail-label">اسم المكلف أثناء الإجازة:</div>
         <div class="detail-value"><?= htmlspecialchars($vac['assigned_emp'] ?? '—') ?></div>
 
-        <div class="detail-label">حالة الموافقة من المدير:</div>
-        <div class="detail-value">
-            <span class="<?= $vac['man_approval'] === 'مقبول' ? 'status-approved' : ($vac['man_approval'] === 'مرفوض' ? 'status-rejected' : 'status-pending') ?>">
-                <?= $vac['man_approval'] ?? 'معلق' ?>
-            </span>
-        </div>
-
         <div class="detail-label">حالة الموافقة من الشؤون المالية:</div>
         <div class="detail-value">
             <span class="<?= $vac['fin_approval'] === 'مقبول' ? 'status-approved' : ($vac['fin_approval'] === 'مرفوض' ? 'status-rejected' : 'status-pending') ?>">
                 <?= $vac['fin_approval'] ?? 'معلق' ?>
             </span>
         </div>
+        <div class="detail-label">حالة الموافقة من المدير:</div>
+        <div class="detail-value">
+            <span class="<?= $vac['man_approval'] === 'مقبول' ? 'status-approved' : ($vac['man_approval'] === 'مرفوض' ? 'status-rejected' : 'status-pending') ?>">
+                <?= $vac['man_approval'] ?? 'معلق' ?>
+            </span>
+        </div>
     </div>
-
-<div class="mt-4">
-    <a href="javascript:history.back()" class="btn btn-secondary">عودة</a>
-    <a href="finance-form.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-primary ms-2">متابعة</a>
+<div class="form-buttons">
+    <a href="javascript:history.back()" class="cancel-button">عودة</a>
+    <a href="finance-form.php?vac_id=<?= $vac['vac_id'] ?>" class="cancel-button ms-2">متابعة</a>
 </div>
+
 </div>
 <div class="container py-4 pb-5">
 <?php include 'footer.php'; ?>
