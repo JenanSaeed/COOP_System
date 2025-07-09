@@ -55,9 +55,17 @@ include 'header.php';
         <label class="loglabels" for="email">البريد الالكتروني</label><br>
         <input class="loginputs" type="email" name="email" required><br><br>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<!-- Add this inside your form before the submit button -->
+<div class="g-recaptcha" data-sitekey="6LcBJX0rAAAAAPlXvSpxDtB8icdEpDQX3FkqKjh-"></div>
+
         <input class= "reset" type="submit" value="اعادة تعيين كلمة المرور">
     </form>
 </div>
+
+
+
 <?php
 include 'footer.php';
 ?>  
