@@ -4,7 +4,13 @@ require_once("db_connect.php");
 
 // Authentication checks
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    $_SESSION['redirect_to'] = basename('PHP_SELF');
     header("Location: login.php");
+    exit();
+}
+
+if ($_SESSION['role'] !== 'employee') {
+    header("Location: homepage.php");
     exit();
 }
 
@@ -81,7 +87,7 @@ $conn->close();
                     </thead>
                     <tbody>
                         <?php foreach ($vacations as $vac): ?>
-                            <tr onclick="window.location.href='empVecDet1.php?vac_id=<?= $vac['vac_id'] ?>'" style="cursor:pointer;">
+                            <tr onclick="window.location.href='empVecDet2.php?vac_id=<?= $vac['vac_id'] ?>'" style="cursor:pointer;">
                                 <td><?= $vac['vac_id'] ?></td>
                                 <td><?= $vac['app_date'] ?></td>
                                 <td><?php

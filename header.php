@@ -1,7 +1,29 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
+  if (session_status() === PHP_SESSION_NONE) {
     session_start();
-}
+  }
+
+  $contractsLink = "login.php";
+  $vacationsLink = "login.php";
+
+  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    $role = $_SESSION['role'];
+
+    switch ($role) {
+      case 'employee':
+        $contractsLink = "contracts.php";
+        $vacationsLink = "empReqs.php";
+        break;
+      case 'finance':
+        $contractsLink = "contracts.php";
+        $vacationsLink = "finMain.php";
+        break;
+      case 'manager':
+        $contractsLink = "contracts.php";
+        $vacationsLink = "manMain.php";
+        break;
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -23,8 +45,8 @@ if (session_status() === PHP_SESSION_NONE) {
     <nav class="main-nav">
       <ul class="nav-links">
         <li><a href="homepage.php">الرئيسية</a></li>
-        <li><a href="#">العقود</a></li>
-        <li><a href="EmpReqs.php">الإجازات</a></li>
+        <li><a href="<?= $contractsLink ?>">العقود</a></li>
+        <li><a href="<?= $vacationsLink ?>">الإجازات</a></li>
       </ul>
     </nav>
     
@@ -34,11 +56,10 @@ if (session_status() === PHP_SESSION_NONE) {
           <i class="fa-solid fa-right-from-bracket"></i>
           <?= htmlspecialchars($_SESSION['name']) ?>      
         </a>
-        <?php else: ?>
-          <a class="logged" href="login.php"><i class="fa-solid fa-user"></i></a>
-        <?php endif; ?>
+      <?php else: ?>
+        <a class="logged" href="login.php"><i class="fa-solid fa-user"></i></a>
+      <?php endif; ?>
     </div>
-    
-</header>
+  </header>
 </body>
 </html>

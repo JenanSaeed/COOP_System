@@ -4,16 +4,13 @@ require_once("db_connect.php");
 
 // Check login
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("Location: homepage.php");
+    $_SESSION['redirect_to'] = basename('PHP_SELF');
+    header("Location: login.php");
     exit();
 }
 
-// Role redirect
-if ($_SESSION['role'] === 'finance') {
-    header("Location: finMain.php");
-    exit();
-} elseif ($_SESSION['role'] === 'employee') {
-    header("Location: empReqs.php");
+if ($_SESSION['role'] !== 'manager') {
+    header("Location: homepage.php");
     exit();
 }
 

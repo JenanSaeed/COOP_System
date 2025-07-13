@@ -3,10 +3,10 @@ session_start();
 include 'db_connect.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $emp_id = trim($_POST['id']);
+    $emp_id = trim($_POST['emp_id']);
     $password = trim($_POST['password']);
 
-    $stmt = $conn->prepare("SELECT * FROM sign WHERE emp_id = ?");
+    $stmt = $conn->prepare("SELECT * FROM employee WHERE emp_id = ?");
     $stmt->bind_param("s", $emp_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -20,9 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = $row['role'];
 
             // ✅ إذا فيه صفحة محفوظة للرجوع لها، نوجه لها
-            if (isset($_SESSION['redirect_after_login'])) {
-                $redirect_to = $_SESSION['redirect_after_login'];
-                unset($_SESSION['redirect_after_login']); // نحذفها عشان ما تبقى
+            if (isset($_SESSION['redirect_to'])) {
+                $redirect_to = $_SESSION['redirect_to'];
+                unset($_SESSION['redirect_to']); // نحذفها عشان ما تبقى
                 header("Location: $redirect_to");
                 exit();
             }
@@ -70,9 +70,9 @@ include 'header.php';
 
 <div class="container">
 <?php
-if (isset($_GET['error_message'])) {
+if (isset($_GET['error'])) {
     echo "<div style='color: red; font-weight: bold; text-align: center; margin-bottom: 15px;'>" 
-        .htmlspecialchars($_GET['error_message']) . 
+        .htmlspecialchars($_GET['error']) . 
         "</div>";
 }
 ?>

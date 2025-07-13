@@ -30,32 +30,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-// جلب بيانات الإجازة الحالية
-$stmt = $conn->prepare("SELECT v.*, e.used_days, e.remaining_days FROM vacation v JOIN employee e ON v.emp_id = e.emp_id WHERE v.vac_id = ?");
+// Fetch vacation info
+$stmt = $conn->prepare("SELECT * FROM vacation WHERE vac_id = ?");
 $stmt->bind_param("i", $vac_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $vac = $result->fetch_assoc();
 $stmt->close();
+$conn->close();
 
 if (!$vac) {
     echo "لم يتم العثور على الطلب.";
     exit();
 }
-
-// جلب آخر إجازة سابقة لهذا الموظف (غير الحالية)
-$emp_id = $vac['emp_id'];
-$stmt = $conn->prepare("
-    SELECT * FROM vacation 
-    WHERE emp_id = ? AND man_approval = 'مقبول' AND vac_id != ?
-    ORDER BY end_date DESC LIMIT 1
-");
-$stmt->bind_param("ii", $emp_id, $vac_id);
-$stmt->execute();
-$last_result = $stmt->get_result();
-$last_vac = $last_result->fetch_assoc();
-$stmt->close();
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -65,6 +52,7 @@ $conn->close();
   <title>تفاصيل الطلب - مركز التعليم المستمر</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <?php include 'header.php'; ?>
@@ -77,26 +65,34 @@ $conn->close();
   <?php endif; ?>
 
   <form method="post" class="leave-form">
-
     <div class="form-group">
-      <label>رصيد الموظف المستهلك:</label>
-      <input type="text" value="<?= htmlspecialchars($vac['used_days']) ?> يومًا" disabled>
+      <label>نوع الإجازة:</label>
+      <input type="text" value="<?= htmlspecialchars($vac['type']) ?>" disabled>
     </div>
 
     <div class="form-group">
-      <label>رصيد الموظف المتبقي:</label>
-      <input type="text" value="<?= htmlspecialchars($vac['remaining_days']) ?> يومًا" disabled>
+      <label>عدد الأيام:</label>
+      <input type="text" value="<?= htmlspecialchars($vac['days']) ?> يوم" disabled>
     </div>
 
     <div class="form-group">
-      <label>تاريخ آخر إجازة تمتع بها الموظف:</label>
-      <input type="text" value="<?php 
-        if ($last_vac) {
-          echo htmlspecialchars("بتاريخ {$last_vac['start_date']} إلى {$last_vac['end_date']} ومدتها {$last_vac['days']} يومًا");
-        } else {
-          echo "لا توجد إجازات سابقة.";
-        }
-      ?>" disabled>
+      <label>من تاريخ:</label>
+      <input type="text" value="<?= htmlspecialchars($vac['start_date']) ?>" disabled>
+    </div>
+
+    <div class="form-group">
+      <label>إلى تاريخ:</label>
+      <input type="text" value="<?= htmlspecialchars($vac['end_date']) ?>" disabled>
+    </div>
+
+    <div class="form-group">
+      <label>تاريخ الطلب:</label>
+      <input type="text" value="<?= htmlspecialchars($vac['application_date']) ?>" disabled>
+    </div>
+
+    <div class="form-group">
+      <label>اسم المكلف أثناء الإجازة:</label>
+      <input type="text" value="<?= htmlspecialchars($vac['assigned_emp']) ?>" disabled>
     </div>
 
     <div class="form-group">
