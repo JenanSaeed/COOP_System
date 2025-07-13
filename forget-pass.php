@@ -39,6 +39,7 @@ if($_SERVER[ 'REQUEST_METHOD']=== 'POST'){
   <meta charset="UTF-8">
   <title>اعادة تعيين كلمة المرور</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
