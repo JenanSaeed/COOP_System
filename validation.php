@@ -21,23 +21,45 @@ $success = '';
 // معالجة اعتماد الطلب فقط
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['approve'])) {
     try {
+        // 1. تحديث الموافقة
         $stmt = $conn->prepare("UPDATE vacation SET man_approval = 'مقبول' WHERE vac_id = ?");
         $stmt->bind_param("i", $vac_id);
         $stmt->execute();
-
-        if ($stmt->affected_rows > 0) {
-            $success = "تم اعتماد الطلب بنجاح.";
-        } else {
-            $error = "لم يتم العثور على الطلب أو لم يحدث أي تغيير.";
-        }
         $stmt->close();
-    } catch (Exception $e) {
-        $error = "خطأ في تحديث الطلب: " . $e->getMessage();
-    }
 
-    if (empty($error)) {
+        // 2. جلب بيانات الإجازة لتحديث جدول الموظف
+        $stmt = $conn->prepare("SELECT emp_id, days, end_date FROM vacation WHERE vac_id = ?");
+        $stmt->bind_param("i", $vac_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $vac = $result->fetch_assoc();
+        $stmt->close();
+
+        if ($vac) {
+            $emp_id = $vac['emp_id'];
+            $days = $vac['days'];
+            $end_date = $vac['end_date'];
+
+            // 3. تحديث جدول الموظف
+            $stmt = $conn->prepare("
+                UPDATE employee 
+                SET 
+                    used_days = used_days + ?, 
+                    remaining_days = remaining_days - ?, 
+                    last_vac = ?
+                WHERE emp_id = ?
+            ");
+            $stmt->bind_param("iisi", $days, $days, $end_date, $emp_id);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        // 4. إعادة التوجيه
         header("Location: manMgr.php");
         exit();
+
+    } catch (Exception $e) {
+        $error = "حدث خطأ: " . $e->getMessage();
     }
 }
 
@@ -89,17 +111,16 @@ $conn->close();
         <p><strong>حالة الموافقة الإدارية:</strong> <?= htmlspecialchars($vacation['man_approval']) ?></p>
         <p><strong>حالة الموافقة المالية:</strong> <?= htmlspecialchars($vacation['fin_approval']) ?></p>
         <a href="generate_pdf.php?vac_id=<?= urlencode($vacation['vac_id']) ?>" class="btn btn-outline-primary mt-3" target="_blank">
-    تحميل نموذج الإجازة PDF
+            تحميل نموذج الإجازة PDF
         </a>
-
     </div>
 
-   <form method="POST">
-    <?php if ($vacation['man_approval'] === 'معلق'): ?>
-        <button type="submit" name="approve" class="btn btn-success me-2">اعتماد</button>
-    <?php endif; ?>
-    <a href="manMain.php" class="btn btn-secondary">إلغاء</a>
-</form>
+    <form method="POST">
+        <?php if ($vacation['man_approval'] === 'معلق'): ?>
+            <button type="submit" name="approve" class="btn btn-success me-2">اعتماد</button>
+        <?php endif; ?>
+        <a href="manMain.php" class="btn btn-secondary">إلغاء</a>
+    </form>
 </div>
 
 <?php include 'footer.php'; ?>
