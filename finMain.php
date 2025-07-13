@@ -42,43 +42,6 @@ $conn->close();
     <meta charset="UTF-8">
     <title>طلبات الإجازات - الشؤون المالية</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-    <style>
-        .vacation-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .vacation-table th, .vacation-table td {
-            padding: 12px 15px;
-            text-align: center;
-            border: 1px solid #dee2e6;
-        }
-        .vacation-table th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-        }
-        .vacation-table tr:hover {
-            background-color: #f1f1f1;
-            cursor: pointer;
-        }
-        .status-badge {
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        .status-approved {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .status-rejected {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-    </style>
 </head>
 <body class="bg-light">
 <?php include 'header.php'; ?>

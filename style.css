@@ -56,13 +56,120 @@ footer {
   width: 100%;
 }
 
-/* Login page */
+/* Home Page */
+.home-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 140px); /* Account for header + footer */
+  background-color: #f9f9f9;
+}
+
+.home-buttons {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.home-btn {
+  background-color: #3A625D;
+  color: white;
+  padding: 40px 60px;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.home-btn:hover {
+  background-color: #2e4f49;
+}
+
+/* LoginPage */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.logform {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 300px;
+  margin-top: -350px;
+}
+
+.loglabels {
+  display: block;
+  margin-top: 10px;
+}
+
+.loginputs {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
 .logged {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 18px;
   color: white;
+}
+
+/* Buttons */
+
+.buttons {
+  margin-top: 20px;
+  width: 50%;
+  padding: 10px;
+  background-color: #154746;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  margin: 20px auto 0;
+  display: block;
+  text-decoration: none !important;
+}
+
+.buttons:hover {
+  background-color: #346463;
+}
+
+.reset {
+  margin-top: 20px;
+  width: 70%;
+  padding: 10px;
+  background-color: #154746;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  margin: 20px auto 0;
+  display: block;
+}
+
+.reset-form {
+  margin-top: 20px;      /* Reduce this if the form is too far down */
+  display: flex;
+  justify-content: center;
 }
 
 /* Employee Requests page */
@@ -114,6 +221,7 @@ footer {
                 padding: 8px 10px;
             }
         }
+
 .title-bar {
   display: flex;
   justify-content: space-between;
@@ -169,42 +277,7 @@ footer {
   border-radius: 6px;
 }
 
-/* Home Page */
-.home-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - 140px); /* Account for header + footer */
-  background-color: #f9f9f9;
-}
-
-.home-buttons {
-  display: flex;
-  gap: 40px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.home-btn {
-  background-color: #3A625D;
-  color: white;
-  padding: 40px 60px;
-  font-size: 24px;
-  font-weight: bold;
-  text-decoration: none;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.home-btn:hover {
-  background-color: #2e4f49;
-}
-
-/* Vacation Finance Page */
+/* Main Finance Page */
 .vacation-list-page {
   padding: 100px 40px 60px;
   max-width: 800px;
@@ -235,87 +308,43 @@ footer {
   gap: 8px;
 }
 
-/* LoginPage */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
-  height: 100vh;
-  direction: rtl; /* مهم للعربية */
-}
+.vacation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .vacation-table th, .vacation-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        .vacation-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .vacation-table tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.logform {
-  background-color: white;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  width: 300px;
-  margin-top: -350px;
-}
-
-.loglabels {
-  display: block;
-  margin-top: 10px;
-}
-
-.loginputs {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  box-sizing: border-box;
-}
-
-/* Buttons */
-
-.buttons {
-  margin-top: 20px;
-  width: 50%;
-  padding: 10px;
-  background-color: #154746;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-  border-radius: 5px;
-  margin: 20px auto 0;
-  display: block;
-}
-
-.buttons:hover {
-  background-color: #346463;
-}
-
-.reset {
-  margin-top: 20px;
-  width: 70%;
-  padding: 10px;
-  background-color: #154746;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-  border-radius: 5px;
-  margin: 20px auto 0;
-  display: block;
-}
-
-.reset-form {
-  margin-top: 20px;      /* Reduce this if the form is too far down */
-  display: flex;
-  justify-content: center;
-}
-
-/* Leave details page */
+/* leave details Page */
 .container {
   min-height: 100vh;
   display: flex;
@@ -365,3 +394,104 @@ body {
   padding: 5px 10px;
   border-radius: 5px;
 }
+
+/* Finance Form Page */
+.request-page {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .form-title {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-buttons {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .submit-button, .cancel-button {
+      padding: 10px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .submit-button {
+      background-color: #007bff;
+      color: white;
+      margin-right: 10px;
+    }
+    .cancel-button {
+      background-color: #6c757d;
+      color: white;
+    }
+    .radio-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    .radio-group label {
+      font-weight: normal;
+    }
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+/* Main Manager Page */
+.vacation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .vacation-table th, .vacation-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        .vacation-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .vacation-table tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+/* validtion Page */
