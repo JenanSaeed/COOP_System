@@ -9,7 +9,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || $_SESSI
 }
 
 $vac_id = $_GET['vac_id'] ?? null;
-$return_url = $_GET['return_url'] ?? 'managerMain.php'; // الصفحة اللي يرجع لها بعد الإجراء
+$return_url = $_GET['return_url'] ?? 'manMain.php'; // الصفحة اللي يرجع لها بعد الإجراء
 
 if (!$vac_id) {
     die("رقم الطلب غير موجود.");
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['approve'])) {
         }
 
         // 4. إعادة التوجيه
-        header("Location: manMgr.php");
+        header("Location: manMain.php");
         exit();
 
     } catch (Exception $e) {
