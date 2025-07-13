@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['approve'])) {
 
     if (empty($error)) {
         // إعادة التوجيه للصفحة السابقة مباشرة بعد الاعتماد
-        header("Location: " . $return_url);
+        header("Location: manMgr.php");
         exit();
     }
 }
