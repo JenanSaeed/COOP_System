@@ -2,7 +2,7 @@
 session_start();
 require_once("db_connect.php");
 
-// Authentication checks
+// تحقق من تسجيل الدخول
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     $_SESSION['redirect_to'] = basename('PHP_SELF');
     header("Location: login.php");
@@ -20,7 +20,7 @@ if (!$emp_id) {
     exit();
 }
 
-// Fetch vacation history
+// جلب بيانات الإجازات
 try {
     $stmt = $conn->prepare("SELECT 
         vac_id, 
@@ -36,9 +36,9 @@ try {
         WHERE emp_id = ? 
         ORDER BY application_date DESC");
 
-        $stmt->bind_param("s", $emp_id);
-        $stmt->execute();
-        $vacations = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $stmt->bind_param("s", $emp_id);
+    $stmt->execute();
+    $vacations = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 } catch (Exception $e) {
     $error = "حدث خطأ في تحميل البيانات: " . $e->getMessage();
 }
@@ -56,7 +56,8 @@ $conn->close();
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-light">
-    <?php include 'header.php'; ?>
+<?php include 'header.php'; ?>
+
 
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -69,49 +70,54 @@ $conn->close();
             </a>
             </div>
 
-        <?php if (!empty($error)): ?>
-            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-        <?php endif; ?>
 
-        <?php if (empty($vacations)): ?>
-            <div class="alert alert-info">لا توجد طلبات إجازة مسجلة</div>
-        <?php else: ?>
-            <div class="table-responsive">
-                <table class="vacation-table">
-                    <thead>
+    <?php if (!empty($error)): ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+    <?php endif; ?>
+
+    <?php if (empty($vacations)): ?>
+        <div class="alert alert-info">لا توجد طلبات إجازة مسجلة</div>
+    <?php else: ?>
+        <div class="table-responsive">
+            <table class="vacation-table table table-bordered text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th>رقم الطلب</th>
+                        <th>تاريخ الطلب</th>
+                        <th>الحالة</th>
+                        <th>العمليات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($vacations as $vac): ?>
+                        <?php
+                            $status = 'معلق';
+                            $class = 'status-pending';
+                            if ($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'مقبول') {
+                                $status = 'مقبول';
+                                $class = 'status-approved';
+                            } elseif ($vac['fin_approval'] === 'مرفوض' || $vac['man_approval'] === 'مرفوض') {
+                                $status = 'مرفوض';
+                                $class = 'status-rejected';
+                            }
+                        ?>
                         <tr>
-                            <th>رقم الطلب</th>
-                            <th>تاريخ الطلب</th>
-                            <th>حالة الموافقة</th>
+                            <td><?= $vac['vac_id'] ?></td>
+                            <td><?= $vac['app_date'] ?></td>
+                            <td><span class="status-badge <?= $class ?>"><?= $status ?></span></td>
+                            <td class="d-flex gap-2 justify-content-center flex-wrap">
+                                <a href="empVecDet2.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-primary">تفاصيل</a>
+                                <a href="empVecDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-outline-secondary" target="_blank">تحميل PDF</a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($vacations as $vac): ?>
-                            <tr onclick="window.location.href='empVecDet2.php?vac_id=<?= $vac['vac_id'] ?>'" style="cursor:pointer;">
-                                <td><?= $vac['vac_id'] ?></td>
-                                <td><?= $vac['app_date'] ?></td>
-                                <td><?php
-                                    $status = 'معلق';
-                                    $class = 'status-pending';
-                                    if ($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'مقبول') {
-                                        $status = 'مقبول';
-                                        $class = 'status-approved';
-                                    } elseif ($vac['fin_approval'] === 'مرفوض' || $vac['man_approval'] === 'مرفوض') {
-                                        $status = 'مرفوض';
-                                        $class = 'status-rejected';
-                                    }
-                                    ?>
-                                    <span class="status-badge <?= $class ?>"><?= $status ?></span>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php endif; ?>
-    </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+</div>
 
-    <?php include 'footer.php'; ?>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<?php include 'footer.php'; ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

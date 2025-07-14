@@ -110,9 +110,6 @@ $conn->close();
         <p><strong>تاريخ التقديم:</strong> <?= htmlspecialchars(date('Y-m-d', strtotime($vacation['application_date']))) ?></p>
         <p><strong>حالة الموافقة الإدارية:</strong> <?= htmlspecialchars($vacation['man_approval']) ?></p>
         <p><strong>حالة الموافقة المالية:</strong> <?= htmlspecialchars($vacation['fin_approval']) ?></p>
-        <a href="generate_pdf.php?vac_id=<?= urlencode($vacation['vac_id']) ?>" class="btn btn-outline-primary mt-3" target="_blank">
-            تحميل نموذج الإجازة PDF
-        </a>
     </div>
 
     <form method="POST">
