@@ -85,7 +85,9 @@ if (isset($_GET['error'])) {
     <label class="loglabels" for="password">كلمة المرور:</label>
     <input class="loginputs" type="password" id="password" name="password" placeholder="كلمة المرور" required>
 
-    <input class="buttons" type="submit" value="تسجيل الدخول">
+    <div class="form-buttons">
+        <button class="buttons" type="submit" value="تسجيل الدخول">تسجيل الدخول</button>
+    </div>
   </form>
 </div>
 
