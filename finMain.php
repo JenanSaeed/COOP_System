@@ -20,6 +20,7 @@ try {
         v.vac_id,
         v.application_date,
         v.fin_approval,
+        v.man_approval,
         e.name AS employee_name
     FROM vacation v
     JOIN employee e ON v.emp_id = e.emp_id
@@ -82,8 +83,10 @@ $conn->close();
                             <td><?= date('Y-m-d', strtotime($vac['application_date'])) ?></td>
                             <td><span class="status-badge <?= $class ?>"><?= $status ?></span></td>
                             <td class="d-flex gap-2 justify-content-center flex-wrap">
-                                <a href="empVacDet1.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-primary">تفاصيل</a>
-                                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-outline-secondary" target="_blank">تحميل PDF</a>
+                                <a href="empVacDet1.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-det">تفاصيل</a>
+                                <?php if ($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد'): ?>
+                                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-prnt" target="_blank">تحميل PDF</a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

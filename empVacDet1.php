@@ -91,7 +91,9 @@ $conn->close();
             </div>
             <div class="detail-label">حالة الاعتماد من المدير:</div>
             <div class="detail-value">
-                <span class="<?= $vac['man_approval'] === 'معتمد' ? 'status-approved' : ($vac['man_approval'] === 'معلق' ? 'status-pending') ?>">
+                <span class="<?=     $vac['man_approval'] === 'معتمد' ? 'status-approved' :
+                    ($vac['man_approval'] === 'معلق' ? 'status-pending' : 'status-rejected')
+                    ?>">
                     <?= $vac['man_approval'] ?? 'معلق' ?>
                 </span>
             </div>

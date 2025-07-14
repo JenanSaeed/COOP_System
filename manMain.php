@@ -89,7 +89,7 @@ $conn->close();
             <td><?= $man_status ?></td>
             <td>
                 <?php if ($vac['man_approval'] === 'معلق'): ?>
-                    <span class="text-primary">قيد الانتظار</span>
+                    <span>قيد الانتظار</span>
                 <?php else: ?>
                     <span>طلب سابق</span>
                 <?php endif; ?>

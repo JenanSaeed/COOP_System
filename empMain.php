@@ -93,10 +93,10 @@ $conn->close();
                         <?php
                             $status = 'معلق';
                             $class = 'status-pending';
-                            if ($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'مقبول') {
+                            if ($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد') {
                                 $status = 'مقبول';
                                 $class = 'status-approved';
-                            } elseif ($vac['fin_approval'] === 'مرفوض' || $vac['man_approval'] === 'مرفوض') {
+                            } elseif ($vac['fin_approval'] === 'مرفوض' && $vac['man_approval'] === 'معتمد') {
                                 $status = 'مرفوض';
                                 $class = 'status-rejected';
                             }
@@ -106,8 +106,10 @@ $conn->close();
                             <td><?= $vac['app_date'] ?></td>
                             <td><span class="status-badge <?= $class ?>"><?= $status ?></span></td>
                             <td class="d-flex gap-2 justify-content-center flex-wrap">
-                                <a href="empVacDet2.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-primary">تفاصيل</a>
-                                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-outline-secondary" target="_blank">تحميل PDF</a>
+                                <a href="empVacDet2.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-det">تفاصيل</a>
+                                <?php if ($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد'): ?>
+                                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-prnt" target="_blank">تحميل PDF</a>
+                                <?php endif; ?>                            
                             </td>
                         </tr>
                     <?php endforeach; ?>
