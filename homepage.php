@@ -21,7 +21,7 @@
     switch ($role) {
       case 'employee':
         $contractsLink = "contracts.php";
-        $vacationsLink = "empReqs.php";
+        $vacationsLink = "empMain.php";
         break;
       case 'finance':
         $contractsLink = "contracts.php";

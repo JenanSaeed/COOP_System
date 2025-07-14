@@ -22,7 +22,7 @@ $success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['approve'])) {
     try {
         // 1. تحديث الموافقة
-        $stmt = $conn->prepare("UPDATE vacation SET man_approval = 'مقبول' WHERE vac_id = ?");
+        $stmt = $conn->prepare("UPDATE vacation SET man_approval = 'معتمد' WHERE vac_id = ?");
         $stmt->bind_param("i", $vac_id);
         $stmt->execute();
         $stmt->close();
@@ -99,24 +99,25 @@ $conn->close();
     <?php if ($error): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
-
-    <div class="card p-4 mb-4">
-        <h4>اسم الموظف: <?= htmlspecialchars($vacation['employee_name']) ?></h4>
-        <p><strong>نوع الإجازة:</strong> <?= htmlspecialchars($vacation['type']) ?></p>
-        <p><strong>مدة الإجازة:</strong> <?= htmlspecialchars($vacation['days']) ?> يوم</p>
-        <p><strong>من تاريخ:</strong> <?= htmlspecialchars($vacation['start_date']) ?></p>
-        <p><strong>إلى تاريخ:</strong> <?= htmlspecialchars($vacation['end_date']) ?></p>
-        <p><strong>الشخص المكلف:</strong> <?= htmlspecialchars($vacation['assigned_emp']) ?></p>
-        <p><strong>تاريخ التقديم:</strong> <?= htmlspecialchars(date('Y-m-d', strtotime($vacation['application_date']))) ?></p>
-        <p><strong>حالة الموافقة الإدارية:</strong> <?= htmlspecialchars($vacation['man_approval']) ?></p>
-        <p><strong>حالة الموافقة المالية:</strong> <?= htmlspecialchars($vacation['fin_approval']) ?></p>
-    </div>
-
     <form method="POST">
-        <?php if ($vacation['man_approval'] === 'معلق'): ?>
-            <button type="submit" name="approve" class="btn btn-success me-2">اعتماد</button>
-        <?php endif; ?>
-        <a href="manMain.php" class="btn btn-secondary">إلغاء</a>
+
+        <div class="card p-4 mb-4">
+            <h4>اسم الموظف: <?= htmlspecialchars($vacation['employee_name']) ?></h4>
+            <p><strong>نوع الإجازة:</strong> <?= htmlspecialchars($vacation['type']) ?></p>
+            <p><strong>مدة الإجازة:</strong> <?= htmlspecialchars($vacation['days']) ?> يوم</p>
+            <p><strong>من تاريخ:</strong> <?= htmlspecialchars($vacation['start_date']) ?></p>
+            <p><strong>إلى تاريخ:</strong> <?= htmlspecialchars($vacation['end_date']) ?></p>
+            <p><strong>الشخص المكلف:</strong> <?= htmlspecialchars($vacation['assigned_emp']) ?></p>
+            <p><strong>تاريخ التقديم:</strong> <?= htmlspecialchars(date('Y-m-d', strtotime($vacation['application_date']))) ?></p>
+            <p><strong>حالة الموافقة الإدارية:</strong> <?= htmlspecialchars($vacation['man_approval']) ?></p>
+            <p><strong>حالة الموافقة المالية:</strong> <?= htmlspecialchars($vacation['fin_approval']) ?></p>
+        </div>
+        <div class="form-buttons">
+            <?php if ($vacation['man_approval'] === 'معلق'): ?>
+            <button type="submit" name="approve" class="buttons">اعتماد</button>
+            <?php endif; ?>
+            <button type="button" class="buttons" onclick="location.href='manMain.php'">إلغاء</button>
+        </div>
     </form>
 </div>
 

@@ -128,7 +128,7 @@ $conn->close();
     </div>
 
     <div class="form-group">
-      <label>هل الإجازة مستحقة نظامًا؟</label>
+      <label>هل الإجازة مستحقة نظاماً؟</label>
       <div class="radio-group">
         <label><input type="radio" name="approval" value="مقبول"> الإجازة مستحقة نظامًا</label>
         <label><input type="radio" name="approval" value="مرفوض"> الإجازة غير مستحقة نظامًا</label>
@@ -136,7 +136,7 @@ $conn->close();
     </div>
 
     <div class="form-buttons">
-      <a href="empVecDet1.php?vac_id=<?= $vac['vac_id'] ?>" class="buttons">عودة</a>
+      <button type="button" class="buttons" onclick="location.href='empVacDet1.php?vac_id=<?= $vac['vac_id'] ?>'">عودة</button>
       <button type="submit" class="buttons">إرسال الطلب</button>
     </div>
   </form>

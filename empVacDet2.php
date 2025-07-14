@@ -97,8 +97,7 @@ $conn->close();
             </div>
         </div>
         <div class="form-buttons text-center">
-            <a href="finMain.php" class="buttons">عودة</a>
-            <a href="finance-form.php?vac_id=<?= $vac['vac_id'] ?>" class="buttons">متابعة</a>
+            <a href="empMain.php" class="buttons">عودة</a>
         </div>
     </div>
 </div>

@@ -89,15 +89,20 @@ $conn->close();
                     <?= $vac['fin_approval'] ?? 'معلق' ?>
                 </span>
             </div>
-            <div class="detail-label">حالة الموافقة من المدير:</div>
+            <div class="detail-label">حالة الاعتماد من المدير:</div>
             <div class="detail-value">
-                <span class="<?= $vac['man_approval'] === 'مقبول' ? 'status-approved' : ($vac['man_approval'] === 'مرفوض' ? 'status-rejected' : 'status-pending') ?>">
+                <span class="<?=     $vac['man_approval'] === 'معتمد' ? 'status-approved' :
+                    ($vac['man_approval'] === 'معلق' ? 'status-pending' : 'status-rejected')
+                    ?>">
                     <?= $vac['man_approval'] ?? 'معلق' ?>
                 </span>
             </div>
         </div>
         <div class="form-buttons text-center">
-            <a href="empReqs.php" class="buttons">عودة</a>
+            <a href="finMain.php" class="buttons">عودة</a>
+            <?php if ($vac['fin_approval'] === 'معلق'): ?>
+            <a href="finance-form.php?vac_id=<?= $vac['vac_id'] ?>" class="buttons">متابعة</a>
+            <?php endif; ?>
         </div>
     </div>
 </div>
