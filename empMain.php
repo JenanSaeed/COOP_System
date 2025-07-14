@@ -106,8 +106,8 @@ $conn->close();
                             <td><?= $vac['app_date'] ?></td>
                             <td><span class="status-badge <?= $class ?>"><?= $status ?></span></td>
                             <td class="d-flex gap-2 justify-content-center flex-wrap">
-                                <a href="empVecDet2.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-primary">تفاصيل</a>
-                                <a href="empVecDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-outline-secondary" target="_blank">تحميل PDF</a>
+                                <a href="empVacDet2.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-primary">تفاصيل</a>
+                                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-outline-secondary" target="_blank">تحميل PDF</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
