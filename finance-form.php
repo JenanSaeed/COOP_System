@@ -2,6 +2,7 @@
 session_start();
 require_once("db_connect.php");
 
+// تحقق من تسجيل الدخول
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.php");
     exit();
@@ -13,7 +14,9 @@ if (!$vac_id) {
     exit();
 }
 
-// Handle form submission
+$error = '';
+
+// معالجة التقديم
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $approval = $_POST['approval'] ?? null;
 
@@ -22,7 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->bind_param("si", $approval, $vac_id);
         $stmt->execute();
         $stmt->close();
-        $conn->close();
         header("Location: finMain.php");
         exit();
     } else {
@@ -30,19 +32,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-// Fetch vacation info
-$stmt = $conn->prepare("SELECT * FROM vacation WHERE vac_id = ?");
+// جلب بيانات الإجازة + الموظف
+$stmt = $conn->prepare("SELECT v.*, e.used_days, e.remaining_days, v.emp_id FROM vacation v JOIN employee e ON v.emp_id = e.emp_id WHERE v.vac_id = ?");
 $stmt->bind_param("i", $vac_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $vac = $result->fetch_assoc();
 $stmt->close();
-$conn->close();
 
 if (!$vac) {
     echo "لم يتم العثور على الطلب.";
+    $conn->close();
     exit();
 }
+
+// جلب آخر إجازة سابقة
+$emp_id = $vac['emp_id'];
+$stmt = $conn->prepare("
+    SELECT start_date, end_date, days 
+    FROM vacation 
+    WHERE emp_id = ? AND man_approval = 'مقبول' AND vac_id != ?
+    ORDER BY end_date DESC 
+    LIMIT 1
+");
+$stmt->bind_param("ii", $emp_id, $vac_id);
+$stmt->execute();
+$last_result = $stmt->get_result();
+$last_vac = $last_result->fetch_assoc();
+$stmt->close();
+
+// إغلاق الاتصال بعد الانتهاء من جميع العمليات
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -83,29 +103,41 @@ if (!$vac) {
     <div class="form-group">
       <label>إلى تاريخ:</label>
       <input type="text" value="<?= htmlspecialchars($vac['end_date']) ?>" disabled>
+      <label>رصيد الموظف المستهلك:</label>
+      <input type="text" value="<?= htmlspecialchars($vac['used_days']) ?> يومًا" disabled>
     </div>
 
     <div class="form-group">
       <label>تاريخ الطلب:</label>
       <input type="text" value="<?= htmlspecialchars($vac['application_date']) ?>" disabled>
+      <label>رصيد الموظف المتبقي:</label>
+      <input type="text" value="<?= htmlspecialchars($vac['remaining_days']) ?> يومًا" disabled>
     </div>
 
     <div class="form-group">
       <label>اسم المكلف أثناء الإجازة:</label>
       <input type="text" value="<?= htmlspecialchars($vac['assigned_emp']) ?>" disabled>
+      <label>تاريخ آخر إجازة تمتع بها الموظف:</label>
+      <input type="text" value="<?php 
+        if ($last_vac) {
+          echo "بتاريخ {$last_vac['start_date']} إلى {$last_vac['end_date']} ومدتها {$last_vac['days']} يومًا";
+        } else {
+          echo "لا توجد إجازات سابقة.";
+        }
+      ?>" disabled>
     </div>
 
     <div class="form-group">
       <label>هل الإجازة مستحقة نظامًا؟</label>
       <div class="radio-group">
-        <label><input type="radio" name="approval" value="مقبول">الإجازة مستحقة نظامًا؟</label>
-        <label><input type="radio" name="approval" value="مرفوض">الإجازة غير مستحقة نظامًا؟</label>
+        <label><input type="radio" name="approval" value="مقبول"> الإجازة مستحقة نظامًا</label>
+        <label><input type="radio" name="approval" value="مرفوض"> الإجازة غير مستحقة نظامًا</label>
       </div>
     </div>
 
     <div class="form-buttons">
       <a href="empVecDet1.php?vac_id=<?= $vac['vac_id'] ?>" class="buttons">عودة</a>
-      <a href="finMain.php" class="buttons">إرسال الطلب</a>
+      <button type="submit" class="buttons">إرسال الطلب</button>
     </div>
   </form>
 </main>
