@@ -1,12 +1,14 @@
 <?php
-$host = "sql103.infinityfree.com";
-$username = "if0_39466845";
-$password = "coopdatabase111";
-$database = "if0_39466845_coop_db";
-
+$host = "localhost";
+$username = "root";
+$password = "";
+$database = "coop_db";
 $conn = mysqli_connect($host, $username, $password, $database);
-
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+//or die("Connection failed"); will be added later
+if(!$conn){
+    die("Connection failed");
 }
+$pdo = new PDO('mysql:host=localhost;dbname=coop_db;charset=utf8', 'root', '');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 ?>

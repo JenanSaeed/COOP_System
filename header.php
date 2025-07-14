@@ -44,7 +44,7 @@
     
     <nav class="main-nav">
       <ul class="nav-links">
-        <li><a href="homepage.php">الرئيسية</a></li>
+        <li><a href="index.php">الرئيسية</a></li>
         <li><a href="<?= $contractsLink ?>">العقود</a></li>
         <li><a href="<?= $vacationsLink ?>">الإجازات</a></li>
       </ul>
