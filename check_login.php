@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // توجيه حسب الدور
              switch ($row['role']) {
                 case 'employee':
-                    header("Location: empReqs.php");
+                    header("Location: empMain.php");
                     break;
                 case 'finance':
                     header("Location: finMain.php");

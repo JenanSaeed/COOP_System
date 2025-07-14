@@ -97,7 +97,7 @@ $conn->close();
             </div>
         </div>
         <div class="form-buttons text-center">
-            <a href="empReqs.php" class="buttons">عودة</a>
+            <a href="empMain.php" class="buttons">عودة</a>
         </div>
     </div>
 </div>

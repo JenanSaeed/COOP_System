@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("ssisssss", $emp_id, $final_type, $days, $start_date, $end_date, $delegate, $man_approval, $fin_approval);
         if ($stmt->execute()) {
             $success = "تم تقديم طلب الإجازة بنجاح";
-            header("Refresh: 2; url=empReqs.php");
+            header("Refresh: 2; url=empMain.php");
         } else {
             throw new Exception("فشل في تقديم الطلب: " . $stmt->error);
         }
@@ -192,7 +192,7 @@ $conn->close();
                 </div>
 
                 <div class="form-buttons">
-                    <button type="button" class="buttons" onclick="location.href='empReqs.php'">إلغاء</button>
+                    <button type="button" class="buttons" onclick="location.href='empMain.php'">إلغاء</button>
                     <button type="submit" class="buttons">إرسال الطلب</button>
                 </div>
             </form>

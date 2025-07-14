@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // توجيه حسب الدور إذا ما فيه redirect مخصص
             if ($row['role'] === 'employee') {
-                header("Location: empReqs.php");
+                header("Location: empMain.php");
                 exit();
             } elseif ($row['role'] === 'finance') {
                 header("Location: finMain.php");
