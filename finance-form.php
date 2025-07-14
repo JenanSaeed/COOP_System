@@ -128,7 +128,7 @@ $conn->close();
     </div>
 
     <div class="form-group">
-      <label>هل الإجازة مستحقة نظامًا؟</label>
+      <label>هل الإجازة مستحقة نظاماً؟</label>
       <div class="radio-group">
         <label><input type="radio" name="approval" value="مقبول"> الإجازة مستحقة نظامًا</label>
         <label><input type="radio" name="approval" value="مرفوض"> الإجازة غير مستحقة نظامًا</label>
