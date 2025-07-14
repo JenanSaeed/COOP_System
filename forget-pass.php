@@ -1,74 +1,81 @@
 <?php
-
 require 'db_connect.php';
 
-$showMessage="";
-if($_SERVER[ 'REQUEST_METHOD']=== 'POST'){
-  $user_id = trim($_POST['user_id']);
-  $email= trim($_POST['email']);
-  $showMessage= "سيتم ارسال رابط اعادة تعيين كلمة المرور للبريد الالكتروني";
-  if (!empty($user_id) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        // Query to verify match
-        $stmt = $pdo->prepare("SELECT id FROM employee WHERE emp_id = ? AND email = ?");
+$showMessage = "";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user_id = trim($_POST['user_id']);
+    $email = trim($_POST['email']);
+    $recaptchaSecret = '6LcBJX0rAAAAAM4nvsH15keAEBNPLt2qBS1LL9uR'; // ← Replace with your actual reCAPTCHA secret key
+    $recaptchaResponse = $_POST['g-recaptcha-response'];
+
+    // Verify reCAPTCHA
+    $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptchaSecret&response=$recaptchaResponse");
+    $responseData = json_decode($verify);
+
+    if (!$responseData->success) {
+        $showMessage = "فشل التحقق من reCAPTCHA، الرجاء المحاولة مرة أخرى.";
+    } elseif (!empty($user_id) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $stmt = $pdo->prepare("SELECT emp_id FROM employee WHERE emp_id = ? AND email = ?");
         $stmt->execute([$user_id, $email]);
         $user = $stmt->fetch();
 
         if ($user) {
-            // Generate secure token
             $token = bin2hex(random_bytes(32));
-            $expires = date('Y-m-d H:i:s', time() + 3600); // 1 hour expiration
             $hashedToken = hash('sha256', $token);
+            $expires = date('Y-m-d H:i:s', time() + 3600); // Token valid for 1 hour
 
-            // Store reset info in password_resets table
             $stmt = $pdo->prepare("INSERT INTO password_resets (user_id, token_hash, expires_at) VALUES (?, ?, ?)");
             $stmt->execute([$user_id, $hashedToken, $expires]);
 
-            // Send reset email
-            $resetLink = "https://yourdomain.com/reset-password.php?token=$token";
+            $resetLink = "http://" . $_SERVER['HTTP_HOST'] . "/COOP_SystemT/reset-password.php?token=$token";
             $subject = "اعادة تعيين كلمة المرور";
-            $message = "لاعادة تعيين كلمة المرور :\n\n$resetLink\n\nThis link will expire in 1 hour.";
-            // mail($email, $subject, $message); // Uncomment this in production
+            $message = "لإعادة تعيين كلمة المرور، اضغط على الرابط التالي:\n\n$resetLink\n\nالرابط صالح لمدة ساعة واحدة فقط.";
+
+            // mail($email, $subject, $message); // Uncomment in production
+            $showMessage = "تم إنشاء الرابط بنجاح. استخدم الرابط التالي لإعادة تعيين كلمة المرور:<br><a href='$resetLink'>$resetLink</a>";
+        } else {
+            $showMessage = "المستخدم غير موجود أو البيانات غير صحيحة.";
         }
+    } else {
+        $showMessage = "يرجى إدخال رقم وظيفي وبريد إلكتروني صحيح.";
     }
 }
- 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <title>اعادة تعيين كلمة المرور</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
-
 <body>
-<?php
-include 'header.php';
-?>
+
+<?php include 'header.php'; ?>
+
 <h2 class="form-title">اعادة تعيين كلمة المرور</h2>
+
 <div class="reset-form">
-<?php if (!empty($showMessage)) echo "<p>$showMessage</p>"; ?>
-   <form method="POST" action="">
-        <label class="loglabels" for="user_id">الرقم الوظيفي</label><br>
-        <input class="loginputs" type="text" name="user_id" required><br><br>
+  
+  <form method="POST" action="forget-pass.php">
+    <label class="loglabels" for="user_id">الرقم الوظيفي</label>
+    <input class="loginputs" type="text" name="user_id" required>
 
-        <label class="loglabels" for="email">البريد الالكتروني</label><br>
-        <input class="loginputs" type="email" name="email" required><br><br>
+    <label class="loglabels" for="email">البريد الالكتروني</label>
+    <input class="loginputs" type="email" name="email" required>
 
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <div class="g-recaptcha" data-sitekey="6LcBJX0rAAAAAPlXvSpxDtB8icdEpDQX3FkqKjh-"></div><br>
 
-<!-- Add this inside your form before the submit button -->
-<div class="g-recaptcha" data-sitekey="6LcBJX0rAAAAAPlXvSpxDtB8icdEpDQX3FkqKjh-"></div>
+    <input class="reset" type="submit" value="اعادة تعيين كلمة المرور">
+    <?php if (!empty($showMessage)) echo "<p class='message'>$showMessage</p>"; ?>
 
-        <input class= "reset" type="submit" value="اعادة تعيين كلمة المرور">
-    </form>
+  </form>
 </div>
 
+<?php include 'footer.php'; ?>
 
-
-<?php
-include 'footer.php';
-?>  
 </body>
+
 </html>

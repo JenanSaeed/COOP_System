@@ -8,4 +8,7 @@ $conn = mysqli_connect($host, $username, $password, $database);
 if(!$conn){
     die("Connection failed");
 }
+$pdo = new PDO('mysql:host=localhost;dbname=coop_db;charset=utf8', 'root', '');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 ?>

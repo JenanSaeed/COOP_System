@@ -86,6 +86,11 @@ if (isset($_GET['error'])) {
     <input class="loginputs" type="password" id="password" name="password" placeholder="كلمة المرور" required>
 
     <input class="buttons" type="submit" value="تسجيل الدخول">
+
+    <div class="forgot-password">
+    <a href="forget-pass.php">نسيت كلمة المرور؟</a>
+</div>
+
   </form>
 </div>
 

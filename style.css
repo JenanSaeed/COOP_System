@@ -3,7 +3,9 @@ body {
   background-color: #f0f2f5;
   font-family: 'Tajawal', sans-serif;
   line-height: 1.6;
+
 }
+
 
 .container {
   min-height: 100vh;
@@ -129,6 +131,22 @@ footer {
   box-sizing: border-box;
 }
 
+
+.forgot-password {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.forgot-password a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+
 /*------------------------ Buttons ------------------------*/
 a.buttons,
 .buttons {
@@ -158,6 +176,7 @@ a.buttons:hover,
   cursor: not-allowed;
 }
 
+/*------------------------Forget-password page---------------------------*/
 .reset {
   width: 70%;
   padding: 10px;
@@ -176,7 +195,18 @@ a.buttons:hover,
   margin-top: 20px;
   display: flex;
   justify-content: center;
+  margin-bottom: 20px;
+  flex: 1;
+
 }
+
+.message {
+  margin-top: 12px;
+  color: rgb(13, 12, 12);
+  font-weight: bold;
+  text-align: center;
+}
+
 
 /*------------------------ Table Styles ------------------------*/
 .vacation-table {
@@ -367,3 +397,4 @@ a.buttons:hover,
     padding: 8px 10px;
   }
 }
+
