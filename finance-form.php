@@ -96,16 +96,16 @@ if (!$vac) {
     </div>
 
     <div class="form-group">
-      <label>هل الإجازة مستحقة نظاماً؟</label>
+      <label>هل الإجازة مستحقة نظامًا؟</label>
       <div class="radio-group">
-        <label><input type="radio" name="approval" value="مقبول"> الإجازة مستحقة نظاماً</label>
-        <label><input type="radio" name="approval" value="مرفوض"> الإجازة غير مستحقة نظاماً</label>
+        <label><input type="radio" name="approval" value="مقبول">الإجازة مستحقة نظامًا؟</label>
+        <label><input type="radio" name="approval" value="مرفوض">الإجازة غير مستحقة نظامًا؟</label>
       </div>
     </div>
 
     <div class="form-buttons">
       <a href="empVecDet1.php?vac_id=<?= $vac['vac_id'] ?>" class="buttons">عودة</a>
-      <button type="submit" class="buttons">إرسال الطلب</button>
+      <a href="finMain.php" class="buttons">إرسال الطلب</a>
     </div>
   </form>
 </main>
