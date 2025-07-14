@@ -136,7 +136,7 @@ $conn->close();
     </div>
 
     <div class="form-buttons">
-      <a href="empVecDet1.php?vac_id=<?= $vac['vac_id'] ?>" class="buttons">عودة</a>
+      <button type="button" class="buttons" onclick="location.href='empVecDet1.php?vac_id=<?= $vac['vac_id'] ?>'">عودة</button>
       <button type="submit" class="buttons">إرسال الطلب</button>
     </div>
   </form>

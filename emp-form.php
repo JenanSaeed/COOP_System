@@ -92,117 +92,110 @@ $conn->close();
 <body class="bg-light">
     <?php include 'header.php'; ?>
 
-    <div class="container py-5">
-        <div class="leave-form">
+    <div class="container">
+        <div class="form-box">
             <h2 class="form-title">طلب إجازة جديدة</h2>
 
             <?php if ($error): ?>
-                <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
 
             <?php if ($success): ?>
-                <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-                <div class="text-center">سيتم تحويلك إلى صفحة طلبات الإجازات خلال ثانيتين...</div>
+            <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
+            <div class="text-center">سيتم تحويلك إلى صفحة طلبات الإجازات خلال ثانيتين...</div>
             <?php endif; ?>
 
             <?php if (empty($success)): ?>
-                <form method="POST" onsubmit="return validateForm()">
-                    <div class="form-group">
-                        <label class="form-label">نوع الإجازة:</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input
-                                    type="radio"
-                                    name="type"
-                                    value="اعتيادية"
-                                    id="regular"
-                                    <?= (isset($_POST['type']) && $_POST['type'] === 'اعتيادية' ? 'checked' : 'checked') ?>
-                                />
-                                <label for="regular">اعتيادية</label>
-                            </div>
-                            <div class="radio-option">
-                                <input
-                                    type="radio"
-                                    name="type"
-                                    value="مرضية"
-                                    id="sick"
-                                    <?= (isset($_POST['type']) && $_POST['type'] === 'مرضية' ? 'checked' : '') ?>
-                                />
-                                <label for="sick">مرضية</label>
-                            </div>
-                            <div class="radio-option">
-                                <input
-                                    type="radio"
-                                    name="type"
-                                    value="أخرى"
-                                    id="other"
-                                    <?= (isset($_POST['type']) && $_POST['type'] === 'أخرى' ? 'checked' : '') ?>
-                                />
-                                <label for="other">أخرى</label>
-                            </div>
-                        </div>
-                        <input
-                            type="text"
-                            name="other"
-                            id="otherType"
-                            class="form-control other-type mt-2"
-                            placeholder="حدد نوع الإجازة"
-                            value="<?= htmlspecialchars($_POST['other'] ?? '') ?>"
-                        />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="days" class="form-label">المدة:</label>
-                        <div class="input-group">
+            <form method="POST" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label class="form-label">نوع الإجازة:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
                             <input
-                                type="number"
-                                min="1"
-                                name="days"
-                                id="days"
-                                class="form-control"
-                                value="<?= htmlspecialchars($_POST['days'] ?? '1') ?>"
-                                required
+                                type="radio"
+                                name="type"
+                                value="اعتيادية"
+                                id="regular"
+                                <?= (isset($_POST['type']) && $_POST['type'] === 'اعتيادية' ? 'checked' : 'checked') ?>
                             />
-                            <span class="input-group-text">يوم</span>
+                            <label for="regular">اعتيادية</label>
+                        </div>
+                        <div class="radio-option">
+                            <input
+                                type="radio"
+                                name="type"
+                                value="مرضية"
+                                id="sick"
+                                <?= (isset($_POST['type']) && $_POST['type'] === 'مرضية' ? 'checked' : '') ?>
+                            />
+                            <label for="sick">مرضية</label>
+                        </div>
+                        <div class="radio-option">
+                            <input
+                                type="radio"
+                                name="type"
+                                value="أخرى"
+                                id="other"
+                                <?= (isset($_POST['type']) && $_POST['type'] === 'أخرى' ? 'checked' : '') ?>
+                            />
+                            <label for="other">أخرى</label>
                         </div>
                     </div>
+                    <input
+                        type="text"
+                        name="other"
+                        id="otherType"
+                        class="form-control other-type mt-2"
+                        placeholder="حدد نوع الإجازة"
+                        value="<?= htmlspecialchars($_POST['other'] ?? '') ?>"
+                    />
+                </div>
 
-                    <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="fromDate" class="form-label">من تاريخ:</label>
-            <input type="date" name="fromDate" id="fromDate" class="form-control" 
-              value="<?= htmlspecialchars($_POST['fromDate'] ?? '') ?>" required>
-            <small id="fromDateHijri" class="hijri-date"></small>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="toDate" class="form-label">إلى تاريخ:</label>
-            <input type="date" name="toDate" id="toDate" class="form-control"
-              value="<?= htmlspecialchars($_POST['toDate'] ?? '') ?>" required>
-            <small id="toDateHijri" class="hijri-date"></small>
-          </div>
-        </div>
-      </div>
-
-                    <div class="form-group">
-                        <label for="delegate" class="form-label">اسم الشخص المكلف:</label>
+                <div class="form-group">
+                    <label for="days" class="form-label">المدة:</label>
+                    <div class="input-group">
                         <input
-                            type="text"
-                            name="delegate"
-                            id="delegate"
+                            type="number"
+                            min="1"
+                            name="days"
+                            id="days"
                             class="form-control"
-                            value="<?= htmlspecialchars($_POST['delegate'] ?? '') ?>"
+                            value="<?= htmlspecialchars($_POST['days'] ?? '1') ?>"
                             required
                         />
+                        <span class="input-group-text">يوم</span>
                     </div>
+                </div>
 
-                    <div class="form-buttons">
-                        <a href="empReqs.php" class="btn btn-secondary btn-cancel">إلغاء</a>
-                        <button type="submit" class="btn btn-primary">إرسال الطلب</button>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fromDate" class="form-label">من تاريخ:</label>
+                            <input type="date" name="fromDate" id="fromDate" class="form-control" 
+                            value="<?= htmlspecialchars($_POST['fromDate'] ?? '') ?>" required>
+                            <small id="fromDateHijri" class="hijri-date"></small>
+                        </div>
                     </div>
-                </form>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="toDate" class="form-label">إلى تاريخ:</label>
+                            <input type="date" name="toDate" id="toDate" class="form-control"
+                            value="<?= htmlspecialchars($_POST['toDate'] ?? '') ?>" required>
+                            <small id="toDateHijri" class="hijri-date"></small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="delegate" class="form-label">اسم الشخص المكلف:</label>
+                    <input type="text" name="delegate" id="delegate" class="form-control" value="<?= htmlspecialchars($_POST['delegate'] ?? '') ?>" required/>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="buttons" onclick="location.href='empReqs.php'">إلغاء</button>
+                    <button type="submit" class="buttons">إرسال الطلب</button>
+                </div>
+            </form>
             <?php endif; ?>
         </div>
     </div>
