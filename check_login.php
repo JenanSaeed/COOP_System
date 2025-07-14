@@ -29,8 +29,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = $row['role'];
             $_SESSION['name'] = $row['name'];
 
+            if (isset($_SESSION['redirect_to'])) {
+                $redirectPage = $_SESSION['redirect_to'];
+                unset($_SESSION['redirect_to']); // تنظيف بعد الاستخدام
+                header("Location: $redirectPage");
+                exit();
+            }
+
+
             // توجيه حسب الدور
-            switch ($row['role']) {
+             switch ($row['role']) {
                 case 'employee':
                     header("Location: empReqs.php");
                     break;
@@ -53,8 +61,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: login.php?error=" . urlencode("رقم الموظف غير موجود."));
         exit();
     }
+
 } else {
     header("Location: login.php");
     exit();
-}
+    }
 ?>

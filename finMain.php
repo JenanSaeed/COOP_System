@@ -4,16 +4,13 @@ require_once("db_connect.php");
 
 // Check login
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("Location: homepage.php");
+    $_SESSION['redirect_to'] = basename('PHP_SELF');
+    header("Location: login.php");
     exit();
 }
 
-// Role redirect
-if ($_SESSION['role'] === 'manager') {
-    header("Location: validation.php");
-    exit();
-} elseif ($_SESSION['role'] === 'employee') {
-    header("Location: empReqs.php");
+if ($_SESSION['role'] !== 'finance') {
+    header("Location: homepage.php");
     exit();
 }
 
@@ -42,43 +39,8 @@ $conn->close();
     <meta charset="UTF-8">
     <title>طلبات الإجازات - الشؤون المالية</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-    <style>
-        .vacation-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .vacation-table th, .vacation-table td {
-            padding: 12px 15px;
-            text-align: center;
-            border: 1px solid #dee2e6;
-        }
-        .vacation-table th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-        }
-        .vacation-table tr:hover {
-            background-color: #f1f1f1;
-            cursor: pointer;
-        }
-        .status-badge {
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        .status-approved {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .status-rejected {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 <?php include 'header.php'; ?>
@@ -92,12 +54,13 @@ $conn->close();
         <div class="alert alert-info">لا توجد طلبات إجازة</div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="vacation-table">
-                <thead>
+            <table class="vacation-table table table-bordered text-center">
+                <thead class="table-light">
                     <tr>
                         <th>اسم الموظف</th>
                         <th>تاريخ الطلب</th>
                         <th>الحالة</th>
+                        <th>العمليات</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -114,10 +77,14 @@ $conn->close();
                                 $class = 'status-rejected';
                             }
                         ?>
-                        <tr onclick="window.location.href='empVecDet1.php?vac_id=<?= $vac['vac_id'] ?>'">
+                        <tr>
                             <td><?= htmlspecialchars($vac['employee_name']) ?></td>
                             <td><?= date('Y-m-d', strtotime($vac['application_date'])) ?></td>
                             <td><span class="status-badge <?= $class ?>"><?= $status ?></span></td>
+                            <td class="d-flex gap-2 justify-content-center flex-wrap">
+                                <a href="empVecDet1.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-primary">تفاصيل</a>
+                                <a href="empVecDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn btn-sm btn-outline-secondary" target="_blank">تحميل PDF</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

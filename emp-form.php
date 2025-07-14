@@ -83,82 +83,11 @@ $conn->close();
         href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap"
         rel="stylesheet"
     />
+
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
-
-    <style>
-        body {
-            font-family: 'Tajawal', Arial, sans-serif;
-            font-size: 16px;
-        }
-
-        .leave-form {
-            width: 100%;
-            max-width: 850px;
-            background: #fff;
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
-            margin: 0 auto;
-        }
-
-        .form-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #0d6efd;
-            font-weight: bold;
-            font-size: 1.6rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-        }
-
-        .btn-cancel {
-            background-color: #dc3545;
-        }
-
-        .btn-cancel:hover {
-            background-color: #bb2d3b;
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .other-type {
-            margin-top: 0.5rem;
-            display: none;
-        }
-
-        input[type='date'] {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            padding: 0.375rem 0.75rem;
-            height: 38px;
-        }
-
-        .form-control {
-            height: 38px;
-        }
-    </style>
 </head>
 <body class="bg-light">
     <?php include 'header.php'; ?>
