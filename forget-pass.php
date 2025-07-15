@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("INSERT INTO password_resets (user_id, token_hash, expires_at) VALUES (?, ?, ?)");
             $stmt->execute([$user_id, $hashedToken, $expires]);
 
-            $resetLink = "http://" . $_SERVER['HTTP_HOST'] . "/COOP_SystemT/reset-password.php?token=$token";
+            $resetLink = "http://" . $_SERVER['HTTP_HOST'] . "/COOP_System/reset-password.php?token=$token";
             $subject = "اعادة تعيين كلمة المرور";
             $message = "لإعادة تعيين كلمة المرور، اضغط على الرابط التالي:\n\n$resetLink\n\nالرابط صالح لمدة ساعة واحدة فقط.";
 

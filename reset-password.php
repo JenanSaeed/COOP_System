@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($reset && strtotime($reset['expires_at']) > time()) {
         // Update password
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        $hashedPassword = hash('sha256',$newPassword);
         $stmt = $pdo->prepare("UPDATE employee SET password = ? WHERE emp_id = ?");
         $stmt->execute([$hashedPassword, $reset['user_id']]);
 
