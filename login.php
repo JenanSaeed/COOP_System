@@ -18,13 +18,7 @@ include 'header.php';
 <h2 class="form-title">تسجيل الدخول</h2>
 
 <div class="container">
-<?php
-if (isset($_GET['error'])) {
-    echo "<div style='color: red; font-weight: bold; text-align: center; margin-bottom: 15px;'>" 
-        .htmlspecialchars($_GET['error']) . 
-        "</div>";
-}
-?>
+
 
 
 <form class="logform" action="check_login.php" method="post">
@@ -37,6 +31,15 @@ if (isset($_GET['error'])) {
     <div class="forgot-password">
     <a href="forget-pass.php">نسيت كلمة المرور؟</a>
 </div>
+
+<?php
+if (isset($_GET['error'])) {
+    echo "<div style='color: black; font-weight: bold; text-align: center; background-color: #f8d7da; font-size: 14px; padding: 10px; border-radius: 5px; margin-top: 15px; margin-bottom: -15px;'>"
+    . htmlspecialchars($_GET['error']) .
+    "</div>";
+
+}
+?>
 
     <div class="form-buttons">
         <button class="buttons" type="submit" value="تسجيل الدخول">تسجيل الدخول</button>
