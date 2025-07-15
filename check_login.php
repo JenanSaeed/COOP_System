@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['name'] = $row['name'];
 
             // ✅ إذا فيه صفحة محفوظة للرجوع لها
-            if (!empty($_SESSION['redirect_to']) &&
+            if (isset($_SESSION['redirect_to']) &&
                 $_SESSION['redirect_to'] !== 'login.php' &&
                 $_SESSION['redirect_to'] !== basename(__FILE__)) {
 
