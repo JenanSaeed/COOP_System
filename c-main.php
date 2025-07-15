@@ -21,11 +21,11 @@
   if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
     $role = $_SESSION['role'];
 
-        $services = "services.php";
-        $servicesDeploma = "servicesDeploma.php";
-        $coopUni = "coopUni.php";
-        $paidTraining = "paidTraining.php";
-        $trainingProgram = "trainingProgram.php";
+        $services = "c-form1.php";
+        $servicesDeploma = "c-form1.php";
+        $coopUni = "c-form1.php";
+        $paidTraining = "c-form1.php";
+        $trainingProgram = "c-form1.php";
 
   }
 ?>
