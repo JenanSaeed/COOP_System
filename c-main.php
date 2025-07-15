@@ -1,3 +1,12 @@
+<?php
+session_start();
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    $_SESSION['redirect_to'] = basename($_SERVER['PHP_SELF']);
+    header("Location: login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>

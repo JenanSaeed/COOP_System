@@ -1,57 +1,6 @@
 <?php 
 session_start();
 include 'db_connect.php';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $emp_id = trim($_POST['emp_id']);
-    $password = trim($_POST['password']);
-
-    $stmt = $conn->prepare("SELECT * FROM employee WHERE emp_id = ?");
-    $stmt->bind_param("s", $emp_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows === 1) {
-        $row = $result->fetch_assoc();
-
-        if ($password === trim($row['password'])) {
-            $_SESSION['emp_id'] = $row['emp_id'];
-            $_SESSION['logged_in'] = true;
-            $_SESSION['role'] = $row['role'];
-
-            // ✅ إذا فيه صفحة محفوظة للرجوع لها، نوجه لها
-            if (isset($_SESSION['redirect_to'])) {
-                $redirect_to = $_SESSION['redirect_to'];
-                unset($_SESSION['redirect_to']); // نحذفها عشان ما تبقى
-                header("Location: $redirect_to");
-                exit();
-            }
-
-            // توجيه حسب الدور إذا ما فيه redirect مخصص
-            if ($row['role'] === 'employee') {
-                header("Location: empMain.php");
-                exit();
-            } elseif ($row['role'] === 'finance') {
-                header("Location: finMain.php");
-                exit();
-            } elseif ($row['role'] === 'manager') {
-                header("Location: manMain.php");
-                exit();
-            } else {
-                header("Location: login.php?error=" . urlencode("دور المستخدم غير معروف"));
-                exit();
-            }
-        } else {
-            $error = "كلمة المرور غير صحيحة!";
-            header("Location: login.php?error=" . urlencode($error));
-            exit();
-        }
-    } else {
-        $error = "رقم الموظف غير موجود!";
-        header("Location: login.php?error=" . urlencode($error));
-        exit();
-    }
-}
 ?>
 
 <!DOCTYPE html>
