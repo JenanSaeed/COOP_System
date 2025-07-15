@@ -11,15 +11,15 @@
 
     switch ($role) {
       case 'employee':
-        $contractsLink = "contracts.php";
+        $contractsLink = "contractMain.php";
         $vacationsLink = "empMain.php";
         break;
       case 'finance':
-        $contractsLink = "contracts.php";
+        $contractsLink = "contractMain.php";
         $vacationsLink = "finMain.php";
         break;
       case 'manager':
-        $contractsLink = "contracts.php";
+        $contractsLink = "contractMain.php";
         $vacationsLink = "manMain.php";
         break;
     }
