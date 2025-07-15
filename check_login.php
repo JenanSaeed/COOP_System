@@ -21,9 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows === 1) {
         $row = $result->fetch_assoc();
+        $stored_hash = $row['password'];
 
         // تحقق من كلمة المرور
-        if ($password === trim($row['password'])) {
+        if (hash('sha256', $password) === $stored_hash) {
             $_SESSION['emp_id'] = $row['emp_id'];
             $_SESSION['logged_in'] = true;
             $_SESSION['role'] = $row['role'];

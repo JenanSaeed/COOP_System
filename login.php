@@ -11,10 +11,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
     $result = $stmt->get_result();
 
+
+
+
     if ($result->num_rows === 1) {
         $row = $result->fetch_assoc();
-
-        if ($password === trim($row['password'])) {
+        $stored_hash = $row['password'];
+       
+        if (hash('sha256', $password) === $stored_hash){
             $_SESSION['emp_id'] = $row['emp_id'];
             $_SESSION['logged_in'] = true;
             $_SESSION['role'] = $row['role'];
