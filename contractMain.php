@@ -31,25 +31,36 @@
 ?>
 
 <main class="home-main">
+  <!-- The heading placed outside of the button groups -->
+  <div style="text-align: center; margin-bottom: 20px;">
+    <h2>الرجاء اختيار نوع العقد:</h2>
+  </div>
+
   <div class="home-buttons">
-    <p><h2>:الرجاء اختيار نوع العقد</h2></p>
-    <a href="<?= $services ?>" class="home-btn">
-      عقد تنفيذ خدمات
-    </a>
-    <a href="<?= $servicesDeploma ?>" class="home-btn">
-      عقد تقديم خدمات (للدبلومات المهنية)
-    </a>
-    <a href="<?= $coopUni ?>" class="home-btn">
+    <div class="button-group mb-3">
+      <a href="<?= $services ?>" class="home-btn">
+        عقد تنفيذ خدمات
+      </a>
+      <a href="<?= $servicesDeploma ?>" class="home-btn">
+        عقد تقديم خدمات (للدبلومات المهنية)
+      </a>
+    </div>
+
+    <div class="button-group">
+      <a href="<?= $coopUni ?>" class="home-btn">
         عقد عمل تعاوني (منسوبي الجامعة)
-    </a>
-    <a href="<?= $paidTraining ?>" class="home-btn">
+      </a>
+      <a href="<?= $paidTraining ?>" class="home-btn">
         عقد تدريب بنظام المكافأة الشهرية
-    </a>
-    <a href="<?= $trainingProgram ?>" class="home-btn">
+      </a>
+      <a href="<?= $trainingProgram ?>" class="home-btn">
         عقد تنفيذ برنامج تدريبي
-    </a>
+      </a>
+    </div>
   </div>
 </main>
+
+
 
 <?php include 'footer.php'; ?>
 
