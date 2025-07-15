@@ -12,8 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // استخدم prepared statement لحماية من SQL Injection
-    // جلب بيانات الموظف مع الدور من جدول sign
+    // تحقق من بيانات المستخدم
     $stmt = $conn->prepare("SELECT * FROM employee WHERE emp_id = ?");
     $stmt->bind_param("s", $emp_id);
     $stmt->execute();
@@ -30,30 +29,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = $row['role'];
             $_SESSION['name'] = $row['name'];
 
-            if (isset($_SESSION['redirect_to'])) {
+            // ✅ إذا فيه صفحة محفوظة للرجوع لها
+            if (!empty($_SESSION['redirect_to']) &&
+                $_SESSION['redirect_to'] !== 'login.php' &&
+                $_SESSION['redirect_to'] !== basename(__FILE__)) {
+
                 $redirectPage = $_SESSION['redirect_to'];
-                unset($_SESSION['redirect_to']); // تنظيف بعد الاستخدام
+                unset($_SESSION['redirect_to']);
                 header("Location: $redirectPage");
+                exit();
+            } else {
+                // ✅ ما فيه صفحة محفوظة، نوديه للصفحة الرئيسية
+                header("Location: index.php");
                 exit();
             }
 
-
-            // توجيه حسب الدور
-             switch ($row['role']) {
-                case 'employee':
-                    header("Location: empMain.php");
-                    break;
-                case 'finance':
-                    header("Location: finMain.php");
-                    break;
-                case 'manager':
-                    header("Location: manMain.php");
-                    break;
-                default:
-                    header("Location: login.php?error=" . urlencode("دور المستخدم غير معروف."));
-                    break;
-            }
-            exit();
         } else {
             header("Location: login.php?error=" . urlencode("كلمة المرور غير صحيحة."));
             exit();
@@ -66,5 +56,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 } else {
     header("Location: login.php");
     exit();
-    }
+}
 ?>

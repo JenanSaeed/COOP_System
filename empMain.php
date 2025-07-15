@@ -4,7 +4,7 @@ require_once("db_connect.php");
 
 // تحقق من تسجيل الدخول
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    $_SESSION['redirect_to'] = basename('PHP_SELF');
+    $_SESSION['redirect_to'] = basename($_SERVER['PHP_SELF']);
     header("Location: login.php");
     exit();
 }
