@@ -74,8 +74,6 @@ include 'header.php';
 
 <div class="container">
 
-
-
 <form class="logform" action="check_login.php" method="post">
     <label class="loglabels" for="emp_id">اسم المستخدم:</label>
     <input class="loginputs" type="text" id="emp_id" name="emp_id" placeholder="اسم المستخدم" required>
