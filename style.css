@@ -179,7 +179,7 @@ a.buttons:hover,
   justify-content: center;
 }
 
-/*------------------------Forget-password page---------------------------*/
+
 .form-buttons {
   display: flex;
   justify-content: center; 
@@ -221,7 +221,7 @@ a.buttons:hover,
 }
 
 
-/*---------------- Reset -------------------*/
+/*------------------------Forget-password page---------------------------*/
 .reset {
   width: 70%;
   padding: 10px;
@@ -242,6 +242,7 @@ a.buttons:hover,
   justify-content: center;
   margin-bottom: 20px;
   flex: 1;
+  height: calc(100vh - 140px);
 
 }
 
