@@ -85,6 +85,28 @@ footer {
 }
 
 
+.index-buttons {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.index-btn {
+  padding: 5rem 6rem;
+  background-color: #2e4f49;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 2rem;
+  transition: background-color 0.3s ease;
+}
+
+.index-btn:hover {
+  background-color: #856404;
+}
+
+/* -------------------------- Contracts Main ------------------*/
 .home-buttons {
   display: flex;
   gap: 40px;
@@ -93,7 +115,7 @@ footer {
 }
 
 .home-btn {
-  padding: 1rem 2rem;
+  padding: 2rem 3rem;
   background-color: #2e4f49;
   color: white;
   text-decoration: none;

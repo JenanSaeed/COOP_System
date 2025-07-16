@@ -36,11 +36,11 @@
 ?>
 
 <main class="home-main">
-  <div class="home-buttons">
-    <a href="<?= $vacationsLink ?>" class="home-btn">
+  <div class="index-buttons">
+    <a href="<?= $vacationsLink ?>" class="index-btn">
       🗓️ الإجازات
     </a>
-    <a href="<?= $contractsLink ?>" class="home-btn">
+    <a href="c-main.php" class="index-btn">
       📄 العقود
     </a>
   </div>
