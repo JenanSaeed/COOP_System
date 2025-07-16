@@ -20,17 +20,20 @@
 
     switch ($role) {
       case 'employee':
-        $contractsLink = "c-main.php";
+        $contractsLink = "c-adminMain.php";
         $vacationsLink = "empMain.php";
         break;
       case 'finance':
-        $contractsLink = "c-main.php";
+        $contractsLink = "c-adminMain.php";
         $vacationsLink = "finMain.php";
         break;
       case 'manager':
-        $contractsLink = "c-main.php";
+        $contractsLink = "c-adminMain.php";
         $vacationsLink = "manMain.php";
         break;
+      case 'guest':
+        $contractsLink = "c-main.php"; 
+      break;
     }
   }
 ?>
