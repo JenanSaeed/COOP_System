@@ -24,7 +24,7 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
       $vacationsLink = "manMain.php";
       break;
     case 'guest':
-      $contractsLink = "c-main.php";
+      $contractsLink = "#"; // not used — links are hidden anyway
       break;
   }
 }
@@ -47,13 +47,13 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
     </div>
     
     <nav class="main-nav">
+      <?php if (!isset($role) || $role !== 'guest'): ?>
       <ul class="nav-links">
         <li><a href="index.php">الرئيسية</a></li>
         <li><a href="<?= $contractsLink ?>">العقود</a></li>
-        <?php if ($role !== 'guest'): ?>
-          <li><a href="<?= $vacationsLink ?>">الإجازات</a></li>
-        <?php endif; ?>
+        <li><a href="<?= $vacationsLink ?>">الإجازات</a></li>
       </ul>
+      <?php endif; ?>
     </nav>
     
     <div class="logging">  
