@@ -1,33 +1,37 @@
 <?php
-  if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
+$contractsLink = "login.php";
+$vacationsLink = "login.php";
+$role = null;
+
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+  $role = $_SESSION['role'];
+
+  switch ($role) {
+    case 'employee':
+      $contractsLink = "c-adminMain.php";
+      $vacationsLink = "empMain.php";
+      break;
+    case 'finance':
+      $contractsLink = "c-adminMain.php";
+      $vacationsLink = "finMain.php";
+      break;
+    case 'manager':
+      $contractsLink = "c-adminMain.php";
+      $vacationsLink = "manMain.php";
+      break;
+    case 'guest':
+      $contractsLink = "#"; // not used — links are hidden anyway
+      break;
   }
-
-  $contractsLink = "login.php";
-  $vacationsLink = "login.php";
-
-  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    $role = $_SESSION['role'];
-
-    switch ($role) {
-      case 'employee':
-        $contractsLink = "c-main.php";
-        $vacationsLink = "empMain.php";
-        break;
-      case 'finance':
-        $contractsLink = "c-main.php";
-        $vacationsLink = "finMain.php";
-        break;
-      case 'manager':
-        $contractsLink = "c-main.php";
-        $vacationsLink = "manMain.php";
-        break;
-    }
-  }
+}
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="style.css">
@@ -43,11 +47,13 @@
     </div>
     
     <nav class="main-nav">
+      <?php if (!isset($role) || $role !== 'guest'): ?>
       <ul class="nav-links">
         <li><a href="index.php">الرئيسية</a></li>
         <li><a href="<?= $contractsLink ?>">العقود</a></li>
         <li><a href="<?= $vacationsLink ?>">الإجازات</a></li>
       </ul>
+      <?php endif; ?>
     </nav>
     
     <div class="logging">  
