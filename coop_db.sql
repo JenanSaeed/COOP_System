@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 20, 2025 at 08:33 AM
+-- Generation Time: Jul 16, 2025 at 10:33 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,7 +29,6 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `contract` (
   `con_id` int(11) NOT NULL,
-  `guest_id` int(10) NOT NULL,
   `con_date` date NOT NULL,
   `1st_party` varchar(30) NOT NULL,
   `2nd_party` varchar(30) NOT NULL,
@@ -37,7 +36,6 @@ CREATE TABLE `contract` (
   `con_starting_date` date NOT NULL,
   `program_name` varchar(50) NOT NULL,
   `program_id` int(11) NOT NULL,
-  `num_weeks` int(11) NOT NULL,
   `total` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -76,6 +74,12 @@ INSERT INTO `employee` (`emp_id`, `name`, `password`, `role`, `signature`, `last
 -- Table structure for table `guest`
 --
 
+CREATE TABLE `guest` (
+  `guest_id` int(10) NOT NULL,
+  `guest_password` varchar(30) NOT NULL,
+  `guest_name` varchar(30) NOT NULL,
+  `guest_email` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -150,8 +154,7 @@ INSERT INTO `vacation` (`vac_id`, `emp_id`, `type`, `days`, `start_date`, `end_d
 --
 ALTER TABLE `contract`
   ADD PRIMARY KEY (`con_id`),
-  ADD UNIQUE KEY `program_id` (`program_id`),
-  ADD KEY `fk_contract_guest` (`guest_id`);
+  ADD UNIQUE KEY `program_id` (`program_id`);
 
 --
 -- Indexes for table `employee`
@@ -210,12 +213,6 @@ ALTER TABLE `vacation`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `contract`
---
-ALTER TABLE `contract`
-  ADD CONSTRAINT `fk_contract_guest` FOREIGN KEY (`guest_id`) REFERENCES `guest` (`guest_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `vacation`
