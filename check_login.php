@@ -7,56 +7,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST['password']);
 
     if (empty($emp_id) || empty($password)) {
-        header('Location: login.php?error=' . urlencode("الرجاء إدخال رقم المستخدم وكلمة المرور."));
+        header('Location: login.php?error=' . urlencode("الرجاء إدخال اسم المستخدم وكلمة المرور."));
         exit();
     }
 
-    // First: Check employee table
+    // 1. Check if user is an employee
     $stmt = $conn->prepare("SELECT * FROM employee WHERE emp_id = ?");
     $stmt->bind_param("s", $emp_id);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $employeeResult = $stmt->get_result();
 
-    if ($result->num_rows === 1) {
-        $row = $result->fetch_assoc();
+    if ($employeeResult->num_rows === 1) {
+        $employee = $employeeResult->fetch_assoc();
 
-        if ($password === trim($row['password'])) {
-            $_SESSION['emp_id'] = $row['emp_id'];
+        if ($password === trim($employee['password'])) {
+            $_SESSION['emp_id'] = $employee['emp_id'];
+            $_SESSION['name'] = $employee['name'];
+            $_SESSION['role'] = $employee['role']; // e.g., employee, manager, finance
             $_SESSION['logged_in'] = true;
-            $_SESSION['role'] = $row['role'];
-            $_SESSION['name'] = $row['name'];
 
-            if (isset($_SESSION['redirect_to']) &&
-                $_SESSION['redirect_to'] !== 'login.php' &&
-                $_SESSION['redirect_to'] !== basename(__FILE__)) {
-                $redirectPage = $_SESSION['redirect_to'];
-                unset($_SESSION['redirect_to']);
-                header("Location: $redirectPage");
-                exit();
-            } else {
-                header("Location: c-adminMain.php");
-                exit();
-            }
+            $redirect = $_SESSION['redirect_to'] ?? 'c-adminMain.php';
+            unset($_SESSION['redirect_to']);
+            header("Location: $redirect");
+            exit();
         } else {
             header("Location: login.php?error=" . urlencode("كلمة المرور غير صحيحة."));
             exit();
         }
     }
 
-    // Second: Check guest table
+    // 2. Check if user is a guest
     $stmt = $conn->prepare("SELECT * FROM guest WHERE guest_id = ?");
     $stmt->bind_param("s", $emp_id);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $guestResult = $stmt->get_result();
 
-    if ($result->num_rows === 1) {
-        $row = $result->fetch_assoc();
+    if ($guestResult->num_rows === 1) {
+        $guest = $guestResult->fetch_assoc();
 
-        if ($password === trim($row['guest_password'])) {
-            $_SESSION['guest_id'] = $row['guest_id'];
-            $_SESSION['logged_in'] = true;
+        if ($password === trim($guest['guest_password'])) {
+            $_SESSION['guest_id'] = $guest['guest_id'];
+            $_SESSION['name'] = $guest['guest_name'];
             $_SESSION['role'] = 'guest';
-            $_SESSION['name'] = $row['guest_name'];
+            $_SESSION['logged_in'] = true;
 
             header("Location: c-main.php");
             exit();
@@ -66,9 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+    // 3. If neither employee nor guest found
     header("Location: login.php?error=" . urlencode("المستخدم غير موجود."));
     exit();
-
 } else {
     header("Location: login.php");
     exit();
