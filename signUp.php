@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($password !== $confirm_password) {
-            throw new Exception("كلمتا المرور غير متطابقتين.");
+        throw new Exception("كلمتا المرور غير متطابقتين.");
         }
 
         // تحقق من تكرار guest_id
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("خطأ في قاعدة البيانات: " . $conn->error);
         }
 
-        $stmt->bind_param("isss", $guest_id_input, $hashed_password, $full_name, $email);
+        $stmt->bind_param("isss", $guest_id_input, $password, $full_name, $email);
 
         if ($stmt->execute()) {
             $success = "تم التسجيل بنجاح!";

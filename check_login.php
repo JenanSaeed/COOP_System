@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = 'guest';
             $_SESSION['logged_in'] = true;
 
-            header("Location: c-main.php");
+            header("Location: c-adminMain.php");
             exit();
         } else {
             header("Location: login.php?error=" . urlencode("كلمة المرور غير صحيحة."));
