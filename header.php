@@ -24,7 +24,8 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
       $vacationsLink = "manMain.php";
       break;
     case 'guest':
-      $contractsLink = "#"; // not used — links are hidden anyway
+      $contractsLink = "c-adminMain.php"; // allow access to contracts
+      $vacationsLink = "#"; // no vacation access
       break;
   }
 }
@@ -45,17 +46,19 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
         <img src="logo_white_no_bg.png" alt="مركز التعليم المستمر">
       </a>
     </div>
-    
+
     <nav class="main-nav">
-      <?php if (!isset($role) || $role !== 'guest'): ?>
       <ul class="nav-links">
-        <li><a href="index.php">الرئيسية</a></li>
-        <li><a href="<?= $contractsLink ?>">العقود</a></li>
-        <li><a href="<?= $vacationsLink ?>">الإجازات</a></li>
+        <?php if (!isset($role) || $role !== 'guest'): ?>
+          <li><a href="index.php">الرئيسية</a></li>
+          <li><a href="<?= $contractsLink ?>">العقود</a></li>
+          <li><a href="<?= $vacationsLink ?>">الإجازات</a></li>
+        <?php else: ?>
+          <li><a href="<?= $contractsLink ?>">العقود</a></li>
+        <?php endif; ?>
       </ul>
-      <?php endif; ?>
     </nav>
-    
+
     <div class="logging">  
       <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
         <a class="logged" href="logout.php">
