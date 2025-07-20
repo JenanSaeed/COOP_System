@@ -2,19 +2,18 @@
 session_start();
 require_once("db_connect.php");
 
-// Check if user is logged in and is a guest
+// Ensure only logged-in guests can access this page
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || $_SESSION['role'] !== 'guest') {
     header("Location: login.php");
     exit();
 }
 
 $guest_id = $_SESSION['guest_id'];
+$guest_name = $_SESSION['guest_name'];
 
 try {
-    $stmt = $conn->prepare("SELECT con_id, con_date, 1st_party, 2nd_party, con_duration, con_starting_date, program_name, program_id, num_weeks, total 
-                            FROM contract 
-                            WHERE guest_id = ? 
-                            ORDER BY con_date DESC");
+    // Get all contracts belonging to this guest
+    $stmt = $conn->prepare("SELECT * FROM contract WHERE guest_id = ?");
     $stmt->bind_param("i", $guest_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -42,23 +41,23 @@ $conn->close();
 <?php include 'header.php'; ?>
 
 <div class="container py-4">
-    <h2 class="mb-4">عقودي</h2>
+    <h2 class="mb-4">العقود الخاصة بك يا <?= htmlspecialchars($guest_name) ?></h2>
 
-    <?php if (isset($error)): ?>
+    <?php if (!empty($error)): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
     <?php elseif (empty($contracts)): ?>
-        <div class="alert alert-info">لا توجد عقود متاحة.</div>
+        <div class="alert alert-info">لا توجد عقود حتى الآن.</div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-striped">
                 <thead class="table-light">
                     <tr>
                         <th>رقم العقد</th>
                         <th>تاريخ العقد</th>
-                        <th>الطرف الأول</th>
-                        <th>الطرف الثاني</th>
+                        <th>اسم الطرف الأول</th>
+                        <th>اسم الطرف الثاني</th>
                         <th>مدة العقد</th>
-                        <th>تاريخ بداية العقد</th>
+                        <th>تاريخ البداية</th>
                         <th>اسم البرنامج</th>
                         <th>رقم البرنامج</th>
                         <th>عدد الأسابيع</th>
@@ -66,18 +65,18 @@ $conn->close();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($contracts as $contract): ?>
+                    <?php foreach ($contracts as $con): ?>
                         <tr>
-                            <td><?= htmlspecialchars($contract['con_id']) ?></td>
-                            <td><?= htmlspecialchars($contract['con_date']) ?></td>
-                            <td><?= htmlspecialchars($contract['1st_party']) ?></td>
-                            <td><?= htmlspecialchars($contract['2nd_party']) ?></td>
-                            <td><?= htmlspecialchars($contract['con_duration']) ?></td>
-                            <td><?= htmlspecialchars($contract['con_starting_date']) ?></td>
-                            <td><?= htmlspecialchars($contract['program_name']) ?></td>
-                            <td><?= htmlspecialchars($contract['program_id']) ?></td>
-                            <td><?= htmlspecialchars($contract['num_weeks']) ?></td>
-                            <td><?= htmlspecialchars($contract['total']) ?></td>
+                            <td><?= $con['con_id'] ?></td>
+                            <td><?= date('Y-m-d', strtotime($con['con_date'])) ?></td>
+                            <td><?= htmlspecialchars($con['1st_party']) ?></td>
+                            <td><?= htmlspecialchars($con['2nd_party']) ?></td>
+                            <td><?= htmlspecialchars($con['con_duration']) ?></td>
+                            <td><?= date('Y-m-d', strtotime($con['con_starting_date'])) ?></td>
+                            <td><?= htmlspecialchars($con['program_name']) ?></td>
+                            <td><?= htmlspecialchars($con['program_id']) ?></td>
+                            <td><?= htmlspecialchars($con['num_weeks']) ?></td>
+                            <td><?= htmlspecialchars($con['total']) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -87,6 +86,5 @@ $conn->close();
 </div>
 
 <?php include 'footer.php'; ?>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
