@@ -57,7 +57,7 @@ $conn->close();
     <?php if (!empty($error)): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
     <?php elseif (empty($contracts)): ?>
-        <div class="alert alert-info">لا توجد عقود حالياً</div>
+        <div class="alert alert-info">لا توجد عقود حاليًا</div>
     <?php else: ?>
         <div class="table-responsive">
             <table class="vacation-table">
