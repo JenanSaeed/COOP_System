@@ -41,7 +41,7 @@ $conn->close();
 <?php include 'header.php'; ?>
 
 <div class="container py-4">
-    <h2 class="mb-4">العقود الخاصة بك يا <?= htmlspecialchars($guest_name) ?></h2>
+    <h2 class="mb-4">العقود الخاصة بك</h2>
 
     <?php if (!empty($error)): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
