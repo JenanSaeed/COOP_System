@@ -29,6 +29,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "<script>alert('حدث خطأ أثناء الحفظ: " . mysqli_error($conn) . "');</script>";
   }
 }
+
+// جلب بيانات الموظفين (فقط المانجر)
+$employees = [];
+$query = mysqli_query($conn, "SELECT name, emp_id, role, email, address, phone FROM employee WHERE role = 'manager'");
+while ($row = mysqli_fetch_assoc($query)) {
+    $employees[$row['name']] = $row;
+}
 ?>
 
 <!DOCTYPE html>
@@ -45,6 +52,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       margin: 40px 0;
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
 </head>
 <body>
 
@@ -60,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <div class="form-group">
         <label>التاريخ الهجري:</label>
-        <input type="date" class="form-control" id="hijriDate">
+        <input type="text" class="form-control" id="hijriDate" readonly>
       </div>
 
       <div class="form-group">
@@ -70,9 +79,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <div class="form-group">
         <label>الطرف الأول:</label>
-        <select class="form-control" id="party1">
-          <option value="فاطمة">فاطمة</option>
-          <option value="جواهر">جواهر</option>
+        <select id="party1Name">
+          <?php foreach ($employees as $name => $data): ?>
+            <option value="<?= htmlspecialchars($name) ?>"><?= htmlspecialchars($name) ?></option>
+          <?php endforeach; ?>
         </select>
       </div>
 
@@ -116,9 +126,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="form-group">
         <label>مدة العقد:</label>
         <div class="radio-group">
-          <label><input type="radio" name="duration" value="days"> أيام</label>
-          <label><input type="radio" name="duration" value="weeks"> أسابيع</label>
-          <label><input type="radio" name="duration" value="months"> أشهر</label>
+          <label><input type="radio" name="duration" value="أيام"> أيام</label>
+          <label><input type="radio" name="duration" value="أسابيع"> أسابيع</label>
+          <label><input type="radio" name="duration" value="أشهر"> أشهر</label>
         </div>
       </div>
 
@@ -129,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <div class="form-group">
         <label>تاريخ بداية العقد بالهجري:</label>
-        <input type="date" class="form-control" id="startHijri">
+        <input type="text" class="form-control" id="startHijri" readonly>
       </div>
 
       <div class="form-buttons">
@@ -145,7 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <div class="form-box">
     <h2 class="form-title">بيانات الطرف الأول</h2>
     <form id="contractFormAll" method="POST">
-      <!-- hidden fields -->
+      <!-- حقول مخفية للإرسال -->
       <input type="hidden" name="gregorian_date" id="hidden_gregorian_date">
       <input type="hidden" name="party1" id="hidden_party1">
       <input type="hidden" name="party2" id="hidden_party2">
@@ -157,27 +167,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <div class="form-group">
         <label>الاسم:</label>
-        <input type="text" class="form-control" name="name1">
+        <select id="party3Name" name="party3">
+          <?php foreach ($employees as $name => $data): ?>
+            <option value="<?= htmlspecialchars($name) ?>"><?= htmlspecialchars($name) ?></option>
+          <?php endforeach; ?>
+        </select>
       </div>
 
       <div class="form-group">
         <label>الصفة:</label>
-        <input type="text" class="form-control" name="role1">
+        <input type="text" class="form-control" name="role1" id="role1">
       </div>
 
       <div class="form-group">
         <label>العنوان:</label>
-        <input type="text" class="form-control" name="address1">
+        <input type="text" class="form-control" name="address1" id="address1">
       </div>
 
       <div class="form-group">
         <label>رقم الهاتف:</label>
-        <input type="tel" class="form-control" name="phone1">
+        <input type="tel" class="form-control" name="phone1" id="phone1">
       </div>
 
       <div class="form-group">
         <label>البريد الإلكتروني:</label>
-        <input type="email" class="form-control" name="email1">
+        <input type="email" class="form-control" name="email1" id="email1">
       </div>
 
       <div class="form-buttons">
@@ -190,42 +204,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php include 'footer.php'; ?>
 
 <script>
-// مزامنة التاريخ الميلادي إلى هجري والعكس + اليوم
-function updateGregorianFromHijri() {
-  const hijriInput = document.getElementById('hijriDate');
-  const gregInput = document.getElementById('gregorianDate');
-  const dayNameInput = document.getElementById('dayName');
+const employeeData = <?= json_encode($employees, JSON_UNESCAPED_UNICODE); ?>;
 
-  if (hijriInput.value) {
-    gregInput.value = hijriInput.value;
-    const day = new Date(hijriInput.value).getDay();
-    const daysArabic = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-    dayNameInput.value = daysArabic[day];
+function fillParty3Info(name) {
+  const data = employeeData[name];
+  if (data) {
+    document.getElementById("party3Name").value = name;
+    document.getElementById("role1").value = data.role || '';
+    document.getElementById("address1").value = data.address || '';
+    document.getElementById("phone1").value = data.phone || '';
+    document.getElementById("email1").value = data.email || '';
   }
 }
 
-document.getElementById('gregorianDate').addEventListener('change', function () {
-  const selectedDate = new Date(this.value);
-  const dayName = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'][selectedDate.getDay()];
-  document.getElementById('dayName').value = dayName;
-  document.getElementById('hijriDate').value = this.value;
+document.getElementById("party1Name").addEventListener("change", function () {
+  const selected = this.value;
+  fillParty3Info(selected);
 });
 
-document.getElementById('hijriDate').addEventListener('change', updateGregorianFromHijri);
+document.getElementById("party3Name").addEventListener("change", function () {
+  const selected = this.value;
+  document.getElementById("party1Name").value = selected;
+  fillParty3Info(selected);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  fillParty3Info(document.getElementById("party1Name").value);
+});
+
+document.getElementById('gregorianDate').addEventListener('change', function () {
+  const date = this.value;
+  const day = new Date(date).getDay();
+  const daysArabic = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  document.getElementById('dayName').value = daysArabic[day];
+  document.getElementById('hijriDate').value = moment(date, 'YYYY-MM-DD').format('iYYYY/iMM/iDD');
+});
 
 document.getElementById('startGregorian').addEventListener('change', function () {
-  document.getElementById('startHijri').value = this.value;
+  const date = this.value;
+  document.getElementById('startHijri').value = moment(date, 'YYYY-MM-DD').format('iYYYY/iMM/iDD');
 });
 
-document.getElementById('startHijri').addEventListener('change', function () {
-  document.getElementById('startGregorian').value = this.value;
-});
-
-// تمرير البيانات إلى النموذج الأخير قبل الإرسال
-const form = document.getElementById('contractFormAll');
-form.addEventListener('submit', function () {
+document.getElementById('contractFormAll').addEventListener('submit', function () {
   document.getElementById('hidden_gregorian_date').value = document.getElementById('gregorianDate').value;
-  document.getElementById('hidden_party1').value = document.getElementById('party1').value;
+  document.getElementById('hidden_party1').value = document.getElementById('party1Name').value;
   document.getElementById('hidden_party2').value = document.getElementById('party2').value;
   document.getElementById('hidden_program_name').value = document.getElementById('program_name').value;
   document.getElementById('hidden_program_code').value = document.getElementById('program_code').value;
