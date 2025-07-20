@@ -21,18 +21,27 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
   include 'header.php';
 
   $role = $_SESSION['role'] ?? null;
-  $services = "login.php";
-  $servicesDeploma = "login.php";
-  $coopUni = "login.php";
-  $paidTraining = "login.php";
-  $trainingProgram = "login.php";
 
-  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    $role = $_SESSION['role'];
+  // Default URLs
+  $newContract = "#";
+  $contractRecords = "#";
 
-        $newContract = "c-main.php";
-        $contractRecords = "c-adminRec.php";
+  // Role-based routing
+  switch ($role) {
+      case 'admin':
+          $newContract = "c-main.php";
+          $contractRecords = "c-adminRec.php";
+          break;
 
+      case 'guest':
+          $newContract = "c-main.php";
+          $contractRecords = "c-guestRec.php";
+          break;
+
+      default:
+          // fallback in case of invalid role
+          $newContract = "#";
+          $contractRecords = "#";
   }
 ?>
 
@@ -46,7 +55,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
       <a href="<?= $newContract ?>" class="home-btn">
         إنشاء عقد جديد
       </a>
-      <a href="<?= $contractRecords?>" class="home-btn">
+      <a href="<?= $contractRecords ?>" class="home-btn">
         سجل العقود
       </a>
     </div>
