@@ -2,12 +2,12 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_name'])) {
-  header("Location: login.php");
-  exit();
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    $_SESSION['redirect_to'] = basename($_SERVER['PHP_SELF']);
+    header("Location: login.php");
+    exit();
 }
 
-include 'header.php';
 include 'db_connect.php';
 
 // توليد con_id تلقائي
@@ -30,8 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $program_id = $_POST['program_code'];
   $total = $_POST['contract_total'];
 
-  $sql = "INSERT INTO contract (con_id, con_date, 1st_party, 2nd_party, con_duration, con_starting_date, program_name, program_id, total)
-          VALUES ('$con_id', '$con_date', '$party1', '$party2', '$con_duration', '$start_date', '$program_name', '$program_id', '$total')";
+  $sql = "INSERT INTO contract (`con_id`, `con_date`, `1st_party`, `2nd_party`, `con_duration`, `con_starting_date`, `program_name`, `program_id`, `total`) 
+  VALUES ('$con_id', '$con_date', '$party1', '$party2', '$con_duration', '$start_date', '$program_name', '$program_id', '$total')";
 
   if (mysqli_query($conn, $sql)) {
     echo "<script>alert('تم حفظ العقد بنجاح');</script>";
