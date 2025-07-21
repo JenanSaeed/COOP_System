@@ -10,6 +10,13 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
 include 'db_connect.php';
 
+$contract_type = $_SESSION['contract_type'] ?? '';
+
+if (empty($contract_type)) {
+    header("Location: conTypes.php");
+    exit();
+}
+
 // توليد con_id تلقائي
 $result = mysqli_query($conn, "SELECT MAX(con_id) AS max_id FROM contract");
 $row = mysqli_fetch_assoc($result);
