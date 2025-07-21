@@ -12,13 +12,29 @@ $guest_id = $_SESSION['guest_id'];
 $guestName = $_SESSION['name'];
 
 try {
-    $stmt = $conn->prepare("SELECT con_id, con_date, 1st_party, 2nd_party, con_duration, con_starting_date, program_name, program_id, num_weeks, total 
-                            FROM contract 
-                            WHERE guest_id = ?");
+    // Get contract info and join with employee table for 1st party name
+    $stmt = $conn->prepare("
+        SELECT 
+            c.con_id, 
+            c.con_date, 
+            c.con_duration, 
+            c.con_starting_date, 
+            c.program_name, 
+            c.program_id, 
+            c.num_weeks, 
+            c.total,
+            e.name AS first_party_name,
+            g.guest_name AS second_party_name
+        FROM contract c
+        JOIN employee e ON c.1st_party = e.emp_id
+        JOIN guest g ON c.guest_id = g.guest_id
+        WHERE c.guest_id = ?
+    ");
     $stmt->bind_param("s", $guest_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $contracts = $result->fetch_all(MYSQLI_ASSOC);
+    $stmt->close();
 } catch (Exception $e) {
     $error = "حدث خطأ أثناء جلب بيانات العقود: " . $e->getMessage();
 }
@@ -38,7 +54,7 @@ $conn->close();
 <?php include 'header.php'; ?>
 
 <div class="container">
-    <h2>مرحبا، <?= htmlspecialchars($guestName) ?></h2>
+    <h2>مرحباً، <?= htmlspecialchars($guestName) ?></h2>
     <h3>سجل العقود الخاصة بك</h3>
 
     <?php if (!empty($error)): ?>
@@ -65,13 +81,13 @@ $conn->close();
                 <tr>
                     <td><?= htmlspecialchars($contract['con_id']) ?></td>
                     <td><?= htmlspecialchars($contract['con_date']) ?></td>
-                    <td><?= htmlspecialchars($contract['1st_party']) ?></td>
-                    <td><?= htmlspecialchars($contract['2nd_party']) ?></td>
-                    <td><?= htmlspecialchars($contract['con_duration']) ?></td>
+                    <td><?= htmlspecialchars($contract['first_party_name']) ?></td>
+                    <td><?= htmlspecialchars($contract['second_party_name']) ?></td>
+                    <td><?= htmlspecialchars($contract['con_duration']) ?> شهر</td>
                     <td><?= htmlspecialchars($contract['con_starting_date']) ?></td>
                     <td><?= htmlspecialchars($contract['program_name']) ?></td>
                     <td><?= htmlspecialchars($contract['num_weeks']) ?></td>
-                    <td><?= htmlspecialchars($contract['total']) ?></td>
+                    <td><?= number_format($contract['total']) ?> ريال</td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
