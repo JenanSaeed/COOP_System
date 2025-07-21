@@ -16,6 +16,7 @@ try {
     $stmt = $conn->prepare("
         SELECT 
             c.con_id, 
+            c.guest_id,
             c.con_date, 
             c.con_duration, 
             c.con_starting_date, 
