@@ -19,6 +19,7 @@ if ($_SESSION['role'] == 'guest') {
 try {
     $stmt = $conn->prepare("SELECT 
         con_id,
+        guest_id,
         con_date,
         1st_party,
         2nd_party,
@@ -26,7 +27,6 @@ try {
         con_starting_date,
         program_name,
         program_id,
-        num_weeks,
         total
     FROM contract
     ORDER BY con_date DESC");
