@@ -1,6 +1,52 @@
 <?php
 include 'header.php';
 include 'db_connect.php';
+
+
+$message = ''; // Initialize as empty
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // DEBUGGING BLOCK
+    if (!isset($_FILES['signature'])) {
+        $message = '<div class="message error">لم يتم العثور على ملف مرفق</div>';
+    } else {
+        switch ($_FILES['signature']['error']) {
+            case UPLOAD_ERR_OK:
+                // this is the good case – do nothing here
+                break;
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:
+                $message = '<div class="message error">حجم الملف كبير جدًا</div>';
+                break;
+            case UPLOAD_ERR_PARTIAL:
+                $message = '<div class="message error">تم تحميل الملف جزئيًا فقط</div>';
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                $message = '<div class="message error">لم يتم تحميل أي ملف</div>';
+                break;
+            default:
+                $message = '<div class="message error">خطأ غير معروف في تحميل الملف</div>';
+        }
+    }
+
+    // Continue only if file is good
+    if (isset($_FILES['signature']) && $_FILES['signature']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = 'secondPartySignature/';
+        $fileTmpPath = $_FILES['signature']['tmp_name'];
+        $fileName = basename($_FILES['signature']['name']);
+        $fileName = preg_replace("/[^a-zA-Z0-9.]/", "_", $fileName); // sanitize
+        $destPath = $uploadDir . $fileName;
+
+        if (move_uploaded_file($fileTmpPath, $destPath)) {
+            $message = "<div class='message success'>تم رفع التوقيع بنجاح</div> <a href='$destPath' target='_blank'>عرض التوقيع</a>";
+        } else {
+            $message = '<div class="message error">فشل في نقل الملف إلى المجلد المحدد</div>';
+        }
+    }
+}
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -28,10 +74,18 @@ include 'db_connect.php';
       flex-wrap: wrap;
     }
 
-    .right-section, .left-section {
+    .left-section {
       flex: 1;
       min-width: 300px;
     }
+    .right-section {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 👈 This centers vertically */
+    }
+
 
     h2 {
       margin-bottom: 20px;
@@ -96,7 +150,7 @@ include 'db_connect.php';
       background-color: #0f3d3c;
     }
 
-    .message {
+  .message {
   margin-top: 20px;
   padding: 10px;
   border-radius: 4px;
@@ -117,29 +171,34 @@ include 'db_connect.php';
 
   </style>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/hijri-date/lib/hijri-date.js"></script>
+
+
 <body>
 
   <div class="container">
+     <form method="POST" action="" enctype="multipart/form-data">
     <!-- Right Section: Signature and Dates -->
-    <div class="right-section">
-      <form method="POST" action="">
+      <div class="right-section">
+  
           <label>الرجاء إرفاق توقيع الطرف الثاني:</label>
-          <label class="signature-upload" for="signature_input">📎 إرفاق التوقيع</label>
+          <label class="signature-upload" for="signature_input">📎 </label>
           <input type="file" name="signature" id="signature_input" accept="image/*" style="display: none;">
           <img id="signature_preview" style="max-width: 100%; margin-top: 10px; display: none;" />
 
 
           <label>التاريخ الهجري:</label>
-          <input type="text" name="hijri_date">
+          <input type="text" name="hijri_date" id="hijri_date" readonly>
         
           <label>التاريخ الميلادي:</label>
-          <input type="date" name="birth_date">
-      </form>
-    </div>
+          <input type="date" name="signature_date" value="<?= date('Y-m-d'); ?>">
+          <?php if (!empty($message)) echo $message; ?>
+      
+      </div>
 
     <!-- Left Section: Other Info -->
-    <div class="left-section">
-      <form method="POST" action="">
+      <div class="left-section">
+      
        
           <label>الاسم:</label>
           <input type="text" name="name">
@@ -161,7 +220,7 @@ include 'db_connect.php';
     
     
           <label>تاريخ الانتهاء:</label>
-          <input type="text" name="expiry_date">
+          <input type="date" name="expiry_date">
         
           <label>العنوان:</label>
           <textarea name="address" rows="2"></textarea>
@@ -181,9 +240,35 @@ include 'db_connect.php';
           <button type="submit">السابق</button>
           <button type="submit">إتمام الطلب</button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   </div>
+
+  <script>
+  const input = document.getElementById('signature_input');
+  const preview = document.getElementById('signature_preview');
+
+  input.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      preview.style.display = 'block';
+      preview.src = URL.createObjectURL(file);
+    }
+  });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.js"></script>
+
+  <script>
+  window.onload = function () {
+  const hijriInput = document.querySelector('input[name="hijri_date"]');
+  
+  const todayHijri = moment().format('iYYYY-iMM-iDD'); // Hijri format
+  if (hijriInput) hijriInput.value = todayHijri;
+};
+
+  </script>
+
   <?php include 'footer.php'; ?>
 
 </body>
