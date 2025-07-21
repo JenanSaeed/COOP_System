@@ -28,7 +28,16 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
   // Role-based routing
   switch ($role) {
-      case 'admin':
+      case 'employee':
+          $newContract = "c-main.php";
+          $contractRecords = "c-adminRec.php";
+          break;
+      case 'finance':
+          $newContract = "c-main.php";
+          $contractRecords = "c-adminRec.php";
+          break;
+
+      case 'manager':
           $newContract = "c-main.php";
           $contractRecords = "c-adminRec.php";
           break;
