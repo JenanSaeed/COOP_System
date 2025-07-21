@@ -21,8 +21,7 @@ try {
             c.con_duration, 
             c.con_starting_date, 
             c.program_name, 
-            c.program_id, 
-            c.num_weeks, 
+            c.program_id,  
             c.total,
             e.name AS first_party_name,
             g.guest_name AS second_party_name
