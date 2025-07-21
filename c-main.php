@@ -11,7 +11,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>الصفحة الرئيسية - قسم العقود</title>
+  <title>الصفحة الرئيسية - إدارة قسم العقود</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -21,55 +21,55 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
   include 'header.php';
 
   $role = $_SESSION['role'] ?? null;
-  $services = "login.php";
-  $servicesDeploma = "login.php";
-  $coopUni = "login.php";
-  $paidTraining = "login.php";
-  $trainingProgram = "login.php";
 
-  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    $role = $_SESSION['role'];
+  // Default URLs
+  $newContract = "#";
+  $contractRecords = "#";
 
-        $services = "c-AdminForm.php";
-        $servicesDeploma = "c-AdminForm.php";
-        $coopUni = "c-AdminForm.php";
-        $paidTraining = "c-AdminForm.php";
-        $trainingProgram = "c-AdminForm.php";
+  // Role-based routing
+  switch ($role) {
+      case 'employee':
+          $newContract = "c-conTypes.php";
+          $contractRecords = "c-adminRec.php";
+          break;
+      case 'finance':
+          $newContract = "c-conTypes.php";
+          $contractRecords = "c-adminRec.php";
+          break;
 
+      case 'manager':
+          $newContract = "c-conTypes.php";
+          $contractRecords = "c-adminRec.php";
+          break;
+
+      case 'guest':
+          $newContract = "c-conTypes.php";
+          $contractRecords = "c-guestRec.php";
+          break;
+
+      default:
+          // fallback in case of invalid role
+          $newContract = "#";
+          $contractRecords = "#";
   }
 ?>
 
 <main class="home-main">
-  <!-- The heading placed outside of the button groups -->
   <div style="text-align: center; margin-bottom: 20px;">
-    <h2>الرجاء اختيار نوع العقد:</h2>
+    <h2>الرجاء اختيار العملية:</h2>
   </div>
 
   <div class="home-buttons">
     <div class="button-group mb-3">
-      <a href="<?= $services ?>" class="home-btn">
-        عقد تنفيذ خدمات
+      <a href="<?= $newContract ?>" class="home-btn">
+        إنشاء عقد جديد
       </a>
-      <a href="<?= $servicesDeploma ?>" class="home-btn">
-        عقد تقديم خدمات (للدبلومات المهنية)
-      </a>
-    </div>
-
-    <div class="button-group">
-      <a href="<?= $coopUni ?>" class="home-btn">
-        عقد عمل تعاوني (منسوبي الجامعة)
-      </a>
-      <a href="<?= $paidTraining ?>" class="home-btn">
-        عقد تدريب بنظام المكافأة الشهرية
-      </a>
-      <a href="<?= $trainingProgram ?>" class="home-btn">
-        عقد تنفيذ برنامج تدريبي
+      <a href="<?= $contractRecords ?>" class="home-btn">
+        سجل العقود
       </a>
     </div>
   </div>
 </main>
-
-
 
 <?php include 'footer.php'; ?>
 
