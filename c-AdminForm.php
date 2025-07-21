@@ -1,4 +1,12 @@
+
 <?php
+session_start();
+
+if (!isset($_SESSION['user_name'])) {
+  header("Location: login.php");
+  exit();
+}
+
 include 'header.php';
 include 'db_connect.php';
 
@@ -14,14 +22,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $con_date = $_POST['gregorian_date'];
   $party1 = $_POST['party1'];
   $party2 = $_POST['party2'];
-  $duration = $_POST['duration'];
+  $duration_value = $_POST['con_duration_value'];    // مثال: 5
+  $duration_type = $_POST['duration_type'];          // مثال: أيام
+  $con_duration = $duration_value . ' ' . $duration_type; // مثال: "5 أيام"
   $start_date = $_POST['start_gregorian'];
   $program_name = $_POST['program_name'];
   $program_id = $_POST['program_code'];
   $total = $_POST['contract_total'];
 
   $sql = "INSERT INTO contract (con_id, con_date, 1st_party, 2nd_party, con_duration, con_starting_date, program_name, program_id, total)
-          VALUES ('$con_id', '$con_date', '$party1', '$party2', '$duration', '$start_date', '$program_name', '$program_id', '$total')";
+          VALUES ('$con_id', '$con_date', '$party1', '$party2', '$con_duration', '$start_date', '$program_name', '$program_id', '$total')";
 
   if (mysqli_query($conn, $sql)) {
     echo "<script>alert('تم حفظ العقد بنجاح');</script>";
@@ -62,20 +72,20 @@ while ($row = mysqli_fetch_assoc($query)) {
   <div class="form-box">
     <h2 class="form-title">عقد تنفيذ برنامج تدريبي</h2>
     <form>
-      <div class="form-group">
-        <label>التاريخ الميلادي:</label>
-        <input type="date" class="form-control" id="gregorianDate">
-      </div>
+     <div class="form-group">
+  <label>التاريخ الميلادي:</label>
+  <input type="date" class="form-control" id="gregorianDate">
+</div>
 
-      <div class="form-group">
-        <label>التاريخ الهجري:</label>
-        <input type="text" class="form-control" id="hijriDate" readonly>
-      </div>
+<div class="form-group">
+  <label>التاريخ الهجري:</label>
+  <input type="text" class="form-control" id="hijriDate" readonly>
+</div>
 
-      <div class="form-group">
-        <label>اليوم:</label>
-        <input type="text" class="form-control" id="dayName" readonly>
-      </div>
+<div class="form-group">
+  <label>اليوم:</label>
+  <input type="text" class="form-control" id="dayName" readonly>
+</div>
 
       <div class="form-group">
         <label>الطرف الأول:</label>
@@ -88,7 +98,9 @@ while ($row = mysqli_fetch_assoc($query)) {
 
       <div class="form-group">
         <label>الطرف الثاني:</label>
-        <input type="text" class="form-control" id="party2">
+          <!-- علشان يصير اسم الطرف الثاني داينميكي-->
+       <input type="text" class="form-control" id="party2" name="party2"
+       value="<?php echo isset($_SESSION['user_name']) ? $_SESSION['user_name'] : ''; ?>" readonly>
       </div>
 
       <div class="form-buttons">
@@ -123,14 +135,26 @@ while ($row = mysqli_fetch_assoc($query)) {
         <input type="text" class="form-control" id="contract_total" placeholder="ريالاً">
       </div>
 
-      <div class="form-group">
-        <label>مدة العقد:</label>
-        <div class="radio-group">
-          <label><input type="radio" name="duration" value="أيام"> أيام</label>
-          <label><input type="radio" name="duration" value="أسابيع"> أسابيع</label>
-          <label><input type="radio" name="duration" value="أشهر"> أشهر</label>
-        </div>
-      </div>
+<div class="form-group">
+  <label>مدة العقد:</label>
+  <div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap;">
+    <input type="text" class="form-control" name="con_duration_value" style="width: 100px; margin-bottom: 0;">
+
+    <label style="display: flex; align-items: center; gap: 5px; margin: 0;">
+      <input type="radio" name="duration_type" value="أيام"> أيام
+    </label>
+
+    <label style="display: flex; align-items: center; gap: 5px; margin: 0;">
+      <input type="radio" name="duration_type" value="أسابيع"> أسابيع
+    </label>
+
+    <label style="display: flex; align-items: center; gap: 5px; margin: 0;">
+      <input type="radio" name="duration_type" value="أشهر"> أشهر
+    </label>
+  </div>
+</div>
+
+
 
       <div class="form-group">
         <label>تاريخ بداية العقد بالميلادي:</label>
@@ -230,7 +254,22 @@ document.getElementById("party3Name").addEventListener("change", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
   fillParty3Info(document.getElementById("party1Name").value);
+
+  // 👇 الكود الجديد للإظهار تاريخ اليوم في بارت
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const formattedToday = `${yyyy}-${mm}-${dd}`;
+  
+  document.getElementById('gregorianDate').value = formattedToday;
+
+  const day = today.getDay();
+  const daysArabic = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  document.getElementById('dayName').value = daysArabic[day];
+  document.getElementById('hijriDate').value = moment(formattedToday, 'YYYY-MM-DD').format('iYYYY/iMM/iDD');
 });
+
 
 document.getElementById('gregorianDate').addEventListener('change', function () {
   const date = this.value;

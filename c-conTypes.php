@@ -19,24 +19,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
 <?php
   include 'header.php';
-
-  $role = $_SESSION['role'] ?? null;
-  $services = "login.php";
-  $servicesDeploma = "login.php";
-  $coopUni = "login.php";
-  $paidTraining = "login.php";
-  $trainingProgram = "login.php";
-
-  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    $role = $_SESSION['role'];
-
-        $services = "c-AdminForm.php";
-        $servicesDeploma = "c-AdminForm.php";
-        $coopUni = "c-AdminForm.php";
-        $paidTraining = "c-AdminForm.php";
-        $trainingProgram = "c-AdminForm.php";
-
-  }
 ?>
 
 <main class="home-main">
