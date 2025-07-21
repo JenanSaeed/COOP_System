@@ -8,13 +8,14 @@ body {
 
 
 .container {
-            width: 400px;
-            margin: 50px auto;
-            background-color: white;
-            padding: 25px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 10px;
-
+  width: 400px;
+  margin: 50px auto;
+  background-color: white;
+  padding: 25px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  max-height: 90vh; /* الحد الأقصى للارتفاع */
+  overflow-y: auto;
 }
 
 /*------------------------ Header ------------------------*/
