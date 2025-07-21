@@ -41,7 +41,7 @@ if (!$vacation) {
 <div class="container py-5 text-center">
     <h2 class="mb-4">تحميل نموذج الإجازة</h2>
 
-    <a href="generate_pdf.php?vac_id=<?= urlencode($vacation['vac_id']) ?>" class="btn btn-outline-primary btn-lg" target="_blank">
+    <a href="v-pdf.php?vac_id=<?= urlencode($vacation['vac_id']) ?>" class="btn btn-outline-primary btn-lg" target="_blank">
         تحميل نموذج الإجازة PDF
     </a>
 </div>
