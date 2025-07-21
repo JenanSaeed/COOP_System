@@ -1,14 +1,16 @@
-
 <?php
 session_start();
 
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    $_SESSION['redirect_to'] = basename($_SERVER['PHP_SELF']);
     header("Location: login.php");
     exit();
 }
 
-include 'db_connect.php';
+if (!isset($_SESSION['contract_type']) && isset($_POST['contract_type'])) {
+    $_SESSION['contract_type'] = trim($_POST['contract_type']);
+    header("Location: c-terms.php");
+    exit();
+}
 
 $contract_type = $_SESSION['contract_type'] ?? '';
 
