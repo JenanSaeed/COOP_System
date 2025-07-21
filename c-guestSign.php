@@ -3,9 +3,16 @@ include 'header.php';
 include 'db_connect.php';
 
 
-$message = ''; // Initialize as empty
+$message = ''; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $required = ['name', 'role', 'nationality', 'id_number', 'issue_place', 'expiry_date', 'address', 'phone', 'email', 'bank', 'iban', 'signature_date', 'hijri_date'];
+  foreach ($required as $field) {
+    if (empty($_POST[$field])) {
+      $message'<div class="message error">يرجى تعبئة جميع الحقول</div>';
+    }
+}
+
     // DEBUGGING BLOCK
     if (!isset($_FILES['signature'])) {
         $message = '<div class="message error">لم يتم العثور على ملف مرفق</div>';
@@ -240,6 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <button type="submit">السابق</button>
           <button type="submit">إتمام الطلب</button>
         </div>
+        
       </div>
     </form>
   </div>
