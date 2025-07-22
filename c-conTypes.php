@@ -8,7 +8,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contract_type'])) {
     $_SESSION['contract_type'] = trim($_POST['contract_type']);
-    header("Location: c-terms.php");
+    header("Location: c-adminForm.php");
     exit();
 }
 ?>
