@@ -5,6 +5,12 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contract_type'])) {
+    $_SESSION['contract_type'] = trim($_POST['contract_type']);
+    header("Location: c-adminForm.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -27,38 +33,21 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     <h2>الرجاء اختيار نوع العقد:</h2>
   </div>
 
-    <div class="home-buttons">
-    <div class="button-group mb-3">
-      <form action="c-adminForm.php" method="POST" style="display:inline-block;">
-        <input type="hidden" name="contract_type" value="عقد تنفيذ خدمات">
-        <button type="submit" class="home-btn">عقد تنفيذ خدمات</button>
-      </form>
-
-      <form action="c-adminForm.php" method="POST" style="display:inline-block;">
-        <input type="hidden" name="contract_type" value="عقد تقديم خدمات (الدبلومات المهنية)">
-        <button type="submit" class="home-btn">عقد تقديم خدمات (الدبلومات المهنية)</button>
-      </form>
+  <form action="c-conTypes.php" method="POST" style="display:inline-block;">
+    <div class="form-buttons">
+      <button type="submit" name="contract_type" value="عقد تنفيذ خدمات" class="home-btn">عقد تنفيذ خدمات</button>
+      
+      <button type="submit" name="contract_type" value="عقد تقديم خدمات (الدبلومات المهنية)" class="home-btn">عقد تقديم خدمات (الدبلومات المهنية)</button>
+        
+      <button type="submit" name="contract_type" value="عقد عمل تعاوني (منسوبي الجامعة)" class="home-btn">عقد عمل تعاوني (منسوبي الجامعة)</button>
+        
+      <button type="submit" name="contract_type" value="عقد تدريب بنظام المكافأة الشهرية" class="home-btn">عقد تدريب بنظام المكافأة الشهرية</button>
+        
+      <button type="submit" name="contract_type" value="عقد تنفيذ برنامج تدريبي" class="home-btn">عقد تنفيذ برنامج تدريبي</button>
     </div>
-
-    <div class="button-group">
-      <form action="c-adminForm.php" method="POST" style="display:inline-block;">
-        <input type="hidden" name="contract_type" value="عقد عمل تعاوني (منسوبي الجامعة)">
-        <button type="submit" class="home-btn">عقد عمل تعاوني (منسوبي الجامعة)</button>
-      </form>
-
-      <form action="c-adminForm.php" method="POST" style="display:inline-block;">
-        <input type="hidden" name="contract_type" value="عقد تدريب بنظام المكافأة الشهرية">
-        <button type="submit" class="home-btn">عقد تدريب بنظام المكافأة الشهرية</button>
-      </form>
-
-      <form action="c-adminForm.php" method="POST" style="display:inline-block;">
-        <input type="hidden" name="contract_type" value="عقد تنفيذ برنامج تدريبي">
-        <button type="submit" class="home-btn">عقد تنفيذ برنامج تدريبي</button>
-      </form>
+  </form>
 
 </main>
-
-
 
 <?php include 'footer.php'; ?>
 

@@ -3,7 +3,6 @@ include 'db_connect.php';
 session_start();
 
 $contract_type = $_GET['type'] ?? '';
-$user_role = $_SESSION['role'] ?? 'guest';
 
 $con_terms = '';
 $extra_terms = [];
@@ -109,10 +108,6 @@ if (!empty($contract_type)) {
     <?php endif; ?>
 
     <hr>
-
-    <!-- خيارات حسب الدور -->
-    <?php switch ($user_role):
-        case 'admin': ?>
             <form method="POST" class="mt-4">
                 <input type="hidden" name="action" value="add_extra">
                 <div class="mb-3">
@@ -121,15 +116,6 @@ if (!empty($contract_type)) {
                 </div>
                 <button type="submit" class="btn btn-primary">إضافة</button>
             </form>
-            <?php break;
-
-        case 'guest': ?>
-            <div class="form-check form-switch mt-4">
-                <input class="form-check-input" type="checkbox" id="agreeSwitch">
-                <label class="form-check-label" for="agreeSwitch">أوافق على جميع البنود المذكورة أعلاه</label>
-            </div>
-            <?php break;
-    endswitch; ?>
 </div>
 </body>
 </html>

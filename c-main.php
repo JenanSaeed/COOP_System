@@ -42,11 +42,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
           $contractRecords = "c-adminRec.php";
           break;
 
-      case 'guest':
-          $newContract = "c-conTypes.php";
-          $contractRecords = "c-guestRec.php";
-          break;
-
       default:
           // fallback in case of invalid role
           $newContract = "#";

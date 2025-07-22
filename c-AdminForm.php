@@ -1,8 +1,26 @@
-
 <?php
 
 include 'header.php';
 include 'db_connect.php';
+session_start();
+
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+if (!isset($_SESSION['contract_type']) && isset($_POST['contract_type'])) {
+    $_SESSION['contract_type'] = trim($_POST['contract_type']);
+    header("Location: c-terms.php");
+    exit();
+}
+
+$contract_type = $_SESSION['contract_type'] ?? '';
+
+if (empty($contract_type)) {
+    header("Location: conTypes.php");
+    exit();
+}
 
 // توليد con_id تلقائي
 $result = mysqli_query($conn, "SELECT MAX(con_id) AS max_id FROM contract");

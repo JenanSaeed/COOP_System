@@ -40,7 +40,6 @@ if (isset($_GET['error'])) {
 
     <div class="form-buttons">
         <button class="buttons" type="submit" value="تسجيل الدخول">تسجيل الدخول</button>
-        <button class="buttons" type="button" onclick="location.href='signUp.php'">التسجيل كـ ضيف</button>
     </div>
   </form>
 </div>
