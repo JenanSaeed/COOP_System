@@ -503,6 +503,16 @@ a.buttons:hover,
   gap: 20px;
 }
 
+.GSbutton {
+  background-color: #154746;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 
 .GSform-buttons button {
   background-color: #154746;

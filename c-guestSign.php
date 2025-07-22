@@ -27,14 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $destPath = $uploadDir . $fileName;
 
     if (move_uploaded_file($fileTmpPath, $destPath)) {
-        $message = "<div class='GSmessage success'>تم رفع التوقيع بنجاح</div> <a href='$destPath' target='_blank'>عرض التوقيع</a>";
+        $message = "<div class='GSmessage success'>تم رفع الطلب بنجاح</div> <a href='$destPath' target='_blank'>عرض التوقيع</a>";
     } else {
         $message = '<div class="GSmessage error">فشل في نقل الملف إلى المجلد المحدد</div>';
     }
   }
-}
-
-if (move_uploaded_file($fileTmpPath, $destPath)) {
+  if (move_uploaded_file($fileTmpPath, $destPath)) {
     session_start();
     $_SESSION['second_party_data'] = [
         'name' => $_POST['name'],
@@ -53,9 +51,12 @@ if (move_uploaded_file($fileTmpPath, $destPath)) {
         'signature_path' => $destPath
     ];
 
-    // Redirect to PDF generation
     header("Location: c-pdf.php");
     exit;
+} else {
+    $message = '<div class="GSmessage error">فشل في نقل الملف إلى المجلد المحدد</div>';
+}
+
 }
 
 ?>
@@ -120,8 +121,8 @@ if (move_uploaded_file($fileTmpPath, $destPath)) {
       ?>
     <div class="GSform-buttons"> 
     
-      <button  type="back" name="back">السابق</button>
-      <button type="submit" name="submit">إتمام الطلب</button>
+      <button type="button" class="GSbutton" onclick="location.href='c-contractDet1.php'">السابق</button>
+      <button type="submit" class="GSbutton">إتمام الطلب</button>
     </div>  
       </div>
      
