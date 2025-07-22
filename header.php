@@ -12,20 +12,16 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
 
   switch ($role) {
     case 'employee':
-      $contractsLink = "c-adminMain.php";
+      $contractsLink = "c-main.php";
       $vacationsLink = "empMain.php";
       break;
     case 'finance':
-      $contractsLink = "c-adminMain.php";
+      $contractsLink = "c-main.php";
       $vacationsLink = "finMain.php";
       break;
     case 'manager':
-      $contractsLink = "c-adminMain.php";
+      $contractsLink = "c-main.php";
       $vacationsLink = "manMain.php";
-      break;
-    case 'guest':
-      $contractsLink = "c-adminMain.php"; // allow access to contracts
-      $vacationsLink = "#"; // no vacation access
       break;
   }
 }

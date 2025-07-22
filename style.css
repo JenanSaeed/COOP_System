@@ -441,13 +441,7 @@ a.buttons:hover,
 
 
 /*.................guestSignPage....................*/
- 
-body {
-  margin: 0;
-  font-family: 'Cairo', sans-serif;
-  direction: rtl;
-  background-color: #f4f4f4;
-}
+
 
 .GScontainer {
   max-width: 1200px;
@@ -558,5 +552,3 @@ body {
   align-items: stretch;
   min-height: 500px;
 }
-
-

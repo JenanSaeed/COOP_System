@@ -1,7 +1,24 @@
 <?php
-
-include 'header.php';
+session_start();
 include 'db_connect.php';
+
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+if (!isset($_SESSION['contract_type']) && isset($_POST['contract_type'])) {
+    $_SESSION['contract_type'] = trim($_POST['contract_type']);
+    header("Location: c-terms.php");
+    exit();
+}
+
+$contract_type = $_SESSION['contract_type'] ?? '';
+
+if (empty($contract_type)) {
+    header("Location: conTypes.php");
+    exit();
+}
 
 // توليد con_id تلقائي
 $result = mysqli_query($conn, "SELECT MAX(con_id) AS max_id FROM contract");
@@ -97,6 +114,7 @@ while ($row = mysqli_fetch_assoc($query)) {
   <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
 </head>
 <body>
+<?php include 'header.php' ?>
 
 <!-- القسم الأول -->
 <section id="section1">

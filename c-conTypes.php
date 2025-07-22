@@ -8,7 +8,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contract_type'])) {
     $_SESSION['contract_type'] = trim($_POST['contract_type']);
-    header("Location: c-adminForm.php");
+    header("Location: c-terms.php");
     exit();
 }
 ?>
@@ -35,15 +35,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contract_type'])) {
 
   <form action="" method="POST" style="display:inline-block;">
     <div class="form-buttons">
-      <button type="submit" name="contract_type" value="عقد تنفيذ خدمات" class="home-btn">عقد تنفيذ خدمات</button>
+      <button type="submit" name="contract_type" value="عقد تقديم خدمات" class="home-btn">عقد تقديم خدمات</button>
       
-      <button type="submit" name="contract_type" value="عقد تقديم خدمات (الدبلومات المهنية)" class="home-btn">عقد تقديم خدمات (الدبلومات المهنية)</button>
+      <button type="submit" name="contract_type" value="(عقد تقديم خدمات (الدبلومات المهنية" class="home-btn">عقد تقديم خدمات (الدبلومات المهنية)</button>
         
       <button type="submit" name="contract_type" value="عقد عمل تعاوني (منسوبي الجامعة)" class="home-btn">عقد عمل تعاوني (منسوبي الجامعة)</button>
         
       <button type="submit" name="contract_type" value="عقد تدريب بنظام المكافأة الشهرية" class="home-btn">عقد تدريب بنظام المكافأة الشهرية</button>
         
-      <button type="submit" name="contract_type" value="عقد تنفيذ برنامج تدريبي" class="home-btn">عقد تنفيذ برنامج تدريبي</button>
+      <button type="submit" name="contract_type" value="عقد التدريب (الدورات)" class="home-btn">عقد  التدريب (الدورات)</button>
     </div>
   </form>
 
