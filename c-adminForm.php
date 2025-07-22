@@ -7,18 +7,13 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit();
 }
 
-if (!isset($_SESSION['contract_type']) && isset($_POST['contract_type'])) {
-    $_SESSION['contract_type'] = trim($_POST['contract_type']);
-    header("Location: c-terms.php");
+if (!isset($_SESSION['contract_type'])) {
+    header("Location: conTypes.php");
     exit();
 }
 
 $contract_type = $_SESSION['contract_type'] ?? '';
 
-if (empty($contract_type)) {
-    header("Location: conTypes.php");
-    exit();
-}
 
 // توليد con_id تلقائي
 $result = mysqli_query($conn, "SELECT MAX(con_id) AS max_id FROM contract");
@@ -28,9 +23,7 @@ $contract_code = str_pad($nextId, 4, "0", STR_PAD_LEFT) . "-2025";
 
 // حفظ البيانات عند الإرسال
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  //$con_id = $nextId;
   $con_id = $_POST['con_id'] ?? $nextId;
-  //$con_id = $_POST['con_id']; // من الحقل المخفي
   $con_date = $_POST['gregorian_date'];
   $party1 = $_POST['party1'];
   $party2 = $_POST['party2'];
@@ -48,7 +41,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   VALUES ('$con_id', '$con_date', '$party1', '$party2', '$con_duration', '$start_date', '$program_name', '$program_id', '$total')";
 
   if (mysqli_query($conn, $sql)) {
-    echo "<script>alert('تم حفظ العقد بنجاح');</script>";
+    header("Location: c-terms.php");
+    exit();
   } else {
     echo "<script>alert('حدث خطأ أثناء الحفظ: " . mysqli_error($conn) . "');</script>";
   }
@@ -87,6 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 }
 */
+
 // جلب بيانات الموظفين (فقط المانجر)
 $employees = [];
 $query = mysqli_query($conn, "SELECT name, emp_id, role, email, address, phone FROM employee WHERE role = 'manager'");
@@ -253,7 +248,7 @@ while ($row = mysqli_fetch_assoc($query)) {
 
       <div class="form-group">
         <label>العنوان:</label>
-        <input type="text" class="form-control" name="address1" id="address1">
+        <textarea type="text" class="form-control" name="address1" id="address1" rows="5"></textarea>
       </div>
 
       <div class="form-group">
