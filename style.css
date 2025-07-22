@@ -438,3 +438,125 @@ a.buttons:hover,
   }
 }
 
+
+
+/*.................guestSignPage....................*/
+ 
+body {
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+  background-color: #f4f4f4;
+}
+
+.GScontainer {
+  max-width: 1200px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.GSright-section,
+.GSleft-section {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.GSlabel {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.GSinput,
+.GStextarea {
+  width: 100%;
+  padding: 8px;
+  font-family: 'Cairo', sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.GStextarea {
+  resize: vertical;
+}
+
+.GSsignature-upload {
+  border: 2px dashed #888;
+  padding: 20px;
+  text-align: center;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #fafafa;
+}
+
+.GSform-buttons {
+  
+  padding: 10px;
+  background-color: #154746;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  display: block;
+  margin: 20px auto 0;
+  gap: 20px;
+}
+
+
+.GSform-buttons button {
+  background-color: #154746;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.GSform-buttons button:hover {
+  background-color: #0f3d3c;
+}
+
+.GSmessage {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.GSmessage.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.GSmessage.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.GSright-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 300px;
+}
+
+.GSform {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  align-items: stretch;
+  min-height: 500px;
+}
+
+
