@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contract_type'])) {
     <h2>الرجاء اختيار نوع العقد:</h2>
   </div>
 
-  <form action="c-conTypes.php" method="POST" style="display:inline-block;">
+  <form action="" method="POST" style="display:inline-block;">
     <div class="form-buttons">
       <button type="submit" name="contract_type" value="عقد تنفيذ خدمات" class="home-btn">عقد تنفيذ خدمات</button>
       

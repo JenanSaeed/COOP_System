@@ -2,10 +2,18 @@
 include 'db_connect.php';
 session_start();
 
+
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || !isset($_SESSION['role'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$user_role = $_SESSION['role'];
+
 $contract_type = $_GET['type'] ?? '';
 
 $con_terms = '';
-$extra_terms = [];
+$extra_terms = '';
 
 // التعامل مع الإضافة والحذف (نفس الصفحة)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user_role === 'admin') {
