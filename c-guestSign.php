@@ -32,9 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = '<div class="GSmessage error">فشل في نقل الملف إلى المجلد المحدد</div>';
     }
   }
-}
-
-if (move_uploaded_file($fileTmpPath, $destPath)) {
+  if (move_uploaded_file($fileTmpPath, $destPath)) {
     session_start();
     $_SESSION['second_party_data'] = [
         'name' => $_POST['name'],
@@ -53,9 +51,12 @@ if (move_uploaded_file($fileTmpPath, $destPath)) {
         'signature_path' => $destPath
     ];
 
-    // Redirect to PDF generation
     header("Location: c-pdf.php");
     exit;
+} else {
+    $message = '<div class="GSmessage error">فشل في نقل الملف إلى المجلد المحدد</div>';
+}
+
 }
 
 ?>
