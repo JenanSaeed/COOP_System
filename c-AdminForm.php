@@ -1,13 +1,7 @@
 
 <?php
-session_start();
 
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    $_SESSION['redirect_to'] = basename($_SERVER['PHP_SELF']);
-    header("Location: login.php");
-    exit();
-}
-
+include 'header.php';
 include 'db_connect.php';
 
 // توليد con_id تلقائي
@@ -94,13 +88,6 @@ while ($row = mysqli_fetch_assoc($query)) {
             <option value="<?= htmlspecialchars($name) ?>"><?= htmlspecialchars($name) ?></option>
           <?php endforeach; ?>
         </select>
-      </div>
-
-      <div class="form-group">
-        <label>الطرف الثاني:</label>
-          <!-- علشان يصير اسم الطرف الثاني داينميكي-->
-       <input type="text" class="form-control" id="party2" name="party2"
-       value="<?php echo isset($_SESSION['user_name']) ? $_SESSION['user_name'] : ''; ?>" readonly>
       </div>
 
       <div class="form-buttons">
