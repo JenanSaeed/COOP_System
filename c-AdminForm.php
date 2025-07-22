@@ -1,4 +1,7 @@
 <?php
+
+include 'header.php';
+include 'db_connect.php';
 session_start();
 include 'db_connect.php';
 
@@ -104,13 +107,6 @@ while ($row = mysqli_fetch_assoc($query)) {
             <option value="<?= htmlspecialchars($name) ?>"><?= htmlspecialchars($name) ?></option>
           <?php endforeach; ?>
         </select>
-      </div>
-
-      <div class="form-group">
-        <label>الطرف الثاني:</label>
-          <!-- علشان يصير اسم الطرف الثاني داينميكي-->
-       <input type="text" class="form-control" id="party2" name="party2"
-       value="<?php echo isset($_SESSION['user_name']) ? $_SESSION['user_name'] : ''; ?>" readonly>
       </div>
 
       <div class="form-buttons">
