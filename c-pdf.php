@@ -32,16 +32,7 @@ try {
     }
     $formatted_total = number_format($total_amount, 2);
 
-    // 2. Fetch first party (manager)
-    $first_party_id = $contract['1st_party'];
-    $stmt = $conn->prepare("SELECT * FROM employee WHERE emp_id = ?");
-    if (!$stmt) throw new Exception("Failed to prepare employee query: " . $conn->error);
-    $stmt->bind_param("i", $first_party_id);
-    if (!$stmt->execute()) throw new Exception("Failed to execute employee query: " . $stmt->error);
-    $employee = $stmt->get_result()->fetch_assoc();
-    $stmt->close();
-
-    // 3. Fetch terms
+    // 2. Fetch terms
     $stmt = $conn->prepare("SELECT con_terms, extra_terms FROM terms WHERE con_type = ?");
     if (!$stmt) throw new Exception("Failed to prepare terms query: " . $conn->error);
     $stmt->bind_param("s", $contract['program_name']);
@@ -49,16 +40,7 @@ try {
     $terms = $stmt->get_result()->fetch_assoc();
     $stmt->close();
 
-    // 4. Generate temporary signature file
-    function createSignatureFile($blob, $name) {
-        if (!$blob) return null;
-        $path = __DIR__ . "/sig_{$name}.png";
-        file_put_contents($path, $blob);
-        return $path;
-    }
-    $signature_path = createSignatureFile($employee['signature'] ?? null, 'emp');
-
-    // 5. Create PDF - removed setErrorSuppression() as it doesn't exist
+    // 3. Create PDF
     $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
     $pdf->SetTitle('نموذج عقد رسمي');
     $pdf->SetMargins(10, 10, 10);
@@ -68,7 +50,7 @@ try {
     $pdf->AddPage();
     $pdf->SetFont('aealarabiya', '', 12);
 
-    // HTML content
+    // 4. Build HTML
     $html = '
     <div style="direction: rtl; text-align: right; font-size: 13px;">
         <h3 style="text-align: center;">جامعة الإمام عبدالرحمن بن فيصل<br>مركز التعليم المستمر</h3>
@@ -95,8 +77,8 @@ try {
         <br>
         <h4>الطرف الأول:</h4>
         <p>
-            الاسم: '.htmlspecialchars($employee['name'] ?? 'غير متوفر').'<br>
-            الوظيفة: '.htmlspecialchars($employee['role'] ?? 'غير متوفر').'
+            الاسم: '.htmlspecialchars($contract['1st_party'] ?? 'غير متوفر').'<br>
+            الوظيفة: مدير
         </p>
 
         <h4>الطرف الثاني:</h4>
@@ -105,7 +87,7 @@ try {
         </p>
 
         <hr>
-        <h4>ألبنود والالتزامات:</h4>
+        <h4>البنود والالتزامات:</h4>
         <p>'.nl2br(htmlspecialchars($terms['con_terms'] ?? 'لم يتم العثور على الشروط.')).'</p>';
 
     if (!empty($terms['extra_terms'])) {
@@ -118,15 +100,8 @@ try {
         <table width="100%" cellspacing="0">
             <tr>
                 <td align="center">
-                    الطرف الأول: '.htmlspecialchars($employee['name'] ?? 'غير متوفر').'<br>';
-                    
-    if ($signature_path && file_exists($signature_path)) {
-        $html .= '<img src="'.$signature_path.'" width="80">';
-    } else {
-        $html .= '_______________________';
-    }
-
-    $html .= '
+                    الطرف الأول: '.htmlspecialchars($contract['1st_party'] ?? 'غير متوفر').'<br>
+                    _______________________
                 </td>
                 <td align="center">
                     الطرف الثاني: '.htmlspecialchars($contract['2nd_party'] ?? 'غير متوفر').'<br>
@@ -141,11 +116,6 @@ try {
 
     // Write HTML content
     $pdf->writeHTML($html, true, false, true, false, '');
-
-    // Clean signature file if exists
-    if ($signature_path && file_exists($signature_path)) {
-        unlink($signature_path);
-    }
 
     // Output PDF
     $pdf->Output('contract_'.$con_id.'.pdf', 'I');
