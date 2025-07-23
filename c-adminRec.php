@@ -9,11 +9,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit();
 }
 
-// منع الزوار من الدخول
-if ($_SESSION['role'] == 'guest') {
-    header("Location: homepage.php");
-    exit();
-}
 
 // جلب العقود
 try {
