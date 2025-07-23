@@ -76,15 +76,15 @@ try {
 
         <table border="1" cellpadding="4" cellspacing="0" width="100%">
             <tr>
-                <td>رقم العقد: '.htmlspecialchars($contract['con_id']).'</td>
+                <td>رمز العقد: '.htmlspecialchars($contract['con_id']).'</td>
                 <td>تاريخ العقد: '.htmlspecialchars($contract['con_date']).'</td>
             </tr>
             <tr>
                 <td>اسم البرنامج: '.htmlspecialchars($contract['program_name']).'</td>
-                <td>رقم البرنامج: '.htmlspecialchars($contract['program_id']).'</td>
+                <td>رمز البرنامج: '.htmlspecialchars($contract['program_id']).'</td>
             </tr>
             <tr>
-                <td>مدة العقد: '.htmlspecialchars($contract['con_duration']).' شهر</td>
+                <td>مدة العقد: '.htmlspecialchars($contract['con_duration']).'</td>
                 <td>تاريخ بدء العقد: '.htmlspecialchars($contract['con_starting_date']).'</td>
             </tr>
             <tr>
