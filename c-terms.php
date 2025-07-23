@@ -100,13 +100,15 @@ if (!empty($contract_type)) {
 <head>
     <meta charset="UTF-8" />
     <title>بنود العقد - <?= htmlspecialchars($contract_type) ?></title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.rtl.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
 <body>
 <?php include 'header.php'; ?>
-<div class="container my-5">
+<div class="t-container">
     <h3 class="mb-4">بنود العقد - <?= htmlspecialchars($contract_type) ?></h3>
 
     <!-- البنود الأساسية -->
@@ -136,7 +138,7 @@ if (!empty($contract_type)) {
                         <form method="POST" style="margin: 0;">
                             <input type="hidden" name="action" value="delete_extra">
                             <input type="hidden" name="index" value="<?= $index ?>">
-                            <button type="submit" class="btn btn-sm btn-danger" title="حذف البند">
+                            <button type="submit" class="delete-button" title="حذف البند">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </form>
@@ -151,7 +153,7 @@ if (!empty($contract_type)) {
 
     <!-- زر إضافة بند -->
     <div class="text-center mt-4">
-        <button id="showAddForm" class="btn btn-success">
+        <button id="showAddForm" class="buttons">
             <i class="fas fa-plus"></i> إضافة بند جديد
         </button>
     </div>
@@ -161,9 +163,9 @@ if (!empty($contract_type)) {
         <form method="POST">
             <input type="hidden" name="action" value="add_extra">
             <input type="text" name="new_term" class="form-control mb-2" required placeholder="أدخل البند الجديد هنا">
-            <div class="buttons-form text-center">
-                <button type="submit" class="btn btn-primary">حفظ</button>
-                <button type="button" class="btn btn-secondary" id="cancelAdd">إلغاء</button>
+            <div class="t-buttons-form">
+                <button type="submit" class="t-buttons">حفظ</button>
+                <button type="button" class="t-buttons" id="cancelAdd">إلغاء</button>
             </div>
         </form>
     </div>
