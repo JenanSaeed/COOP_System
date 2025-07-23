@@ -25,15 +25,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ajax_check'])) {
 }
 
 
-// توليد con_id تلقائي
-$result = mysqli_query($conn, "SELECT MAX(con_id) AS max_id FROM contract");
-$row = mysqli_fetch_assoc($result);
-$nextId = $row['max_id'] + 1;
-$contract_code = str_pad($nextId, 4, "0", STR_PAD_LEFT) . "-2025";
+$currentYear = date("Y"); // السنة الحالية مثل 2025
+
+// جلب آخر con_id بدايته بنفس السنة
+$result = mysqli_query($conn, "SELECT con_id FROM contract WHERE con_id LIKE '%-$currentYear' ORDER BY con_id DESC LIMIT 1");
+
+if ($row = mysqli_fetch_assoc($result)) {
+    // استخراج الرقم قبل الشرطة
+    $lastNumber = (int) explode('-', $row['con_id'])[0];
+    $nextNumber = $lastNumber + 1;
+} else {
+    $nextNumber = 1;
+}
+
+// توليد الرمز الكامل مثل 0001-2025
+$contract_code = str_pad($nextNumber, 4, "0", STR_PAD_LEFT) . "-$currentYear";
 
 // حفظ البيانات عند الإرسال
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $con_id = $_POST['con_id'] ?? $nextId;
+  $con_id = $contract_code;
   $con_date = $_POST['gregorian_date'];
   $party1 = $_POST['party1'];
   $party2 = $_POST['party2'];
@@ -57,40 +67,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "<script>alert('حدث خطأ أثناء الحفظ: " . mysqli_error($conn) . "');</script>";
   }
 }
-
-/* لو ابغا اخلي الحقول الزاميه--مايشتغل
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $con_date = $_POST['gregorian_date'] ?? '';
-  $party1 = $_POST['party1'] ?? '';
-  $party2 = $_POST['party2'] ?? '';
-  $duration_value = $_POST['con_duration_value'] ?? '';
-  $duration_type = $_POST['duration_type'] ?? '';
-  $con_duration = $duration_value . ' ' . $duration_type;
-  $start_date = $_POST['start_gregorian'] ?? '';
-  $program_name = $_POST['program_name'] ?? '';
-  $program_id = $_POST['program_code'] ?? '';
-  $total = $_POST['contract_total'] ?? '';
-  $con_id = $_POST['con_id'] ?? '';
-
-  // التحقق من أن كل الحقول ما هي فاضية
-  if (
-    empty($con_date) || empty($party1) || empty($party2) || empty($duration_value) ||
-    empty($duration_type) || empty($start_date) || empty($program_name) ||
-    empty($program_id) || empty($total) || empty($con_id)
-  ) {
-    echo "<script>alert('يرجى تعبئة جميع الحقول قبل الحفظ.');</script>";
-  } else {
-    $sql = "INSERT INTO contract (`con_id`, `con_date`, `1st_party`, `2nd_party`, `con_duration`, `con_starting_date`, `program_name`, `program_id`, `total`) 
-    VALUES ('$con_id', '$con_date', '$party1', '$party2', '$con_duration', '$start_date', '$program_name', '$program_id', '$total')";
-
-    if (mysqli_query($conn, $sql)) {
-      echo "<script>alert('تم حفظ العقد بنجاح');</script>";
-    } else {
-      echo "<script>alert('حدث خطأ أثناء الحفظ: " . mysqli_error($conn) . "');</script>";
-    }
-  }
-}
-*/
 
 // جلب بيانات الموظفين (فقط المانجر)
 $employees = [];
@@ -249,7 +225,7 @@ while ($row = mysqli_fetch_assoc($query)) {
       <input type="hidden" name="duration_type" id="hidden_duration">
       <input type="hidden" name="start_gregorian" id="hidden_start_gregorian">
       <input type="hidden" name="con_duration_value" id="hidden_duration_value">
-      <input type="hidden" name="con_id" value="<?php echo $nextId; ?>">
+      <input type="hidden" name="con_id" value="<?php echo $contract_code; ?>">
 
       
 
