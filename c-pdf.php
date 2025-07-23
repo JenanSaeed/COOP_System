@@ -93,7 +93,7 @@ $html = '
 </tr>
 <tr>
     <td><b>مدة البرنامج</b></td>
-    <td>'.htmlspecialchars($contract['con_duration'] ?? 'غير محددة').' أسبوع، ابتداءً من تاريخ '.htmlspecialchars($contract['con_starting_date'] ?? 'غير محدد').'</td>
+    <td>'.htmlspecialchars($contract['con_duration'] ?? 'غير محددة').' ابتداءً من تاريخ '.htmlspecialchars($contract['con_starting_date'] ?? 'غير محدد').'</td>
 </tr>
 <tr>
     <td><b>قيمة العقد</b></td>
