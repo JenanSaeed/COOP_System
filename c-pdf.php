@@ -121,7 +121,6 @@ $html .= '</ol>';
 if (!empty($extra_terms)) {
     $html .= '<p>'.nl2br(htmlspecialchars($extra_terms)).'</p>';
 }
-
 // 7. Signatures
 $html .= '
 <br><br><br>
