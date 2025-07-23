@@ -28,16 +28,17 @@ $first_party_name = trim($contract['1st_party'] ?? '');
 $employee_signature_path = null;
 
 if (!empty($first_party_name)) {
-    $stmt = $conn->prepare("SELECT signature FROM employee WHERE name = ?");
-    if (!$stmt) die("فشل في تحضير استعلام الموظف: " . $conn->error);
+    // نستخدم BINARY للتطابق الدقيق + إزالة الفراغات المحتملة
+    $stmt = $conn->prepare("SELECT signature FROM employee WHERE BINARY TRIM(name) = ?");
+    if (!$stmt) die("فشل استعلام الموظف: " . $conn->error);
     $stmt->bind_param("s", $first_party_name);
     $stmt->execute();
     $result = $stmt->get_result();
-    $first_party_emp = $result->fetch_assoc();
+    $emp = $result->fetch_assoc();
     $stmt->close();
 
-    if ($first_party_emp && !empty($first_party_emp['signature'])) {
-        $imageData = $first_party_emp['signature'];
+    if ($emp && !empty($emp['signature'])) {
+        $imageData = $emp['signature'];
         if (@getimagesizefromstring($imageData)) {
             $employee_signature_path = __DIR__ . "/sig_first_party.png";
             file_put_contents($employee_signature_path, $imageData);
@@ -48,23 +49,20 @@ if (!empty($first_party_name)) {
 // 3. Get 2nd party name directly from contract
 $second_party_name = !empty($contract['2nd_party']) ? $contract['2nd_party'] : "غير متوفر";
 
-// 4. Fetch contract terms based on con_type
+// 4. Fetch contract terms
 $con_type = $contract['con_type'] ?? null;
 $terms = [];
 $extra_terms = "";
 
 if ($con_type) {
     $stmt = $conn->prepare("SELECT con_terms, extra_terms FROM terms WHERE con_type = ?");
-    if (!$stmt) {
-        die("فشل تحضير استعلام الشروط: " . $conn->error);
-    }
+    if (!$stmt) die("فشل استعلام الشروط: " . $conn->error);
     $stmt->bind_param("s", $con_type);
     $stmt->execute();
     $result = $stmt->get_result();
     if ($row = $result->fetch_assoc()) {
-        // تفكيك نص الشروط إلى مصفوفة، افتراضياً كل شرط في سطر جديد
         $terms = preg_split('/\r\n|\r|\n/', $row['con_terms']);
-        $extra_terms = $row['extra_terms']; 
+        $extra_terms = $row['extra_terms'];
     }
     $stmt->close();
 }
@@ -75,30 +73,33 @@ $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('نظام العقود');
 $pdf->SetTitle('عقد');
 $pdf->SetMargins(15, 15, 15);
+$pdf->setRTL(true); // محاذاة لليمين
 $pdf->AddPage();
 $pdf->SetFont('aealarabiya', '', 14);
 
-// 6. Contract HTML
+// 6. Content
 $html = '
-<h2 align="center">نموذج عقد</h2>
-<p>بتاريخ: '.htmlspecialchars($contract['con_date']).'</p>
-<p>تم الاتفاق بين كل من:</p>
+<h2 align="center">جامعة الإمام عبدالرحمن بن فيصل<br>مركز التعليم المستمر</h2>
+<h3 align="center">نموذج عقد</h3>
 
-<h4>الطرف الأول:</h4>
-<p>
-الاسم: '.htmlspecialchars($contract['1st_party'] ?? 'غير متوفر').'<br>
-الوظيفة: مدير
-</p>';
-
-$html .= '
-<h4>الطرف الثاني:</h4>
-<p>
-الاسم: '.htmlspecialchars($second_party_name).'<br>
-البرنامج: '.htmlspecialchars($contract['program_name'] ?? 'غير متوفر').'
-</p>
-
-<p>مدة البرنامج: '.htmlspecialchars($contract['num_weeks']).' أسبوع، ابتداءً من تاريخ '.htmlspecialchars($contract['con_starting_date']).'</p>
-<p>قيمة العقد: '.htmlspecialchars($contract['total']).' ريال</p>
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+    <td width="30%"><b>تاريخ العقد</b></td>
+    <td>'.htmlspecialchars($contract['con_date'] ?? '').'</td>
+</tr>
+<tr>
+    <td><b>البرنامج</b></td>
+    <td>'.htmlspecialchars($contract['program_name'] ?? '').'</td>
+</tr>
+<tr>
+    <td><b>مدة البرنامج</b></td>
+    <td>'.htmlspecialchars($contract['con_duration'] ?? 'غير محددة').' أسبوع، ابتداءً من تاريخ '.htmlspecialchars($contract['con_starting_date'] ?? 'غير محدد').'</td>
+</tr>
+<tr>
+    <td><b>قيمة العقد</b></td>
+    <td>'.htmlspecialchars($contract['total']).' ريال</td>
+</tr>
+</table>
 
 <h4>الشروط:</h4>
 <ol>';
@@ -110,28 +111,33 @@ foreach ($terms as $term) {
 }
 $html .= '</ol>';
 
-// عرض extra_terms إذا لم يكن فارغاً
 if (!empty($extra_terms)) {
     $html .= '<p>'.nl2br(htmlspecialchars($extra_terms)).'</p>';
 }
 
-$html .= '<br><br>
+// 7. Signatures
+$html .= '
+<br><br><br>
 <table width="100%" style="text-align:center;">
 <tr>
     <td>
         الطرف الأول: '.htmlspecialchars($contract['1st_party'] ?? 'غير متوفر').'<br>';
-
 if ($employee_signature_path && file_exists($employee_signature_path)) {
     $html .= '<img src="'.$employee_signature_path.'" width="80">';
 } else {
     $html .= '_______________________';
 }
-
 $html .= '
     </td>
     <td>
-        الطرف الثاني: '.htmlspecialchars($second_party_name).'<br>
-        _______________________
+        الطرف الثاني: '.htmlspecialchars($second_party_name).'<br>';
+$second_sig_path = __DIR__ . "/secondPartySignature/sign.png";
+if (file_exists($second_sig_path)) {
+    $html .= '<img src="'.$second_sig_path.'" width="80">';
+} else {
+    $html .= '_______________________';
+}
+$html .= '
     </td>
 </tr>
 </table>
@@ -139,11 +145,11 @@ $html .= '
 
 $pdf->writeHTML($html, true, false, true, false, '');
 
-// 7. Cleanup temp signature image
+// 8. Clean up
 if ($employee_signature_path && file_exists($employee_signature_path)) {
     unlink($employee_signature_path);
 }
 
-// 8. Output
+@ob_end_clean();
 $pdf->Output('contract_'.$con_id.'.pdf', 'I');
 ?>
