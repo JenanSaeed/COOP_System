@@ -28,7 +28,6 @@ $first_party_name = trim($contract['1st_party'] ?? '');
 $employee_signature_path = null;
 
 if (!empty($first_party_name)) {
-    // نستخدم BINARY للتطابق الدقيق + إزالة الفراغات المحتملة
     $stmt = $conn->prepare("SELECT signature FROM employee WHERE BINARY TRIM(name) = ?");
     if (!$stmt) die("فشل استعلام الموظف: " . $conn->error);
     $stmt->bind_param("s", $first_party_name);
@@ -46,7 +45,7 @@ if (!empty($first_party_name)) {
     }
 }
 
-// 3. Get 2nd party name directly from contract
+// 3. Get 2nd party name
 $second_party_name = !empty($contract['2nd_party']) ? $contract['2nd_party'] : "غير متوفر";
 
 // 4. Fetch contract terms
@@ -73,7 +72,7 @@ $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('نظام العقود');
 $pdf->SetTitle('عقد');
 $pdf->SetMargins(15, 15, 15);
-$pdf->setRTL(true); // محاذاة لليمين
+$pdf->setRTL(true);
 $pdf->AddPage();
 $pdf->SetFont('aealarabiya', '', 14);
 
@@ -84,7 +83,15 @@ $html = '
 
 <table border="1" cellpadding="6" cellspacing="0" width="100%">
 <tr>
-    <td width="30%"><b>تاريخ العقد</b></td>
+    <td width="30%"><b>رمز العقد</b></td>
+    <td>'.htmlspecialchars($contract['con_id'] ?? '').'</td>
+</tr>
+<tr>
+    <td><b>رمز البرنامج</b></td>
+    <td>'.htmlspecialchars($contract['program_id'] ?? '').'</td>
+</tr>
+<tr>
+    <td><b>تاريخ العقد</b></td>
     <td>'.htmlspecialchars($contract['con_date'] ?? '').'</td>
 </tr>
 <tr>
