@@ -47,8 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   
 
 
-  $sql = "INSERT INTO contract (`con_id`, `con_date`, `1st_party`, `2nd_party`, `con_duration`, `con_starting_date`, `program_name`, `program_id`, `total`) 
-  VALUES ('$con_id', '$con_date', '$party1', '$party2', '$con_duration', '$start_date', '$program_name', '$program_id', '$total')";
+  $sql = "INSERT INTO contract (`con_id`, `con_date`, `1st_party`, `2nd_party`, `con_duration`, `con_starting_date`, `program_name`, `program_id`, `total`, `con_type`) 
+  VALUES ('$con_id', '$con_date', '$party1', '$party2', '$con_duration', '$start_date', '$program_name', '$program_id', '$total', '$contract_type')";
 
   if (mysqli_query($conn, $sql)) {
     header("Location: c-terms.php");
@@ -114,6 +114,15 @@ while ($row = mysqli_fetch_assoc($query)) {
     section {
       margin: 40px 0;
     }
+    #warningMsg {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#warningMsg.visible {
+  opacity: 1;
+}
+
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
@@ -189,7 +198,7 @@ while ($row = mysqli_fetch_assoc($query)) {
 <div class="form-group">
   <label>مدة العقد:</label>
   <div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap;">
-    <input type="text" class="form-control" name="con_duration_value" style="width: 100px; margin-bottom: 0;"  required>
+    <input type="text" class="form-control" name="con_duration_value" id="con_duration_value" style="width: 100px; margin-bottom: 0;"  required>
 
     <label style="display: flex; align-items: center; gap: 5px; margin: 0;">
       <input type="radio" name="duration_type" value="أيام"> أيام
@@ -273,9 +282,11 @@ while ($row = mysqli_fetch_assoc($query)) {
         <input type="email" class="form-control" name="email1" id="email1">
       </div>
 
-      <div class="form-buttons">
-        <button type="submit" class="buttons">حفظ</button>
-      </div>
+      <div class="form-buttons" style="display: flex; flex-direction: column; align-items: center;">
+        <div id="warningMsg"></div>
+        <button type="submit" id="submitBtn" class="submitBtn" disabled>إرسال</button>
+     </div>
+
     </form>
   </div>
 </section>
@@ -387,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function () {
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
       if (xhr.responseText === 'exists') {
-        msg.textContent = '⚠️ رمز البرنامج مستخدم مسبقاً. الرجاء إدخال رمز آخر.';
+        msg.textContent = '⚠️ رمز البرنامج مستخدم مسبقاً او غير صالح. الرجاء إدخال رمز آخر.';
         msg.style.color = 'red';
         programExists = true;
         hasTriedInvalid = true;
@@ -412,6 +423,62 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+</script>
+<script>
+  const requiredFieldIds = [
+    'gregorianDate',
+    'party1Name',
+    'program_name',
+    'program_code',
+    'contract_total',
+    'startGregorian',
+    'con_duration_value'
+  ];
+
+  const submitBtn = document.getElementById('submitBtn');
+
+  function checkFormCompletion() {
+    const allFilled = requiredFieldIds.every(id => {
+      const el = document.getElementById(id);
+      return el && el.value.trim() !== '';
+    });
+
+    const durationSelected = document.querySelector('[name="duration_type"]:checked');
+
+    const warningMsg = document.getElementById('warningMsg');
+    const submitBtn = document.getElementById('submitBtn');
+
+     if (allFilled && durationSelected) {
+    submitBtn.disabled = false;
+    submitBtn.style.backgroundColor = 'green'; // زر أخضر
+    warningMsg.textContent = ''; // إخفاء الرسالة
+    warningMsg.classList.remove('visible');
+  } else {
+    submitBtn.disabled = true;
+    submitBtn.style.backgroundColor = ''; // يرجع للون الأصلي
+    warningMsg.textContent = '⚠️ الرجاء إدخال جميع البيانات للمتابعة.';
+    warningMsg.classList.add('visible');
+  }
+}
+
+  // أربط كل حقل بحدث oninput أو onchange
+  requiredFieldIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', checkFormCompletion);
+    }
+  });
+
+  // لحقل الراديو
+  document.querySelectorAll('[name="duration_type"]').forEach(radio => {
+    radio.addEventListener('change', checkFormCompletion);
+  });
+
+  // تشغيل الفحص مبدأيًا إذا في بيانات محفوظة
+  window.addEventListener('load', checkFormCompletion);
+  //document.addEventListener('DOMContentLoaded', checkFormCompletion);
+
+
 </script>
 
 </body>

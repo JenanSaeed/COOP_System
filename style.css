@@ -207,6 +207,31 @@ a.buttons:hover,
   margin-top: 20px;
 }
 
+/*  الزر الأساسي حق زر سبمت جنان في ادمن فورم بارت3*/
+#submitBtn {
+  width: 50%;
+  padding: 10px 20px;
+  background-color: #0d2625;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  margin-top: 2px;
+  margin-bottom: 10px;
+  text-decoration: none !important;
+  text-align: center;
+}
+
+/* الزر لما يكون معطّل */
+#submitBtn:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+
 /* زر التفاصيل */
 .btn-det {
   color: #346463;
@@ -630,4 +655,17 @@ th {
 
 #cancelAdd:hover {
   background-color: #5c636a;
+}
+
+#warningMsg {
+  color: #b02a37;
+  background-color: #fdecea;
+  border: 1px solid #f5c6cb;
+  font-weight: 500;
+  font-size: 11px;
+  margin-top: 1px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-align: center;
+  width: 50%;
 }
