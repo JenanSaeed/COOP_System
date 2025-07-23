@@ -98,7 +98,7 @@ $conn->close();
 <body class="bg-light">
 <?php include 'header.php'; ?>
 
-<div class="container py-4">
+<div class="r-container">
     <h2 class="mb-4">سجل العقود</h2>
 
     <?php if (!empty($error)): ?>
