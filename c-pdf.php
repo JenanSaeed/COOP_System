@@ -48,19 +48,26 @@ if (!empty($first_party_name)) {
 // 3. Get 2nd party name directly from contract
 $second_party_name = !empty($contract['2nd_party']) ? $contract['2nd_party'] : "غير متوفر";
 
-// 4. Fetch contract terms
-$stmt = $conn->prepare("SELECT term FROM terms WHERE con_id = ?");
-if (!$stmt) {
-    die("فشل تحضير استعلام الشروط: " . $conn->error);
-}
-$stmt->bind_param("i", $con_id);
-$stmt->execute();
-$result = $stmt->get_result();
+// 4. Fetch contract terms based on con_type
+$con_type = $contract['con_type'] ?? null;
 $terms = [];
-while ($row = $result->fetch_assoc()) {
-    $terms[] = $row['term'];
+$extra_terms = "";
+
+if ($con_type) {
+    $stmt = $conn->prepare("SELECT con_terms, extra_terms FROM terms WHERE con_type = ?");
+    if (!$stmt) {
+        die("فشل تحضير استعلام الشروط: " . $conn->error);
+    }
+    $stmt->bind_param("s", $con_type);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        // تفكيك نص الشروط إلى مصفوفة، افتراضياً كل شرط في سطر جديد
+        $terms = preg_split('/\r\n|\r|\n/', $row['con_terms']);
+        $extra_terms = $row['extra_terms']; 
+    }
+    $stmt->close();
 }
-$stmt->close();
 
 // 5. Start PDF
 $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8');
@@ -96,11 +103,19 @@ $html .= '
 <h4>الشروط:</h4>
 <ol>';
 foreach ($terms as $term) {
-    $html .= '<li>'.htmlspecialchars($term).'</li>';
+    $trimmed = trim($term);
+    if ($trimmed !== '') {
+        $html .= '<li>'.htmlspecialchars($trimmed).'</li>';
+    }
 }
-$html .= '</ol>
+$html .= '</ol>';
 
-<br><br>
+// عرض extra_terms إذا لم يكن فارغاً
+if (!empty($extra_terms)) {
+    $html .= '<p>'.nl2br(htmlspecialchars($extra_terms)).'</p>';
+}
+
+$html .= '<br><br>
 <table width="100%" style="text-align:center;">
 <tr>
     <td>
