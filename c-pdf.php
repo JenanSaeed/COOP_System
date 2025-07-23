@@ -121,6 +121,7 @@ $html .= '</ol>';
 if (!empty($extra_terms)) {
     $html .= '<p>'.nl2br(htmlspecialchars($extra_terms)).'</p>';
 }
+
 // 7. Signatures
 $html .= '
 <br><br><br>
@@ -139,7 +140,7 @@ $html .= '
         الطرف الثاني: '.htmlspecialchars($second_party_name).'<br>';
 $second_sig_path = __DIR__ . "/secondPartySignature/sign.png";
 if (file_exists($second_sig_path)) {
-    $html .= '<img src="'.$second_sig_path.'" width="80">';
+    $html .= '<img src="'.$second_sig_path.'"width="80">';
 } else {
     $html .= '_______________________';
 }
