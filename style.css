@@ -17,7 +17,6 @@ body {
   max-height: 90vh; /* الحد الأقصى للارتفاع */
   overflow-y: auto;
 }
-
 /*------------------------ Header ------------------------*/
 header {
   display: flex;
@@ -180,6 +179,7 @@ button.buttons,
   margin-top: 20px;
   text-decoration: none !important;
   text-align: center;
+  margin-bottom: 10px;
 }
 
 a.buttons:hover,
@@ -564,6 +564,55 @@ a.buttons:hover,
 }
 
 /*------------------------- Terms ---------------------------*/
-.fas fa-trash-alt {
-  color: #cccccc;
+.delete-button {
+  color: #5c6b6b;
+}
+
+.t-container {
+  width: 1000px;
+  margin: 50px auto;
+  background-color: white;
+  padding: 25px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  max-height: 90vh; /* الحد الأقصى للارتفاع */
+  overflow-y: auto;
+}
+
+.t-buttons-form {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.t-buttons-form .t-buttons {
+  padding: 10px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.t-buttons-form .t-buttons[type="submit"] {
+  background-color: #0f3d3c;
+  color: white;
+}
+
+.t-buttons-form .t-buttons[type="submit"]:hover {
+  background-color: #346463;
+}
+
+/* زر الإلغاء */
+#cancelAdd {
+  background-color: #6c757d;
+  color: white;
+}
+
+#cancelAdd:hover {
+  background-color: #5c636a;
 }
