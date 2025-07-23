@@ -86,7 +86,7 @@ $conn->close();
                         <td><?= htmlspecialchars($con['con_duration']) ?></td>
                         <td><?= htmlspecialchars($con['con_starting_date']) ?></td>
                         <td><?= htmlspecialchars($con['program_name']) ?></td>
-                        <td><?= htmlspecialchars($con['num_weeks']) ?></td>
+                        //anything messing?
                         <td><?= htmlspecialchars($con['total']) ?></td>
                         <td><a href="c-adminForm1.php?con_id=<?= $con['con_id'] ?>" class="btn-det">تفاصيل</a></td>
                     </tr>
