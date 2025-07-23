@@ -13,6 +13,16 @@ if (!isset($_SESSION['contract_type'])) {
 }
 
 $contract_type = $_SESSION['contract_type'] ?? '';
+//علشان يتأكد من البروقرام id بدون مايرسل الفورم
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ajax_check'])) {
+    $code = $_POST['program_code'];
+    $stmt = $conn->prepare("SELECT * FROM contract WHERE program_id = ?");
+    $stmt->bind_param("s", $code);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    echo ($result->num_rows > 0) ? 'exists' : 'available';
+    exit(); // مهم جداً عشان ما يكمل تنفيذ الصفحة
+}
 
 
 // توليد con_id تلقائي
@@ -166,8 +176,10 @@ while ($row = mysqli_fetch_assoc($query)) {
 
       <div class="form-group">
         <label>رمز البرنامج:</label>
-        <input type="text" class="form-control" id="program_code"  required>
+        <input type="text" class="form-control" id="program_code" name="program_code" required>
+        <small id="code-msg"></small>
       </div>
+
 
       <div class="form-group">
         <label>إجمالي العقد:</label>
@@ -351,6 +363,55 @@ function validatePrice(input) {
   }
 }
 
+</script>
+
+<script> //to check program_id before submiting the page
+let programExists = false;
+let hasTriedInvalid = false; // <-- جديد: يحدد إذا المستخدم دخل رمز مكرر سابقاً
+
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('program_code');
+  const msg = document.getElementById('code-msg');
+
+  input.addEventListener('blur', function () {
+    const code = input.value.trim();
+    if (code === '') {
+      msg.textContent = '';
+      programExists = false;
+      hasTriedInvalid = false;
+      return;
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '', true); // نرسل لنفس الصفحة
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+      if (xhr.responseText === 'exists') {
+        msg.textContent = '⚠️ رمز البرنامج مستخدم مسبقاً. الرجاء إدخال رمز آخر.';
+        msg.style.color = 'red';
+        programExists = true;
+        hasTriedInvalid = true;
+      } else {
+        programExists = false;
+        if (hasTriedInvalid) {
+          msg.textContent = '✅ الرمز متاح.';
+          msg.style.color = 'green';
+        } else {
+          msg.textContent = ''; // لا تظهر شيء إذا ما كان فيه محاولة خاطئة من قبل
+        }
+      }
+    };
+    xhr.send('ajax_check=1&program_code=' + encodeURIComponent(code));
+  });
+
+  const form = document.querySelector('form');
+  form.addEventListener('submit', function (e) {
+    if (programExists) {
+      alert("رمز البرنامج مستخدم مسبقاً. الرجاء تغييره قبل الإرسال.");
+      e.preventDefault();
+    }
+  });
+});
 </script>
 
 </body>
