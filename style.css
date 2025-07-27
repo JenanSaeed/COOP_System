@@ -590,7 +590,17 @@ a.buttons:hover,
 
 /*------------------------- Terms ---------------------------*/
 .delete-button {
-  color: #5c6b6b;
+    background-color: #5c6b6ba5;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+    background-color: #5c6b6b;
 }
 
 .t-container {

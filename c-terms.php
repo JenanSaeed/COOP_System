@@ -138,7 +138,7 @@ if (!empty($contract_type)) {
                         <form method="POST" style="margin: 0;">
                             <input type="hidden" name="action" value="delete_extra">
                             <input type="hidden" name="index" value="<?= $index ?>">
-                            <button type="submit" class="delete-button" title="حذف البند">
+                            <button type="submit" class="delete-button" title="حذف البند" onclick="return confirm('هل أنت متأكد من حذف الإجازة؟');">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </form>

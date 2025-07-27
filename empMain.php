@@ -20,6 +20,8 @@ if (!$emp_id) {
     exit();
 }
 
+$action = $_POST['action'] ?? '';
+
 // جلب بيانات الإجازات
 try {
     $stmt = $conn->prepare("SELECT 
@@ -42,7 +44,23 @@ try {
 } catch (Exception $e) {
     $error = "حدث خطأ في تحميل البيانات: " . $e->getMessage();
 }
+// delete vacation
+if ($action === 'delete_vac' && isset($_POST['vac_id'])) {
+    $vac_id = (int) $_POST['vac_id'];
+
+    // حذف الإجازة من قاعدة البيانات
+    $stmt = $conn->prepare("DELETE FROM vacation WHERE vac_id = ?");
+    $stmt->bind_param("i", $vac_id);
+    $stmt->execute();
+    $stmt->close();
+
+    // إعادة التوجيه لصفحة الإجازات
+    header("Location: empMain.php");
+    exit();
+}
+
 $conn->close();
+
 ?>
 
 <!DOCTYPE html>
@@ -54,12 +72,14 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
 <body class="bg-light">
 <?php include 'header.php'; ?>
 
 
-    <div class="container py-4">
+    <div class="r-container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>طلبات الإجازات</h2>
         </div>
@@ -110,7 +130,16 @@ $conn->close();
                                 <?php if (($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد') || 
                                         ($vac['fin_approval'] === 'مرفوض' && $vac['man_approval'] === 'معتمد')): ?>
                                 <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-prnt" target="_blank">PDF</a>
-                                <?php endif; ?>                            
+                                <?php endif; ?>   
+                                <?php if ($vac['man_approval'] === 'معلق' && $vac['fin_approval'] === 'معلق'): ?>
+                                <form method="POST" style="margin: 0;">
+                                    <input type="hidden" name="action" value="delete_vac">
+                                    <input type="hidden" name="vac_id" value="<?= $vac['vac_id'] ?>">
+                                    <button type="submit" class="delete-button" title="حذف الإجازة" onclick="return confirm('هل أنت متأكد من حذف الإجازة؟');">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+        </form>
+    <?php endif; ?>                         
                             </td>
                         </tr>
                     <?php endforeach; ?>

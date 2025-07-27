@@ -92,8 +92,7 @@ $conn->close();
 <body class="bg-light">
     <?php include 'header.php'; ?>
 
-    <div class="container">
-        <div class="form-box">
+    <div class="r-container">
             <h2 class="form-title">طلب إجازة جديدة</h2>
 
             <?php if ($error): ?>
@@ -197,7 +196,6 @@ $conn->close();
                 </div>
             </form>
             <?php endif; ?>
-        </div>
     </div>
 
     <?php include 'footer.php'; ?>
