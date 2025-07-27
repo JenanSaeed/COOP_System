@@ -40,6 +40,8 @@ if ($row = mysqli_fetch_assoc($result)) {
 
 // توليد الرمز الكامل مثل 0001-2025
 $contract_code = str_pad($nextNumber, 4, "0", STR_PAD_LEFT) . "-$currentYear";
+$_SESSION['contract_code'] = $contract_code; //save contract code in session
+
 
 // حفظ البيانات عند الإرسال
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

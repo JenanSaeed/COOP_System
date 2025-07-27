@@ -679,3 +679,19 @@ th {
   text-align: center;
   width: 50%;
 }
+
+/*-----contract detials page----*/
+
+.nextCD{
+  width: 30%;
+  padding: 10px;
+  background-color: #154746;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  display: block;
+  margin: 20px auto 0;
+}

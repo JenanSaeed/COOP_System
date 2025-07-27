@@ -19,20 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $message = '<div class="GSmessage error">يرجى تعبئة جميع الحقول</div>';
   } elseif (!isset($_FILES['signature']) || $_FILES['signature']['error'] !== UPLOAD_ERR_OK) {
     $message = '<div class="GSmessage error">يرجى إرفاق التوقيع بشكل صحيح</div>';
-  } else {
-    $uploadDir = 'secondPartySignature/';
-    $fileTmpPath = $_FILES['signature']['tmp_name'];
-    $fileName = basename($_FILES['signature']['name']);
-    $fileName = preg_replace("/[^a-zA-Z0-9.]/", "_", $fileName);
-    $destPath = $uploadDir . $fileName;
+  } 
+  else{
+  $uploadDir = 'secondPartySignature/';
+  $fileTmpPath = $_FILES['signature']['tmp_name'];
+  $destPath = $uploadDir . 'sign.png'; // Always save as 'sign.png'
 
-    if (move_uploaded_file($fileTmpPath, $destPath)) {
-        $message = "<div class='GSmessage success'>تم رفع الطلب بنجاح</div> <a href='$destPath' target='_blank'>عرض التوقيع</a>";
-    } else {
-        $message = '<div class="GSmessage error">فشل في نقل الملف إلى المجلد المحدد</div>';
-    }
-  }
-  if (move_uploaded_file($fileTmpPath, $destPath)) {
+if (move_uploaded_file($fileTmpPath, $destPath)) {
     session_start();
     $_SESSION['second_party_data'] = [
         'name' => $_POST['name'],
@@ -56,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     $message = '<div class="GSmessage error">فشل في نقل الملف إلى المجلد المحدد</div>';
 }
-
+  }
 }
 
 ?>
