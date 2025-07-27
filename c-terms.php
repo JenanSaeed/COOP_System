@@ -180,7 +180,7 @@ if (!empty($contract_type)) {
 
     <!-- زر المتابعة دائم -->
     <div class="text-center mt-4">
-        <a href="c-contractDet1.php" class="btn btn-outline-dark">متابعة</a>
+        <a href="c-contractDet1.php" class="buttons">متابعة</a>
     </div>
 </div>
 
