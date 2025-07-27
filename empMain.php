@@ -109,7 +109,7 @@ $conn->close();
                                 <a href="empVacDet2.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-det">تفاصيل</a>
                                 <?php if (($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد') || 
                                         ($vac['fin_approval'] === 'مرفوض' && $vac['man_approval'] === 'معتمد')): ?>
-                                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-prnt" target="_blank">تحميل PDF</a>
+                                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-prnt" target="_blank">PDF</a>
                                 <?php endif; ?>                            
                             </td>
                         </tr>

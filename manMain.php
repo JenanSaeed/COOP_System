@@ -46,7 +46,7 @@ $conn->close();
 <body class="bg-light">
 <?php include 'header.php'; ?>
 
-<div class="container py-4">
+<div class="r-container">
     <h2 class="mb-4">طلبات الإجازات</h2>
 
     <?php if (!empty($error)): ?>
@@ -63,6 +63,7 @@ $conn->close();
                         <th>تاريخ الطلب</th>
                         <th>حالة الموافقة المالية</th>
                         <th>حالة الموافقة الإدارية</th>
+                        <th>الحالة</th>
                         <th>العمليات</th>
                     </tr>
                 </thead>
@@ -93,13 +94,14 @@ $conn->close();
                 <?php else: ?>
                     <span>طلب سابق</span>
                 <?php endif; ?>
+            </td>
+            <td class="d-flex gap-2 justify-content-center flex-wrap">
                 <a href="validation.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-det">تفاصيل</a>
                 <?php if (
                     ($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد') || 
                     ($vac['fin_approval'] === 'مرفوض' && $vac['man_approval'] === 'معتمد')): ?>
-                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-prnt" target="_blank">تحميل PDF</a>
+                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-prnt" target="_blank">PDF</a>
                 <?php endif; ?>
-            </td>
             </td>
         </tr>
     <?php endforeach; ?>

@@ -43,52 +43,7 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <style>
-        .vacation-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .vacation-table th, .vacation-table td {
-            padding: 12px;
-            text-align: right;
-            border: 1px solid #ddd;
-        }
-        .vacation-table th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-        }
-        .vacation-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .vacation-table tr:hover {
-            background-color: #f1f1f1;
-        }
-        .btn-det {
-            display: inline-block;
-            padding: 6px 12px;
-            background-color: #0d6efd;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            margin-left: 5px;
-        }
-        .btn-det:hover {
-            background-color: #0b5ed7;
-            color: white;
-        }
-        .btn-pdf {
-            display: inline-block;
-            padding: 6px 12px;
-            background-color: #dc3545;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-        .btn-pdf:hover {
-            background-color: #bb2d3b;
-            color: white;
-        }
-    </style>
+    
 </head>
 <body class="bg-light">
 <?php include 'header.php'; ?>
@@ -101,6 +56,7 @@ $conn->close();
     <?php elseif (empty($contracts)): ?>
         <div class="alert alert-info">لا توجد عقود حاليًا</div>
     <?php else: ?>
+        <div class="table-responsive">
         <table class="vacation-table">
             <thead>
                 <tr>
@@ -108,11 +64,9 @@ $conn->close();
                     <th>تاريخ العقد</th>
                     <th>اسم الطرف الأول</th>
                     <th>اسم الطرف الثاني</th>
-                    <th>مدة العقد</th>
-                    <th>تاريخ البداية</th>
                     <th>اسم البرنامج</th>
-                    <th>الإجمالي</th>
-                    <th>خيارات</th>
+                    <th>رمز البرنامج</th>
+                    <th>العمليات</th>
                 </tr>
             </thead>
             <tbody>
@@ -122,18 +76,17 @@ $conn->close();
                     <td><?= htmlspecialchars($con['con_date']) ?></td>
                     <td><?= htmlspecialchars($con['1st_party']) ?></td>
                     <td><?= htmlspecialchars($con['2nd_party']) ?></td>
-                    <td><?= htmlspecialchars($con['con_duration']) ?></td>
-                    <td><?= htmlspecialchars($con['con_starting_date']) ?></td>
                     <td><?= htmlspecialchars($con['program_name']) ?></td>
-                    <td><?= htmlspecialchars($con['total']) ?></td>
-                    <td>
+                    <td><?= htmlspecialchars($con['program_id']) ?></td>
+                    <td class="d-flex gap-2 justify-content-center flex-wrap">
                         <a href="c-adminForm1.php?con_id=<?= $con['con_id'] ?>" class="btn-det">تفاصيل</a>
-                        <a href="c-pdf.php?con_id=<?= $con['con_id'] ?>" class="btn-pdf">PDF</a>
+                        <a href="c-pdf.php?con_id=<?= $con['con_id'] ?>" class="btn-prnt">PDF</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+                </div>
     <?php endif; ?>
 </div>
 
