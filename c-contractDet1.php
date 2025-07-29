@@ -213,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
 <div class="form-buttons">
 <button type="button" class="buttons" onclick="location.href='c-terms.php'">عودة</button>
 <button type="button" class="buttons" onclick="location.href='c-adminRec.php'">متابعة إلى سجل العقود</button>
-<button id="showInviteBtn" class="buttons">دعوة</button>
+<button id="showInviteBtn" class="buttons">إرسال دعوة</button>
 
 </div>
 </section> 
