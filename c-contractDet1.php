@@ -2,7 +2,12 @@
 session_start();
 include 'db_connect.php';
 
-
+//----- reqiured for sending invite via email----
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+require 'PHPMailer/src/Exception.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 $contract_code = $_SESSION['contract_code'] ?? null;
 $contract_type = $_SESSION['contract_type'] ?? null;
@@ -32,26 +37,35 @@ $firstParty= $result3->fetch_assoc();
 
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_invite'])) {
-    $inviteEmail = filter_var($_POST['invite_email'], FILTER_VALIDATE_EMAIL);
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
+    // Make sure this comes BEFORE using $inviteEmail
+    $inviteEmail = $_POST['invite_email'];
 
-    if ($inviteEmail && !empty($contract_code) && !empty($contract_type)) {
-        // Construct the URL to this page
-        $baseURL = "http://COOP_System/c-cotractDet1.php"; // Replace with your actual URL
-        $link = $baseURL . "?code=" . urlencode($contract_code) . "&type=" . urlencode($contract_type);
+    // Construct the contract link
+    $contractId = $_GET['id'] ?? ''; // Or however you identify the contract
+    $link = "http://localhost/COOP_System/c-contractDet1.php?id=" . urlencode($contractId);
 
-        // Send email
-        $subject = "دعوة لمراجعة العقد";
-        $message = "يرجى مراجعة العقد عبر الرابط التالي:\n\n" . $link;
-        $headers = "From: contracts@yourdomain.com\r\n";  // Change this to your actual sender
 
-        if (mail($inviteEmail, $subject, $message, $headers)) {
-            echo "<script>alert('تم إرسال الدعوة بنجاح.');</script>";
-        } else {
-            echo "<script>alert('حدث خطأ أثناء إرسال الدعوة.');</script>";
-        }
-    } else {
-        echo "<script>alert('يرجى إدخال بريد إلكتروني صحيح.');</script>";
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'fatemah36618@gmail.com'; // Use your Gmail
+        $mail->Password   = 'yzat lisb xubr ggvq';    // Use your Gmail App Password
+        $mail->SMTPSecure = 'tls';
+        $mail->Port       = 587;
+
+        $mail->setFrom('fatemah36618@gmail.com', 'Contract System');
+        $mail->addAddress($inviteEmail); // ✅ make sure $inviteEmail is already set
+
+        $mail->Subject = 'دعوة لمراجعة العقد';
+        $mail->Body    = "يرجى مراجعة العقد عبر الرابط التالي:\n\n" . $link;
+
+        $mail->send();
+        echo "<script>alert('تم إرسال الدعوة بنجاح.');</script>";
+    } catch (Exception $e) {
+        echo "<script>alert('خطأ في إرسال الدعوة: {$mail->ErrorInfo}');</script>";
     }
 }
 
@@ -207,19 +221,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_invite'])) {
     <div><?= nl2br(htmlspecialchars($terms['extra_terms'] ?? '')) ?></div>
   </div>
 </section> 
+
 <!---جزء الدعوة---->
+
+
 <section id="inviteSection">
   <div class="form-box">
     <h2 class="form-title">دعوة لمراجعة العقد</h2>
-    <form method="POST">
+    <form method="POST" action="" accept-charset="UTF-8">
       <div class="form-group">
-        <label>البريد الإلكتروني للطرف الثاني :</label>
-        <input type="email" name="invite_email" class="form-control" required>
+        <label for="invite_email">البريد الإلكتروني للطرف الثاني:</label>
+        <input type="email" id="invite_email" name="invite_email" class="form-control" required>
       </div>
       <input class="reset" type="submit" name="send_invite" value="إرسال الدعوة">
     </form>
   </div>
 </section>
+
+
+
+<button type="button" class="nextCD" onclick="location.href='c-terms.php'">عودة</button>
 <button type="button" class="nextCD" onclick="location.href='c-adminRec.php'">التالي</button>
 </br>
 <?php include 'footer.php'; ?>
