@@ -42,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
     $inviteEmail = $_POST['invite_email'];
 
     // Construct the contract link
-    $contractId = $_GET['id'] ?? ''; // Or however you identify the contract
-    $link = "http://localhost/COOP_System/c-contractDet1.php?id=" . urlencode($contractId);
+    $contractId = $contract_code; // Or however you identify the contract
+    $link = "http://localhost/COOP_System/c-guestContractDet.php?id=" . urlencode($contractId);
 
 
     $mail = new PHPMailer(true);
