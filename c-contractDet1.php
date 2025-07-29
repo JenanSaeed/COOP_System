@@ -56,6 +56,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
+        $mail->CharSet = 'UTF-8'; 
+        $mail->Encoding = 'base64';
+
         $mail->setFrom('fatemah36618@gmail.com', 'Contract System');
         $mail->addAddress($inviteEmail); // ✅ make sure $inviteEmail is already set
 
