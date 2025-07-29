@@ -211,10 +211,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
 </div>
 
 <div class="form-buttons">
-<button type="button" class="buttons" onclick="location.href='c-terms.php'">عودة</button>
-<button type="button" class="buttons" onclick="location.href='c-adminRec.php'">متابعة إلى سجل العقود</button>
+<a href="c-terms.php"  class="buttons" >عودة</button>
+<a class="buttons" href="c-adminRec.php">متابعة إلى سجل العقود</a>
 <button id="showInviteBtn" class="buttons">إرسال دعوة</button>
+</div>
+ <!-- رسائل النجاح والخطأ --> 
+<div>
+  <?php if (!empty($success_message)): ?>
+    <div class="alert alert-success text-center mt-3">
+      <?= $success_message ?>
+    </div>
+  <?php endif; ?>
 
+  <?php if (!empty($error_message)): ?>
+    <div class="alert alert-danger text-center mt-3">
+      <?= $error_message ?>
+    </div>
+  <?php endif; ?>
 </div>
 </section> 
 
@@ -230,24 +243,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
       </div>
       <input class="reset" type="submit" name="send_invite" value="إرسال الدعوة">
     </form>
-
-      <!-- رسائل النجاح والخطأ --> 
-<?php if (!empty($success_message)): ?>
-      <div class="alert alert-success text-center mt-3">
-        <?= $success_message ?>
-      </div>
-      <script>
-        setTimeout(function () {
-          window.location.href = 'c-contractDet1.php';
-        }, 2500);
-      </script>
-    <?php endif; ?>
-
-    <?php if (!empty($error_message)): ?>
-      <div class="alert alert-danger text-center mt-3">
-        <?= $error_message ?>
-      </div>
-    <?php endif; ?>
   </div>
 </section>
 
