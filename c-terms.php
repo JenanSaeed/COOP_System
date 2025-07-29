@@ -179,8 +179,9 @@ if (!empty($contract_type)) {
     
 
     <!-- زر المتابعة دائم -->
-    <div class="text-center mt-4">
-        <a href="c-contractDet1.php" class="buttons">متابعة</a>
+    <div class="form-buttons">
+        <button class="buttons" onclick="location.href='c-adminForm.php'">عودة</button>
+        <button onclick="location.href='c-contractDet1.php'" class="buttons">متابعة</button>
     </div>
 </div>
 

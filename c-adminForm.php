@@ -262,7 +262,7 @@ while ($row = mysqli_fetch_assoc($query)) {
 
       <div class="form-buttons" style="display: flex; flex-direction: column; align-items: center;">
         <div id="warningMsg"></div>
-        <button type="submit" id="submitBtn" class="submitBtn" disabled>إرسال</button>
+        <button type="submit" id="submitBtn" class="buttons" disabled>إرسال</button>
      </div>
 
     </form>
