@@ -101,130 +101,129 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
 
 <?php include 'header.php' ?>
 
-<!-- القسم الأول -->
-<section id="section1">
+<section id="contractFullView">
   <div class="form-box">
-    <h2 class="form-title">تفاصيل تنفيذ العقد</h2>
-    <form>
-     <div class="form-group">
-  <label>التاريخ الميلادي:</label>
-  <input type="text" class="form-control" id="gregorianDate" value="<?= htmlspecialchars($contract['con_date']) ?>" readonly>
+    <h2 class="form-title">مراجعة بيانات العقد</h2>
+
+    <!-- التاريخ واليوم -->
+    <div class="form-group">
+      <label>التاريخ الميلادي:</label>
+      <p class="form-control-static" id="gregorianDate"><?= htmlspecialchars($contract['con_date']) ?></p>
+    </div>
+
+    <div class="form-group">
+      <label>التاريخ الهجري:</label>
+      <p class="form-control-static" id="hijriDate"></p>
+    </div>
+
+    <div class="form-group">
+      <label>اليوم:</label>
+      <p class="form-control-static" id="dayName"></p>
+    </div>
+
+    <!-- بيانات العقد -->
+    <div class="form-group">
+      <label>رمز العقد:</label>
+      <p class="form-control-static"><?= htmlspecialchars($contract['con_id']) ?></p>
+    </div>
+
+    <div class="form-group">
+      <label>اسم البرنامج:</label>
+      <p class="form-control-static"><?= htmlspecialchars($contract['program_name']) ?></p>
+    </div>
+
+    <div class="form-group">
+      <label>رمز البرنامج:</label>
+      <p class="form-control-static"><?= htmlspecialchars($contract['program_id']) ?></p>
+    </div>
+
+    <div class="form-group">
+      <label>إجمالي العقد:</label>
+      <p class="form-control-static"><?= htmlspecialchars($contract['total']) ?></p>
+    </div>
+
+    <div class="form-group">
+      <label>مدة العقد:</label>
+      <p class="form-control-static"><?= htmlspecialchars($contract['con_duration']) ?></p>
+    </div>
+
+    <div class="form-group">
+      <label>تاريخ بداية العقد بالميلادي:</label>
+      <p class="form-control-static" id="contractStartDate"><?= htmlspecialchars($contract['con_starting_date']) ?></p>
+    </div>
+
+    <div class="form-group">
+      <label>تاريخ بداية العقد بالهجري:</label>
+      <p class="form-control-static" id="startHijri"></p>
+    </div>
+
+    <!-- الطرف الأول -->
+    <hr>
+    <h3>بيانات الطرف الأول</h3>
+
+    <div class="form-group">
+      <label>الاسم:</label>
+      <p class="form-control-static"><?= htmlspecialchars($firstParty['name']) ?></p>
+    </div>
+
+    <div class="form-group">
+      <label>الصفة:</label>
+      <p class="form-control-static"><?= htmlspecialchars($firstParty['role']) ?></p>
+    </div>
+
+    <div class="form-group">
+      <label>العنوان:</label>
+      <p class="form-control-static"><?= nl2br(htmlspecialchars($firstParty['address'])) ?></p>
+    </div>
+
+    <div class="form-group">
+      <label>رقم الهاتف:</label>
+      <p class="form-control-static"><?= htmlspecialchars($firstParty['phone']) ?></p>
+    </div>
+
+    <div class="form-group">
+      <label>البريد الإلكتروني:</label>
+      <p class="form-control-static"><?= htmlspecialchars($firstParty['email']) ?></p>
+    </div>
+
+    <!-- الشروط -->
+    <hr>
+    <h3>بنود العقد</h3>
+    <div class="form-group">
+  <ul>
+    <?php
+    if (!empty($terms['con_terms'])) {
+      $conTermsList = preg_split('/\r\n|\n|\r|•|-/', $terms['con_terms']);
+      foreach ($conTermsList as $term) {
+        $term = trim($term);
+        if (!empty($term)) {
+          echo '<li>' . htmlspecialchars($term) . '</li>';
+        }
+      }
+    }
+    ?>
+  </ul>
 </div>
 
 <div class="form-group">
-  <label>التاريخ الهجري:</label>
-  <input type="text" class="form-control" id="hijriDate" readonly>
+  <ul>
+    <?php
+    if (!empty($terms['extra_terms'])) {
+      $extraTermsList = preg_split('/\r\n|\n|\r|•|-/', $terms['extra_terms']);
+      foreach ($extraTermsList as $term) {
+        $term = trim($term);
+        if (!empty($term)) {
+          echo '<li>' . htmlspecialchars($term) . '</li>';
+        }
+      }
+    }
+    ?>
+  </ul>
 </div>
-
-<div class="form-group">
-  <label>اليوم:</label>
-  <input type="text" class="form-control" id="dayName" readonly>
-</div>
-
-      <div class="form-group">
-        <label>الطرف الأول:</label>
-        <input type="text" class="form-control" value="<?= htmlspecialchars($contract['1st_party']) ?>" readonly>
-      </div>
-
-    </form>
-  </div>
-</section>
-
-<!-- القسم الثاني -->
-<section id="section2">
-  <div class="form-box">
-    <h2 class="form-title">بيانات العقد</h2>
-    <form>
-      <div class="form-group">
-        <label>رمز العقد:</label>
-        <input type="text" class="form-control" value="<?= htmlspecialchars($contract['con_id']) ?>" readonly>
-      
-      </div>
-
-      <div class="form-group">
-        <label>اسم البرنامج:</label>
-        <input type="text" class="form-control" value="<?= htmlspecialchars($contract['program_name']) ?>" readonly>
-      </div>
-
-      <div class="form-group">
-        <label>رمز البرنامج:</label>
-        <input type="textarea" class="form-control" value="<?= htmlspecialchars($contract['program_id']) ?>" readonly>
-        <small id="code-msg"></small>
-      </div>
-
-
-      <div class="form-group">
-        <label>إجمالي العقد:</label>
-        <input type="text" class="form-control" value="<?= htmlspecialchars($contract['total']) ?>" readonly>
-      </div>
-
-<div class="form-group">
-  <label>مدة العقد:</label>
-  <div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap;">
-  <input type="text" class="form-control" value="<?= htmlspecialchars($contract['con_duration'])?>" readonly  >
-  </div>
-</div>
-
-
-
-      <div class="form-group">
-        <label>تاريخ بداية العقد بالميلادي:</label>
-          <input type="text" class="form-control" id="contractStartDate" value="<?= htmlspecialchars($contract['con_starting_date']) ?>" readonly>
-      </div>
-
-      <div class="form-group">
-        <label>تاريخ بداية العقد بالهجري:</label>
-        <input type="text" class="form-control" id="startHijri" readonly>
-      </div>
-    </form>
-  </div>
-</section>
-
-<!-- القسم الثالث -->
-<section id="section3">
-  <div class="form-box">
-    <h2 class="form-title">بيانات الطرف الأول</h2>
-    <form id="contractFormAll" method="POST">
-      <div class="form-group">
-        <label>الاسم:</label>
-        <input type="text" class="form-control" value="<?= htmlspecialchars($firstParty['name']) ?>" readonly>
-      </div>
-
-      <div class="form-group">
-        <label>الصفة:</label>
-        <input type="text" class="form-control" value="<?= htmlspecialchars($firstParty['role']) ?>" readonly>
-      </div>
-
-      <div class="form-group">
-        <label>العنوان:</label>
-        <textarea class="form-control" rows="3" readonly><?= htmlspecialchars($firstParty['address']) ?></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>رقم الهاتف:</label>
-        <input type="text" class="form-control" value="<?= htmlspecialchars($firstParty['phone']) ?>" readonly>
-      </div>
-
-      <div class="form-group">
-        <label>البريد الإلكتروني:</label>
-        <input type="text" class="form-control" value="<?= htmlspecialchars($firstParty['email']) ?>" readonly>
-      </div>
-
-    </form>
-  </div>
-</section>
-
-<section id="section4">
-  <div class="t-container">
-    <h2 class="form-title">شروط العقد</h2>
-    <div><?= nl2br(htmlspecialchars($terms['con_terms'] ?? '')) ?></div></br>
-    <div><?= nl2br(htmlspecialchars($terms['extra_terms'] ?? '')) ?></div>
-  </div>
 </section> 
 
+
 <!---جزء الدعوة---->
-
-
 <section id="inviteSection">
   <div class="form-box">
     <h2 class="form-title">دعوة لمراجعة العقد</h2>
