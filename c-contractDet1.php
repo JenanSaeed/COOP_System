@@ -42,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
     $inviteEmail = $_POST['invite_email'];
 
     // Construct the contract link
-    $contractId = $_GET['id'] ?? ''; // Or however you identify the contract
-    $link = "http://localhost/COOP_System/c-contractDet1.php?id=" . urlencode($contractId);
+    $contractId = $contract_code; // Or however you identify the contract
+    $link = "http://localhost/COOP_System/c-guestContractDet.php?id=" . urlencode($contractId);
 
 
     $mail = new PHPMailer(true);
@@ -66,9 +66,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
         $mail->Body    = "يرجى مراجعة العقد عبر الرابط التالي:\n\n" . $link;
 
         $mail->send();
-        echo "<script>alert('تم إرسال الدعوة بنجاح.');</script>";
+        echo "<script>document.body.innerHTML = '<h2 style=\"text-align:center; margin-top:50px;\">تم إرسال الدعوة بنجاح.</h2>';</script>";
     } catch (Exception $e) {
-        echo "<script>alert('خطأ في إرسال الدعوة: {$mail->ErrorInfo}');</script>";
+        echo "<script>document.body.innerHTML = '<h2 style=\"text-align:center; margin-top:50px; color:red;\">حدث خطأ في إرسال الدعوة: {$errorMsg}</h2>';</script>";
     }
 }
 
@@ -81,23 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
   <meta charset=\"UTF-8\">
   <title>مراجعة العقد</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    html {
-      scroll-behavior: smooth;
-    }
-    section {
-      margin: 40px 0;
-    }
-    #warningMsg {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-#warningMsg.visible {
-  opacity: 1;
-}
 
-
-  </style>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
 </head>
@@ -225,13 +209,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
     ?>
   </ul>
 </div>
+
+<div class="form-buttons">
+<button type="button" class="buttons" onclick="location.href='c-terms.php'">عودة</button>
+<button type="button" class="buttons" onclick="location.href='c-adminRec.php'">متابعة إلى سجل العقود</button>
+<button id="showInviteBtn" class="buttons">إرسال دعوة</button>
+
+</div>
 </section> 
 
 
 <!---جزء الدعوة---->
-<section id="inviteSection">
+<section id="inviteSection" style="display:none;">
   <div class="form-box">
-    <h2 class="form-title">دعوة لمراجعة العقد</h2>
+    <h2 class="form-title">إرسال دعوة للطرف الثاني</h2>
     <form method="POST" action="" accept-charset="UTF-8">
       <div class="form-group">
         <label for="invite_email">البريد الإلكتروني للطرف الثاني:</label>
@@ -242,11 +233,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
   </div>
 </section>
 
-
-
-<button type="button" class="nextCD" onclick="location.href='c-terms.php'">عودة</button>
-<button type="button" class="nextCD" onclick="location.href='c-adminRec.php'">التالي</button>
 </br>
+
 <?php include 'footer.php'; ?>
 <script>
 function convertToHijri(gregorianDateStr, outputId) {
@@ -283,6 +271,14 @@ window.onload = function () {
   document.getElementById("dayName").innerText = getDayName(contractDate);
 }
 
+// عند الضغط على الزر
+document.getElementById('showInviteBtn').addEventListener('click', function() {
+  const inviteSection = document.getElementById('inviteSection');
+  if (inviteSection.style.display === 'none' || inviteSection.style.display === '') {
+    inviteSection.style.display = 'block';
+    this.style.display = 'none';  // يخفي الزر بعد العرض
+  }
+});
 </script>
 
 </body>
