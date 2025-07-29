@@ -1,6 +1,10 @@
 <?php
 session_start();
 include 'db_connect.php';
+$success_message = $_SESSION['success_message'] ?? '';
+$error_message = $_SESSION['error_message'] ?? '';
+// حذف الرسائل بعد عرضها لمرة واحدة
+unset($_SESSION['success_message'], $_SESSION['error_message']);
 
 //----- reqiured for sending invite via email----
 require 'PHPMailer/src/PHPMailer.php';
@@ -66,10 +70,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
         $mail->Body    = "يرجى مراجعة العقد عبر الرابط التالي:\n\n" . $link;
 
         $mail->send();
-        $success_message = "✅ تم إرسال الدعوة بنجاح.";
+        $_SESSION['success_message'] = "✅ تم إرسال الدعوة بنجاح.";
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+
     } catch (Exception $e) {
-        $error_message = "❌ حدث خطأ أثناء الإرسال: " . $mail->ErrorInfo;
-    }
+        $_SESSION['error_message'] = "❌ حدث خطأ أثناء الإرسال: " . $mail->ErrorInfo;
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();}
 }
 ?>
 
@@ -91,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
 <?php include 'header.php' ?>
 
 <section id="contractFullView">
-  <div class="form-box">
+  <div class="r-container">
     <h2 class="form-title">مراجعة بيانات العقد</h2>
 
     <!-- التاريخ واليوم -->
@@ -217,17 +225,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
 </div>
  <!-- رسائل النجاح والخطأ --> 
 <div>
-  <?php if (!empty($success_message)): ?>
-    <div class="alert alert-success text-center mt-3">
-      <?= $success_message ?>
-    </div>
-  <?php endif; ?>
+<?php if (!empty($success_message)): ?>
+  <div class="alert alert-success text-center mt-3">
+    <?= $success_message ?>
+  </div>
+<?php endif; ?>
 
-  <?php if (!empty($error_message)): ?>
-    <div class="alert alert-danger text-center mt-3">
-      <?= $error_message ?>
-    </div>
-  <?php endif; ?>
+<?php if (!empty($error_message)): ?>
+  <div class="alert alert-danger text-center mt-3">
+    <?= $error_message ?>
+  </div>
+<?php endif; ?>
 </div>
 </section> 
 
@@ -242,6 +250,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
         <input type="email" id="invite_email" name="invite_email" class="form-control" placeholder="secondParty@gmail.com" required>
       </div>
       <input class="reset" type="submit" name="send_invite" value="إرسال الدعوة">
+      
     </form>
   </div>
 </section>

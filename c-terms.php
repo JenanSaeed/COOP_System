@@ -6,8 +6,8 @@ error_reporting(E_ALL);
 include 'db_connect.php';
 session_start();
 $success_message = $_SESSION['success_message'] ?? '';
-unset($_SESSION['success_message']); // نضمن عرضها مرة واحدة فقط
-
+$error_message = $_SESSION['error_message'] ?? '';
+unset($_SESSION['success_message'], $_SESSION['error_message']);
 
 $term_added = isset($_GET['added']) && $_GET['added'] == 1;
 
@@ -44,12 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("ss", $updated_terms, $contract_type);
             if ($stmt->execute()) {
                 $_SESSION['success_message'] = "تم إضافة البند بنجاح!";
-                header("Location: c-terms.php?type=" . urlencode($contract_type));
-                exit();
             } else {
-                echo "<script>alert('❌ فشل في إضافة البند');</script>";
+                $_SESSION['error_message'] = "❌ فشل في إضافة البند.";
             }
             $stmt->close();
+            header("Location: c-terms.php?type=" . urlencode($contract_type));
+            exit();
+
         }
     }
 //delete term
@@ -176,6 +177,11 @@ if (!empty($contract_type)) {
         <?= $success_message ?>
     </div>
     <?php endif; ?>
+    <?php if (!empty($error_message)): ?>
+  <div class="alert alert-danger text-center mt-3">
+    <?= $error_message ?>
+  </div>
+<?php endif; ?>
     
 
     <!-- زر المتابعة دائم -->
