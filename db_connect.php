@@ -1,8 +1,8 @@
 <?php
 $host = "localhost";
-$username = "root";
-$password = "";
-$database = "coop_db";
+$username = "adbook";
+$password = "jk3ni40ik266eu8a";
+$database = "adbook_center_db";
 $conn = mysqli_connect($host, $username, $password, $database);
 //or die("Connection failed"); will be added later
 if(!$conn){
