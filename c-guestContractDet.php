@@ -60,10 +60,23 @@ $firstParty = $result3->fetch_assoc();
         <p>العنوان: <?= htmlspecialchars($firstParty['address']) ?></p>
         <p>رقم الهاتف: <?= htmlspecialchars($firstParty['phone']) ?></p>
         <p>البريد الإلكتروني: <?= htmlspecialchars($firstParty['email']) ?></p>
-
-        <h3>شروط العقد</h3>
-        <div><?= nl2br(htmlspecialchars($terms['con_terms'] ?? '')) ?></div>
-        <div><?= nl2br(htmlspecialchars($terms['extra_terms'] ?? '')) ?></div>
+ <!-- الشروط -->
+    <hr>
+    <h3>بنود العقد</h3>
+    <div class="form-group">
+  <ul>
+    <?php
+    if (!empty($terms['con_terms'])) {
+      $conTermsList = preg_split('/\r\n|\n|\r|•|-/', $terms['con_terms']);
+      foreach ($conTermsList as $term) {
+        $term = trim($term);
+        if (!empty($term)) {
+          echo '<li>' . htmlspecialchars($term) . '</li>';
+        }
+      }
+    }
+    ?>
+  </ul>
     </div>
 </section>  
 

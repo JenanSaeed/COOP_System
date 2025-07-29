@@ -114,7 +114,6 @@ if (move_uploaded_file($fileTmpPath, $destPath)) {
       ?>
     <div class="GSform-buttons"> 
     
-      <button type="button" class="GSbutton" onclick="location.href='c-guestContractDet.php'">السابق</button>
       <button type="submit" class="GSbutton">إتمام الطلب</button>
     </div>  
       </div>
