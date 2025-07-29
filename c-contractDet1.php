@@ -98,6 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
 
 
   </style>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
 </head>
 <body>
 
@@ -250,7 +252,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
 function convertToHijri(gregorianDateStr, outputId) {
   const gregorianDate = new Date(gregorianDateStr);
   if (isNaN(gregorianDate)) {
-    document.getElementById(outputId).value = 'تاريخ غير صالح';
+    document.getElementById(outputId).innerText = 'تاريخ غير صالح';
     return;
   }
 
@@ -261,7 +263,7 @@ function convertToHijri(gregorianDateStr, outputId) {
   });
 
   const formattedHijri = hijriFormatter.format(gregorianDate);
-  document.getElementById(outputId).value = formattedHijri;
+  document.getElementById(outputId).innerText = formattedHijri;
 }
 
 function getDayName(gregorianDateStr) {
@@ -272,15 +274,15 @@ function getDayName(gregorianDateStr) {
 
 // When page loads
 window.onload = function () {
-  const contractDate = document.getElementById("gregorianDate").value;
-  const startDate = document.getElementById("contractStartDate").value;
+  const contractDate = document.getElementById("gregorianDate").innerText;
+  const startDate = document.getElementById("contractStartDate").innerText;
 
   convertToHijri(contractDate, "hijriDate");
   convertToHijri(startDate, "startHijri");
 
-  // Show day name as well
-  document.getElementById("dayName").value = getDayName(contractDate);
+  document.getElementById("dayName").innerText = getDayName(contractDate);
 }
+
 </script>
 
 </body>
