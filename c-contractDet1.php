@@ -59,28 +59,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
         $mail->CharSet = 'UTF-8'; 
         $mail->Encoding = 'base64';
 
-        $mail->setFrom('fatemah36618@gmail.com', 'Contract System');
+        $mail->setFrom('fatemah36618@gmail.com', 'COOP System');
         $mail->addAddress($inviteEmail); // ✅ make sure $inviteEmail is already set
 
         $mail->Subject = 'دعوة لمراجعة العقد';
         $mail->Body    = "يرجى مراجعة العقد عبر الرابط التالي:\n\n" . $link;
 
         $mail->send();
-        echo "<script>document.body.innerHTML = '<h2 style=\"text-align:center; margin-top:50px;\">تم إرسال الدعوة بنجاح.</h2>';</script>";
+        $success_message = "✅ تم إرسال الدعوة بنجاح.";
     } catch (Exception $e) {
-        echo "<script>document.body.innerHTML = '<h2 style=\"text-align:center; margin-top:50px; color:red;\">حدث خطأ في إرسال الدعوة: {$errorMsg}</h2>';</script>";
+        $error_message = "❌ حدث خطأ أثناء الإرسال: " . $mail->ErrorInfo;
     }
 }
-
-
-// --- Show the data ---
 ?>
+
 <!DOCTYPE html>
-<html lang=\"ar\">
+<html lang="ar">
 <head>
   <meta charset=\"UTF-8\">
   <title>مراجعة العقد</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
@@ -148,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
 
     <!-- الطرف الأول -->
     <hr>
-    <h3>بيانات الطرف الأول</h3>
+    <h2 class="form-title">بيانات الطرف الأول</h2>
 
     <div class="form-group">
       <label>الاسم:</label>
@@ -177,7 +177,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
 
     <!-- الشروط -->
     <hr>
-    <h3>بنود العقد</h3>
+    <h2 class="form-title">بنود العقد</h2>
     <div class="form-group">
   <ul>
     <?php
@@ -226,16 +226,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
     <form method="POST" action="" accept-charset="UTF-8">
       <div class="form-group">
         <label for="invite_email">البريد الإلكتروني للطرف الثاني:</label>
-        <input type="email" id="invite_email" name="invite_email" class="form-control" required>
+        <input type="email" id="invite_email" name="invite_email" class="form-control" placeholder="secondParty@gmail.com" required>
       </div>
       <input class="reset" type="submit" name="send_invite" value="إرسال الدعوة">
     </form>
+
+      <!-- رسائل النجاح والخطأ --> 
+<?php if (!empty($success_message)): ?>
+      <div class="alert alert-success text-center mt-3">
+        <?= $success_message ?>
+      </div>
+      <script>
+        setTimeout(function () {
+          window.location.href = 'c-contractDet1.php';
+        }, 2500);
+      </script>
+    <?php endif; ?>
+
+    <?php if (!empty($error_message)): ?>
+      <div class="alert alert-danger text-center mt-3">
+        <?= $error_message ?>
+      </div>
+    <?php endif; ?>
   </div>
 </section>
 
 </br>
 
-<?php include 'footer.php'; ?>
 <script>
 function convertToHijri(gregorianDateStr, outputId) {
   const gregorianDate = new Date(gregorianDateStr);
@@ -270,8 +287,7 @@ window.onload = function () {
 
   document.getElementById("dayName").innerText = getDayName(contractDate);
 }
-
-// عند الضغط على الزر
+  // عند الضغط على الزر
 document.getElementById('showInviteBtn').addEventListener('click', function() {
   const inviteSection = document.getElementById('inviteSection');
   if (inviteSection.style.display === 'none' || inviteSection.style.display === '') {
@@ -279,7 +295,10 @@ document.getElementById('showInviteBtn').addEventListener('click', function() {
     this.style.display = 'none';  // يخفي الزر بعد العرض
   }
 });
+
 </script>
+
+<?php include 'footer.php'; ?>
 
 </body>
 </html> 
