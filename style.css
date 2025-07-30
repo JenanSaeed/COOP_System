@@ -695,3 +695,26 @@ th {
   display: block;
   margin: 20px auto 0;
 }
+
+/* خلفية dropdown نفسها */
+.dropdown-menu {
+  background-color: #f9f9f9; /* لون الخلفية */
+  border: 1px solid #ccc;
+  min-width: 160px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* عناصر القائمة */
+.dropdown-menu .dropdown-item {
+  color: #333; /* لون الخط */
+  padding: 10px 15px;
+  font-size: 15px;
+  transition: background-color 0.2s ease;
+}
+
+/* تأثير عند المرور */
+.dropdown-menu .dropdown-item:hover {
+  background-color: #e0f0ff; /* لون عند الهوفر */
+  color: #000; /* خط أوضح عند الهوفر */
+}

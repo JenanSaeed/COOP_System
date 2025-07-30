@@ -34,6 +34,8 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+
 </head>
 <body>
   <header>
@@ -55,16 +57,23 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
       </ul>
     </nav>
 
-    <div class="logging">  
-      <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-        <a class="logged" href="logout.php">
-          <i class="fa-solid fa-right-from-bracket"></i>
-          <?= htmlspecialchars($_SESSION['name']) ?>      
-        </a>
-      <?php else: ?>
-        <a class="logged" href="login.php"><i class="fa-solid fa-user"></i></a>
-      <?php endif; ?>
+    <div class="logging">
+  <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+    <div class="dropdown">
+      <a class="logged dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-user"></i> <?= htmlspecialchars($_SESSION['name']) ?>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end text-end" aria-labelledby="userDropdown">
+        <li><a class="dropdown-item" href="c-adminProfile.php">الملف الشخصي</a></li>
+        <li><a class="dropdown-item" href="logout.php">تسجيل الخروج</a></li>
+      </ul>
     </div>
+  <?php else: ?>
+    <a class="logged" href="login.php"><i class="fa-solid fa-user"></i></a>
+  <?php endif; ?>
+</div>
+
   </header>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
