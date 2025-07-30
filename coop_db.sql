@@ -137,6 +137,8 @@ INSERT INTO `vacation` (`vac_id`, `emp_id`, `type`, `days`, `start_date`, `end_d
 (3, 111, 'مرضية', 4, '2025-07-15', '2025-07-18', '2025-07-16', 'رنيم', 'معلق', 'معلق');
 
 --
+
+
 -- Indexes for dumped tables
 --
 
@@ -206,6 +208,28 @@ ALTER TABLE `contract`
 ALTER TABLE `vacation`
   ADD CONSTRAINT `vacation_ibfk_1` FOREIGN KEY (`emp_id`) REFERENCES `employee` (`emp_id`);
 COMMIT;
+
+-- Table structure for table `second_party`
+--
+CREATE TABLE `second_party` (
+  `id_number` VARCHAR(10) PRIMARY KEY, 
+  `con_id` VARCHAR(15) NOT NULL,  
+  `name` VARCHAR(30) NOT NULL,
+  `role` VARCHAR(30) NOT NULL,
+  `nationality` VARCHAR(30) NOT NULL,
+  `issue_place` VARCHAR(50) NOT NULL,
+  `expiry_date` DATE NOT NULL,
+  `address` TEXT NOT NULL,
+  `phone` VARCHAR(10) NOT NULL,
+  `email` VARCHAR(50) NOT NULL,
+  `bank` VARCHAR(50) NOT NULL,
+  `iban` VARCHAR(34) NOT NULL,
+  FOREIGN KEY (`con_id`) REFERENCES `contract`(`con_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+-- --------------------------------------------------------
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
