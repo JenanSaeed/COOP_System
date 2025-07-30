@@ -89,8 +89,8 @@ $firstParty = $result3->fetch_assoc();
     </div>
 </section>  
 
+<a href="c-guestSign.php?id=<?= urlencode($contract['con_id']) ?>" class="nextCD">التالي</a>
 
-<button type="button" class="nextCD" onclick="location.href='c-guestSign.php'">التالي</button>
 </br>
 
 </body>

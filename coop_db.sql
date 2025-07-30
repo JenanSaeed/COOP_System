@@ -212,7 +212,8 @@ COMMIT;
 -- Table structure for table `second_party`
 --
 CREATE TABLE `second_party` (
-  `id_number` VARCHAR(10) PRIMARY KEY, 
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `id_number` VARCHAR(10), 
   `con_id` VARCHAR(15) NOT NULL,  
   `name` VARCHAR(30) NOT NULL,
   `role` VARCHAR(30) NOT NULL,
