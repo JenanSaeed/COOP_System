@@ -276,16 +276,6 @@ $conn->close();
             return true;
         }
 
-        // Sync min date on toDate and reset if invalid
-        document.getElementById('fromDate').addEventListener('change', function () {
-            const fromDateVal = this.value;
-            const toDateInput = document.getElementById('toDate');
-            toDateInput.min = fromDateVal;
-            if (toDateInput.value && toDateInput.value < fromDateVal) {
-                toDateInput.value = fromDateVal;
-            }
-        });
-
         // Calculate days automatically
         function calculateDays() {
             const fromDate = document.getElementById('fromDate').value;
@@ -296,8 +286,42 @@ $conn->close();
                 (1000 * 60 * 60 * 24);
             document.getElementById('days').value = diff + 1 > 0 ? diff + 1 : 1;
         }
-        document.getElementById('fromDate').addEventListener('change', calculateDays);
+
+        // Sync min date on toDate and reset if invalid
+        document.getElementById('fromDate').addEventListener('change', function () {
+            const fromDateVal = this.value;
+            const toDateInput = document.getElementById('toDate');
+            toDateInput.min = fromDateVal;
+            if (toDateInput.value && toDateInput.value < fromDateVal) {
+                toDateInput.value = fromDateVal;
+            }
+            calculateDays();
+        });
+
         document.getElementById('toDate').addEventListener('change', calculateDays);
+
+
+        document.getElementById('days').addEventListener('input', function () {
+            const days = parseInt(this.value);
+            const fromDateInput = document.getElementById('fromDate');
+            const toDateInput = document.getElementById('toDate');
+
+            if (!fromDateInput.value || isNaN(days) || days < 1) {
+                return;
+            }
+
+            const fromDate = new Date(fromDateInput.value);
+            // نحسب تاريخ النهاية بإضافة (عدد الأيام - 1) لأن البداية محسوبة بيوم واحد
+            const newToDate = new Date(fromDate);
+            newToDate.setDate(fromDate.getDate() + days - 1);
+
+            // نحدث قيمة تاريخ النهاية بصيغة yyyy-mm-dd
+            toDateInput.value = newToDate.toISOString().split('T')[0];
+
+            // نحدّث الحد الأدنى لتاريخ النهاية أيضاً
+            toDateInput.min = fromDateInput.value;
+        });
+        document.getElementById('fromDate').addEventListener('change', calculateDays);
     </script>
 </body>
 </html>
