@@ -93,7 +93,7 @@ $conn->close();
 <body class="bg-light">
 <?php include 'header.php'; ?>
 
-<div class="container py-5">
+<div class="r-container">
     <h2 class="mb-4">تفاصيل طلب الإجازة</h2>
 
     <?php if ($error): ?>

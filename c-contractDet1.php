@@ -198,13 +198,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
         }
       }
     }
-    ?>
-  </ul>
-</div>
-
-<div class="form-group">
-  <ul>
-    <?php
     if (!empty($terms['extra_terms'])) {
       $extraTermsList = preg_split('/\r\n|\n|\r|•|-/', $terms['extra_terms']);
       foreach ($extraTermsList as $term) {
@@ -215,8 +208,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
       }
     }
     ?>
+
   </ul>
+  
 </div>
+
 
 <div class="form-buttons">
 <a href="c-terms.php"  class="buttons" >عودة</a>

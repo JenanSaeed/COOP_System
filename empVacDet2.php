@@ -58,8 +58,7 @@ $conn->close();
 <body>
 <?php include 'header.php'; ?>
 
-<div class="container">
-    <div class="detail-box">
+<div class="r-container">
         <h2 class="mb-4 text-center">تفاصيل طلب الإجازة</h2>
         <div class="mb-3">
             <div class="detail-label">اسم الموظف:</div>
@@ -99,7 +98,6 @@ $conn->close();
         <div class="form-buttons text-center">
             <a href="empMain.php" class="buttons">عودة</a>
         </div>
-    </div>
 </div>
 
 <?php include 'footer.php'; ?>

@@ -46,7 +46,7 @@ $conn->close();
 <body class="bg-light">
 <?php include 'header.php'; ?>
 
-<div class="container py-4">
+<div class="r-container">
     <h2 class="mb-4">طلبات الإجازات لجميع الموظفين</h2>
 
     <?php if (!empty($error)): ?>
@@ -86,7 +86,7 @@ $conn->close();
                                 <a href="empVacDet1.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-det">تفاصيل</a>
                                 <?php if (($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد') || 
                                         ($vac['fin_approval'] === 'مرفوض' && $vac['man_approval'] === 'معتمد')): ?>
-                                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-prnt" target="_blank">PDF</a>
+                                <a href="v-pdf.php?vac_id=<?= urlencode($vacation['vac_id']) ?>" class="btn-prnt" target="_blank">PDF</a>
                                 <?php endif; ?>
                             </td>
                         </tr>

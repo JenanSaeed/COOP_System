@@ -75,6 +75,15 @@ $firstParty = $result3->fetch_assoc();
         }
       }
     }
+    if (!empty($terms['extra_terms'])) {
+      $extraTermsList = preg_split('/\r\n|\n|\r|•|-/', $terms['extra_terms']);
+      foreach ($extraTermsList as $term) {
+        $term = trim($term);
+        if (!empty($term)) {
+          echo '<li>' . htmlspecialchars($term) . '</li>';
+        }
+      }
+    }
     ?>
   </ul>
     </div>

@@ -109,7 +109,7 @@ $conn->close();
                     <td><?= htmlspecialchars($con['program_name']) ?></td>
                     <td><?= htmlspecialchars($con['program_id']) ?></td>
                     <td class="d-flex gap-2 justify-content-center flex-wrap">
-                        <a href="c-adminForm1.php?con_id=<?= $con['con_id'] ?>" class="btn-det">تفاصيل</a>
+                        <a href="c-adminForm.php?con_id=<?= $con['con_id'] ?>" class="btn-det">تفاصيل</a>
                         <a href="c-pdf.php?con_id=<?= $con['con_id'] ?>" class="btn-prnt">PDF</a>
                     </td>
                 </tr>
