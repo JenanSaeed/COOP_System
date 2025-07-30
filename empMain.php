@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once("db_connect.php");
+include_once("reset_days.php");
+
 
 // تحقق من تسجيل الدخول
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
