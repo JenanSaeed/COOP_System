@@ -139,8 +139,8 @@ $current_query = http_build_query($_GET);
         <select name="sort" class="form-select" style="width: 150px;">
             <option value="app_date_desc" <?= $sort === 'app_date_desc' ? 'selected' : '' ?>>الأحدث أولاً</option>
             <option value="app_date_asc" <?= $sort === 'app_date_asc' ? 'selected' : '' ?>>الأقدم أولاً</option>
-            <option value="vac_id_asc" <?= $sort === 'vac_id_asc' ? 'selected' : '' ?>>رقم الطلب تصاعدي</option>
-            <option value="vac_id_desc" <?= $sort === 'vac_id_desc' ? 'selected' : '' ?>>رقم الطلب تنازلي</option>
+            <option value="vac_id_asc" <?= $sort === 'vac_id_asc' ? 'selected' : '' ?>>رقم الطلب تصاعديًا</option>
+            <option value="vac_id_desc" <?= $sort === 'vac_id_desc' ? 'selected' : '' ?>>رقم الطلب تنازليًا</option>
         </select>
 
         <button type="submit" class="btn btn-secondary">تطبيق</button>
