@@ -682,18 +682,23 @@ th {
 
 /*-----contract detials page----*/
 
-.nextCD{
-  width: 30%;
-  padding: 10px;
-  background-color: #154746;
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 40px; /* Optional: some bottom space */
+}
+.nextCD {
+  width: 20%;
+  display: inline-block;
+  background-color: #184C4B; /* dark teal */
   color: white;
-  border: none;
-  cursor: pointer;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
   font-weight: bold;
-  transition: background-color 0.3s ease;
-  border-radius: 5px;
-  display: block;
-  margin: 20px auto 0;
+  font-family: 'Arial', sans-serif; 
 }
 
 /* خلفية dropdown نفسها */
