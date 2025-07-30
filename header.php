@@ -12,15 +12,15 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
 
   switch ($role) {
     case 'employee':
-      $contractsLink = "c-main.php";
+      $contractsLink = "c-adminRec.php";
       $vacationsLink = "empMain.php";
       break;
     case 'finance':
-      $contractsLink = "c-main.php";
+      $contractsLink = "c-adminRec.php";
       $vacationsLink = "finMain.php";
       break;
     case 'manager':
-      $contractsLink = "c-main.php";
+      $contractsLink = "c-adminRec.php";
       $vacationsLink = "manMain.php";
       break;
   }

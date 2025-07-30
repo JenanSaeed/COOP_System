@@ -35,6 +35,36 @@ try {
 $conn->close();
 ?>
 
+<?php
+  $role = $_SESSION['role'] ?? null;
+
+  // Default URLs
+  $newContract = "#";
+  $contractRecords = "#";
+
+  // Role-based routing
+  switch ($role) {
+      case 'employee':
+          $newContract = "c-conTypes.php";
+          $contractRecords = "c-adminRec.php";
+          break;
+      case 'finance':
+          $newContract = "c-conTypes.php";
+          $contractRecords = "c-adminRec.php";
+          break;
+
+      case 'manager':
+          $newContract = "c-conTypes.php";
+          $contractRecords = "c-adminRec.php";
+          break;
+
+      default:
+          // fallback in case of invalid role
+          $newContract = "#";
+          $contractRecords = "#";
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -88,6 +118,12 @@ $conn->close();
         </table>
                 </div>
     <?php endif; ?>
+    <div class="text-center mt-4">
+  <a href="<?= $newContract ?>" class="btn btn-sm btn-success px-4">
+    إنشاء عقد جديد
+  </a>
+</div>
+
 </div>
 
 <?php include 'footer.php'; ?>

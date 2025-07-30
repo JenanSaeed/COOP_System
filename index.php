@@ -32,7 +32,7 @@
         $vacationsLink = "manMain.php";
         break;
       case 'guest':
-        $contractsLink = "c-main.php"; 
+        $contractsLink = "c-adminRec.php"; 
       break;
     }
   }
@@ -43,7 +43,7 @@
     <a href="<?= $vacationsLink ?>" class="index-btn">
       🗓️ الإجازات
     </a>
-    <a href="c-main.php" class="index-btn">
+    <a href="c-adminRec.php" class="index-btn">
       📄 العقود
     </a>
   </div>
