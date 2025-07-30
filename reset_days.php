@@ -9,7 +9,7 @@ $current_year = date('Y');
 if (!file_exists($reset_flag_file) || file_get_contents($reset_flag_file) !== $current_year) {
     
     // فقط في 1 يناير يتم التحديث
-    if (date('m-d') === '07-30') {
+    if (date('m-d') === '01-01') {
         $sql = "UPDATE employee SET remaining_days = 30, used_days = 0";
         if ($conn->query($sql)) {
             file_put_contents($reset_flag_file, $current_year); // نخزن السنة الجديدة
