@@ -2,6 +2,8 @@
 session_start();
 require_once("db_connect.php");
 
+$contract_code = $_SESSION['contract_code'] ?? '';
+
 // التحقق من تسجيل الدخول
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     $_SESSION['redirect_to'] = basename($_SERVER['PHP_SELF']);

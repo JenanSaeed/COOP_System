@@ -13,6 +13,7 @@ if (!isset($_SESSION['contract_type'])) {
 }
 
 $contract_type = $_SESSION['contract_type'] ?? '';
+
 //علشان يتأكد من البروقرام id بدون مايرسل الفورم
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ajax_check'])) {
     $code = $_POST['program_code'];

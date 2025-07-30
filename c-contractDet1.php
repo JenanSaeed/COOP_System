@@ -1,8 +1,24 @@
 <?php
 session_start();
 include 'db_connect.php';
-$success_message = $_SESSION['success_message'] ?? '';
-$error_message = $_SESSION['error_message'] ?? '';
+
+$con_id = $_GET['con_id'] ?? null;
+
+if (!$con_id) {
+    die("عذرًا، لم يتم تمرير رمز العقد.");
+}
+
+// استعلام العقد
+$sql = "SELECT * FROM contract WHERE con_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $con_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$contract = $result->fetch_assoc();
+
+if (!$contract) {
+    die("عذرًا، لم يتم العثور على بيانات العقد.");
+}
 // حذف الرسائل بعد عرضها لمرة واحدة
 unset($_SESSION['success_message'], $_SESSION['error_message']);
 
@@ -20,10 +36,31 @@ $emp_id=$_SESSION['emp_id']??null;
 
 if(!empty($contract_code)&&!empty($contract_type)){
 $stmt = $conn->prepare("SELECT * FROM contract WHERE con_id = ?");
-$stmt->bind_param("i", $contract_code);
+$stmt->bind_param("s", $contract_code);
 $stmt->execute();
 $result = $stmt->get_result();
-$contract = $result->fetch_assoc();
+$contract_code = $_SESSION['contract_code'] ?? null;
+$contract_type = $_SESSION['contract_type'] ?? null;
+$emp_id = $_SESSION['emp_id'] ?? null;
+
+// لا تعيدي جلب بيانات العقد إن كانت موجودة مسبقًا
+if (!empty($contract_code) && !empty($contract_type) && $contract_code == $con_id) {
+    // لا حاجة لإعادة جلب $contract، لأنه جُلب مسبقًا من $_GET['con_id']
+
+    // جلب الشروط
+    $stmt2 = $conn->prepare("SELECT con_terms, extra_terms FROM terms WHERE con_type = ?");
+    $stmt2->bind_param("s", $contract_type);
+    $stmt2->execute();
+    $result2 = $stmt2->get_result();
+    $terms = $result2->fetch_assoc();
+
+    // جلب الطرف الأول
+    $stmt3 = $conn->prepare("SELECT * FROM employee  WHERE name = ?");
+    $stmt3->bind_param("s", $contract['1st_party']);
+    $stmt3->execute();
+    $result3 = $stmt3->get_result();
+    $firstParty = $result3->fetch_assoc();
+}
 
 
 // --- Get contract terms based on type ---
@@ -157,6 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
     <!-- الطرف الأول -->
     <hr>
     <h2 class="form-title">بيانات الطرف الأول</h2>
+    <?php if (!empty($firstParty)): ?>
 
     <div class="form-group">
       <label>الاسم:</label>
@@ -182,6 +220,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
       <label>البريد الإلكتروني:</label>
       <p class="form-control-static"><?= htmlspecialchars($firstParty['email']) ?></p>
     </div>
+    <?php else: ?>
+    <p class="text-danger">لا توجد بيانات للطرف الأول.</p>
+<?php endif; ?>
 
     <!-- الشروط -->
     <hr>
