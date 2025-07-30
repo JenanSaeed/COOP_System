@@ -55,8 +55,8 @@ CREATE TABLE `employee` (
   `role` varchar(25) NOT NULL,
   `signature` longblob NOT NULL,
   `last_vac` date NOT NULL,
-  `used_days` int(11) NOT NULL,
-  `remaining_days` int(11) NOT NULL,
+  `used_days` int(2) NOT NULL DEFAULT 0,
+  `remaining_days` int(2) NOT NULL DEFAULT 30,
   `email` varchar(50) NOT NULL,
   `address` text NOT NULL,
   `phone` varchar(25) NOT NULL
