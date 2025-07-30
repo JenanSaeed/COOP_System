@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'add_extra') {
 
-        if ($user_role !== 'admin') {
+        if ($user_role !== 'manager') {
             $_SESSION['error_message'] = "❌ غير مصرح لك بإضافة البنود.";
             header("Location: c-terms.php?type=" . urlencode($contract_type));
             exit();
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 //delete term
     if ($action === 'delete_extra' && isset($_POST['index'])) {
-        if ($user_role !== 'admin') {
+        if ($user_role !== 'manager') {
             $_SESSION['error_message'] = "❌ غير مصرح لك بحذف البنود.";
             header("Location: c-terms.php?type=" . urlencode($contract_type));
             exit();
@@ -149,7 +149,7 @@ if (!empty($contract_type)) {
                 <?php $term = trim($term); if ($term === '') continue; ?>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <?= htmlspecialchars($term) ?>
-                    <?php if ($user_role === 'admin'): ?>
+                    <?php if ($user_role === 'manager'): ?>
                     <form method="POST" style="margin: 0;">
                         <input type="hidden" name="action" value="delete_extra">
                         <input type="hidden" name="index" value="<?= $index ?>">
@@ -167,17 +167,10 @@ if (!empty($contract_type)) {
 
     <hr>
 
-    <!-- زر إضافة بند -->
-    <?php if ($user_role === 'admin'): ?>
-    <div class="text-center mt-4">
-        <button id="showAddForm" class="buttons">
-            <i class="fas fa-plus"></i> إضافة بند جديد
-        </button>
-    </div>
-    <?php endif; ?>
+
 
     <!-- نموذج الإضافة -->
-     <?php if ($user_role === 'admin'): ?>
+     <?php if ($user_role === 'manager'): ?>
     <div id="addTermForm" class="mt-3" style="display:none;">
         <form method="POST">
             <input type="hidden" name="action" value="add_extra">
@@ -208,6 +201,12 @@ if (!empty($contract_type)) {
     <div class="form-buttons">
         <button class="buttons" onclick="location.href='c-adminForm.php'">عودة</button>
         <button onclick="location.href='c-contractDet1.php'" class="buttons">متابعة</button>
+        <?php if ($user_role === 'manager'): ?>
+        <button id="showAddForm" class="buttons">
+        <i class="fas fa-plus"></i> إضافة بند جديد
+        </button>
+    </div>
+    <?php endif; ?>
     </div>
 </div>
 

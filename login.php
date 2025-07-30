@@ -19,7 +19,7 @@ include 'header.php';
 ?>
 <h2 class="form-title">تسجيل الدخول</h2>
 
-<div class="container">
+<div class="l-container">
 
 <form class="log-form" action="check_login.php" method="post">
     <label class="loglabels" for="emp_id">اسم المستخدم:</label>
