@@ -1,8 +1,13 @@
 <?php
 include 'header.php';
 include 'db_connect.php';
+ 
+$message = '';
 
-$message = ''; 
+$contractId = $_GET['id'] ?? null;
+if (!$contractId) {
+    die("رمز العقد مفقود. الرجاء الرجوع إلى الصفحة السابقة.");
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $required = ['name', 'role', 'nationality', 'id_number', 'issue_place', 'expiry_date', 'address', 'phone', 'email', 'bank', 'iban', 'signature_date', 'hijri_date'];
@@ -19,38 +24,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $message = '<div class="GSmessage error">يرجى تعبئة جميع الحقول</div>';
   } elseif (!isset($_FILES['signature']) || $_FILES['signature']['error'] !== UPLOAD_ERR_OK) {
     $message = '<div class="GSmessage error">يرجى إرفاق التوقيع بشكل صحيح</div>';
-  } 
-  else{
-  $uploadDir = 'secondPartySignature/';
-  $fileTmpPath = $_FILES['signature']['tmp_name'];
-  $destPath = $uploadDir . 'sign.png'; // Always save as 'sign.png'
+  } else {
+    $uploadDir = 'secondPartySignature/';
+    $fileTmpPath = $_FILES['signature']['tmp_name'];
+    $destPath = $uploadDir . 'sign.png'; // Always save as 'sign.png'
 
-if (move_uploaded_file($fileTmpPath, $destPath)) {
-    session_start();
-    $_SESSION['second_party_data'] = [
-        'name' => $_POST['name'],
-        'role' => $_POST['role'],
-        'nationality' => $_POST['nationality'],
-        'id_number' => $_POST['id_number'],
-        'issue_place' => $_POST['issue_place'],
-        'expiry_date' => $_POST['expiry_date'],
-        'address' => $_POST['address'],
-        'phone' => $_POST['phone'],
-        'email' => $_POST['email'],
-        'bank' => $_POST['bank'],
-        'iban' => $_POST['iban'],
-        'signature_date' => $_POST['signature_date'],
-        'hijri_date' => $_POST['hijri_date'],
-        'signature_path' => $destPath
-    ];
+    if (move_uploaded_file($fileTmpPath, $destPath)) {
+      // Prepare data from POST
+      $con_id = $_POST['con_id'];
+      $id_number = $_POST['id_number'];
+      $name = $_POST['name'];
+      $role = $_POST['role'];
+      $nationality = $_POST['nationality'];
+      $issue_place = $_POST['issue_place'];
+      $expiry_date = $_POST['expiry_date'];
+      $address = $_POST['address'];
+      $phone = $_POST['phone'];
+      $email = $_POST['email'];
+      $bank = $_POST['bank'];
+      $iban = $_POST['iban'];
 
-    header("Location: c-pdf.php");
-    exit;
-} else {
-    $message = '<div class="GSmessage error">فشل في نقل الملف إلى المجلد المحدد</div>';
-}
+      // Insert into DB
+      $stmt = $conn->prepare("INSERT INTO second_party 
+        (id_number, con_id, name, role, nationality, issue_place, expiry_date, address, phone, email, bank, iban)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+      $stmt->bind_param("ssssssssssss",
+        $id_number, $con_id, $name, $role, $nationality, $issue_place, $expiry_date, $address, $phone, $email, $bank, $iban);
+
+      if ($stmt->execute()) {
+        session_start();
+        $_SESSION['second_party_data'] = [
+          'name' => $name,
+          'role' => $role,
+          'nationality' => $nationality,
+          'id_number' => $id_number,
+          'issue_place' => $issue_place,
+          'expiry_date' => $expiry_date,
+          'address' => $address,
+          'phone' => $phone,
+          'email' => $email,
+          'bank' => $bank,
+          'iban' => $iban,
+          'signature_date' => $_POST['signature_date'],
+          'hijri_date' => $_POST['hijri_date'],
+          'signature_path' => $destPath
+        ];
+
+        header("Location: c-pdf.php?con_id=" . urlencode($contractId));
+
+        exit;
+      } else {
+        $message = '<div class="GSmessage error">خطأ في حفظ البيانات في قاعدة البيانات: ' . htmlspecialchars($stmt->error) . '</div>';
+      }
+
+      $stmt->close();
+    } else {
+      $message = '<div class="GSmessage error">فشل في نقل الملف إلى المجلد المحدد</div>';
+    }
   }
 }
+
 
 ?>
 <!DOCTYPE html>
@@ -79,6 +113,8 @@ if (move_uploaded_file($fileTmpPath, $destPath)) {
 
         <label class="GSlabel" for="signature_date">التاريخ الميلادي:</label>
         <input class="GSinput" type="date" name="signature_date" value="<?= date('Y-m-d'); ?>">
+        <input type="hidden" name="con_id" value="<?= htmlspecialchars($contractId) ?>">
+
 
       <?php if (!empty($message)) echo $message; ?>
    
