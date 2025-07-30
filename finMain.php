@@ -14,7 +14,47 @@ if ($_SESSION['role'] !== 'finance') {
     exit();
 }
 
-// Fetch vacations
+// Get filters from GET
+$search = $_GET['search'] ?? '';
+$sort = $_GET['sort'] ?? 'app_date_desc'; // default sorting
+$status_filter = $_GET['status'] ?? 'all';
+
+// Build WHERE clauses dynamically
+$where_clauses = [];
+$params = [];
+$types = "";
+
+// Search by employee name, vac_id, or date
+if (!empty($search)) {
+    $where_clauses[] = "(e.name LIKE ? OR v.vac_id LIKE ? OR DATE_FORMAT(v.application_date, '%Y-%m-%d') LIKE ?)";
+    $search_like = "%$search%";
+    $params[] = $search_like;
+    $params[] = $search_like;
+    $params[] = $search_like;
+    $types .= "sss";
+}
+
+// Filter by status
+if ($status_filter === 'approved') {
+    $where_clauses[] = "v.fin_approval = 'مقبول' AND v.man_approval = 'معتمد'";
+} elseif ($status_filter === 'rejected') {
+    $where_clauses[] = "v.fin_approval = 'مرفوض' AND v.man_approval = 'معتمد'";
+} elseif ($status_filter === 'pending') {
+    $where_clauses[] = "v.fin_approval = 'معلق' AND v.man_approval = 'معلق'";
+}
+
+// Compose final WHERE clause
+$where_sql = "";
+if (count($where_clauses) > 0) {
+    $where_sql = "WHERE " . implode(" AND ", $where_clauses);
+}
+
+// Determine ORDER BY clause
+$order_clause = "ORDER BY v.application_date DESC";
+if ($sort === 'app_date_asc') $order_clause = "ORDER BY v.application_date ASC";
+elseif ($sort === 'vac_id_asc') $order_clause = "ORDER BY v.vac_id ASC";
+elseif ($sort === 'vac_id_desc') $order_clause = "ORDER BY v.vac_id DESC";
+
 try {
     $sql = "SELECT 
         v.vac_id,
@@ -130,7 +170,7 @@ $current_query = http_build_query($_GET);
                             if ($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد') {
                                 $status = 'مقبول';
                                 $class = 'status-approved';
-                            } elseif ($vac['fin_approval'] === 'مرفوض') {
+                            } elseif ($vac['fin_approval'] === 'مرفوض' && $vac['man_approval'] === 'معتمد') {
                                 $status = 'مرفوض';
                                 $class = 'status-rejected';
                             }
@@ -140,7 +180,7 @@ $current_query = http_build_query($_GET);
                             <td><?= date('Y-m-d', strtotime($vac['application_date'])) ?></td>
                             <td><span class="status-badge <?= $class ?>"><?= $status ?></span></td>
                             <td class="d-flex gap-2 justify-content-center flex-wrap">
-                                <a href="empVacDet1.php?vac_id=<?= $vac['vac_id'] ?>" class="btn-det">تفاصيل</a>
+                                <a href="empVacDet1.php?vac_id=<?= $vac['vac_id'] ?>&<?= $current_query ?>" class="btn-det">تفاصيل</a>
                                 <?php if (($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد') || 
                                         ($vac['fin_approval'] === 'مرفوض' && $vac['man_approval'] === 'معتمد')): ?>
                                 <a href="v-pdf.php?vac_id=<?= urlencode($vacation['vac_id']) ?>" class="btn-prnt" target="_blank">PDF</a>
