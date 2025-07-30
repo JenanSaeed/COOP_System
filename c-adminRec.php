@@ -197,10 +197,8 @@ function isSelected($value, $selected) {
     <h2 class="mb-4">سجل العقود</h2>
     
     <!-- Add New Contract Button at the top -->
-    <a href="<?= htmlspecialchars($newContract) ?>" class="btn btn-primary btn-new-contract">
-        <i class="fas fa-plus"></i> إنشاء عقد جديد
-    </a>
-
+    <a class="buttons" href="<?= htmlspecialchars($newContract) ?>">إنشاء عقد جديد</a>
+    <p></p>
     <!-- Filter/Search/Sort Form -->
     <form method="GET" class="filter-form" role="search" aria-label="فلترة العقود">
         <input
