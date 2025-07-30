@@ -24,6 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'add_extra') {
+
+        if ($user_role !== 'admin') {
+            $_SESSION['error_message'] = "❌ غير مصرح لك بإضافة البنود.";
+            header("Location: c-terms.php?type=" . urlencode($contract_type));
+            exit();
+        }
+
         $new_term = trim($_POST['new_term'] ?? '');
 
         if (!empty($new_term) && !empty($contract_type)) {
@@ -55,6 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 //delete term
     if ($action === 'delete_extra' && isset($_POST['index'])) {
+        if ($user_role !== 'admin') {
+            $_SESSION['error_message'] = "❌ غير مصرح لك بحذف البنود.";
+            header("Location: c-terms.php?type=" . urlencode($contract_type));
+            exit();
+        }
+
         $index = (int) $_POST['index'];
         $stmt = $conn->prepare("SELECT extra_terms FROM terms WHERE con_type = ?");
         $stmt->bind_param("s", $contract_type);
@@ -136,13 +149,15 @@ if (!empty($contract_type)) {
                 <?php $term = trim($term); if ($term === '') continue; ?>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <?= htmlspecialchars($term) ?>
-                        <form method="POST" style="margin: 0;">
-                            <input type="hidden" name="action" value="delete_extra">
-                            <input type="hidden" name="index" value="<?= $index ?>">
-                            <button type="submit" class="delete-button" title="حذف البند" onclick="return confirm('هل أنت متأكد من حذف الإجازة؟');">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </form>
+                    <?php if ($user_role === 'admin'): ?>
+                    <form method="POST" style="margin: 0;">
+                        <input type="hidden" name="action" value="delete_extra">
+                        <input type="hidden" name="index" value="<?= $index ?>">
+                        <button type="submit" class="delete-button" title="حذف البند" onclick="return confirm('هل أنت متأكد من حذف البند؟');">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                    <?php endif; ?>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -153,13 +168,16 @@ if (!empty($contract_type)) {
     <hr>
 
     <!-- زر إضافة بند -->
+    <?php if ($user_role === 'admin'): ?>
     <div class="text-center mt-4">
         <button id="showAddForm" class="buttons">
             <i class="fas fa-plus"></i> إضافة بند جديد
         </button>
     </div>
+    <?php endif; ?>
 
     <!-- نموذج الإضافة -->
+     <?php if ($user_role === 'admin'): ?>
     <div id="addTermForm" class="mt-3" style="display:none;">
         <form method="POST">
             <input type="hidden" name="action" value="add_extra">
@@ -170,6 +188,8 @@ if (!empty($contract_type)) {
             </div>
         </form>
     </div>
+    <?php endif; ?>
+
 
     <!-- رسالة النجاح -->
     <?php if (!empty($success_message)): ?>
