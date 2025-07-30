@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once("db_connect.php");
+include_once("reset_days.php");
+
 
 // تحقق من تسجيل الدخول
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
@@ -209,7 +211,6 @@ $current_query = http_build_query($_GET);
                                 <a href="empVacDet2.php?vac_id=<?= $vac['vac_id'] ?>&<?= $current_query ?>" class="btn-det">تفاصيل</a>
                                 <?php if (($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد') || 
                                         ($vac['fin_approval'] === 'مرفوض' && $vac['man_approval'] === 'معتمد')): ?>
-                                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>&<?= $current_query ?>" class="btn-prnt" target="_blank">PDF</a>
                                 <a href="v-pdf.php?vac_id=<?= urlencode($vacation['vac_id']) ?>" class="btn-prnt" target="_blank">PDF</a>
                                 <?php endif; ?>   
                                 <?php if ($vac['man_approval'] === 'معلق' && $vac['fin_approval'] === 'معلق'): ?>
