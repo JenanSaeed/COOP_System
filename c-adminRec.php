@@ -212,26 +212,11 @@ function isSelected($value, $selected) {
             aria-label="بحث"
         />
 
-        <select name="status" class="form-select" aria-label="فلترة حالة العقد">
-            <option value="all" <?= isSelected('all', $status_filter) ?>>كل الحالات</option>
-            <option value="pending" <?= isSelected('pending', $status_filter) ?>>قيد الانتظار</option>
-            <option value="active" <?= isSelected('active', $status_filter) ?>>نشط</option>
-            <option value="completed" <?= isSelected('completed', $status_filter) ?>>مكتمل</option>
-            <option value="cancelled" <?= isSelected('cancelled', $status_filter) ?>>ملغى</option>
-        </select>
-
-        <select name="guest_status" class="form-select" aria-label="فلترة حالة الضيف">
-            <option value="all" <?= isSelected('all', $guest_status_filter) ?>>كل الحالات</option>
-            <option value="confirmed" <?= isSelected('confirmed', $guest_status_filter) ?>>مؤكد</option>
-            <option value="pending" <?= isSelected('pending', $guest_status_filter) ?>>قيد الانتظار</option>
-            <option value="cancelled" <?= isSelected('cancelled', $guest_status_filter) ?>>ملغى</option>
-        </select>
-
         <select name="sort" class="form-select" aria-label="ترتيب">
             <option value="con_date_desc" <?= isSelected('con_date_desc', $sort) ?>>تاريخ العقد: الأحدث أولاً</option>
             <option value="con_date_asc" <?= isSelected('con_date_asc', $sort) ?>>تاريخ العقد: الأقدم أولاً</option>
-            <option value="con_id_asc" <?= isSelected('con_id_asc', $sort) ?>>رقم العقد: تصاعدي</option>
-            <option value="con_id_desc" <?= isSelected('con_id_desc', $sort) ?>>رقم العقد: تنازلي</option>
+            <option value="con_id_asc" <?= isSelected('con_id_asc', $sort) ?>>رقم العقد: تصاعديًا</option>
+            <option value="con_id_desc" <?= isSelected('con_id_desc', $sort) ?>>رقم العقد: تنازليًا</option>
         </select>
 
         <button type="submit" class="btn btn-secondary">تطبيق</button>
