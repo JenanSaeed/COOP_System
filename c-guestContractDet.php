@@ -1,16 +1,33 @@
+
 <?php
+
+
+
 include 'db_connect.php';
 
-// Get contract ID from URL
-$contractId = $_GET['id'] ?? null;
+function decrypt($data, $key) {
+  
+    $data = base64_decode($data);
+    if ($data === false || strlen($data) <= 16) return false;
+
+    $iv = substr($data, 0, 16);
+    $encryptedData = substr($data, 16);
+    return openssl_decrypt($encryptedData, 'AES-256-CBC', $key, 0, $iv);
+}
+
+
+$secretKey = 'f7d9a2d91e47fcb2e3c98602c858c901'; // Must match the one used for encryption
+$encryptedId = $_GET['id'] ?? null;
+
+$contractId = $encryptedId ? decrypt($encryptedId, $secretKey) : null;
 
 if (!$contractId) {
-    die("رمز العقد مفقود.");
+    die("رمز العقد غير صالح أو مفقود.");
 }
 
 // --- Fetch contract ---
 $stmt = $conn->prepare("SELECT * FROM contract WHERE con_id = ?");
-$stmt->bind_param("i", $contractId);
+$stmt->bind_param("s", $contractId); // Use "s" not "i" if con_id is a string
 $stmt->execute();
 $result = $stmt->get_result();
 $contract = $result->fetch_assoc();
@@ -32,7 +49,17 @@ $stmt3->bind_param("s", $contract['1st_party']);
 $stmt3->execute();
 $result3 = $stmt3->get_result();
 $firstParty = $result3->fetch_assoc();
+
+function encrypt($data, $key) {
+    $iv = openssl_random_pseudo_bytes(16);
+    $encrypted = openssl_encrypt($data, 'AES-256-CBC', $key, 0, $iv);
+    return urlencode(base64_encode($iv . $encrypted));
+}
+
+$encryptedForNextPage = encrypt($contract['con_id'], $secretKey);
+
 ?>
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -89,7 +116,7 @@ $firstParty = $result3->fetch_assoc();
     </div>
 </section>  
 <div class="button-container">
-  <a href="c-guestSign.php?id=<?= urlencode($contract['con_id']) ?>" class="nextCD">التالي</a>
+  <a href="c-guestSign.php?id=<?= $encryptedForNextPage ?>" class="nextCD">التالي</a>
 </div>  
 </br>
 

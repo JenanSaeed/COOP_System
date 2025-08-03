@@ -2,6 +2,14 @@
 session_start();
 require_once("db_connect.php");
 
+function encrypt($data, $key) {
+    $iv = openssl_random_pseudo_bytes(16);
+    $encrypted = openssl_encrypt($data, 'AES-256-CBC', $key, 0, $iv);
+    return urlencode(base64_encode($iv . $encrypted));
+}
+$secretKey = 'f7d9a2d91e47fcb2e3c98602c858c901';
+
+
 $contract_code = $_SESSION['contract_code'] ?? '';
 
 // التحقق من تسجيل الدخول
@@ -250,8 +258,12 @@ function isSelected($value, $selected) {
                         <td><?= htmlspecialchars($con['program_name']) ?></td>
                         <td><?= htmlspecialchars($con['program_id']) ?></td>
                         <td class="d-flex gap-2 justify-content-center flex-wrap">
-                            <a href="c-contractDet1.php?con_id=<?= urlencode($con['con_id']) ?>" class="btn-det">تفاصيل</a>
-                            <a href="c-pdf.php?con_id=<?= urlencode($con['con_id']) ?>" class="btn-prnt">PDF</a>
+                            <?php $encryptedId = encrypt($con['con_id'], $secretKey); ?>
+                            <a href="c-contractDet1.php?id=<?= $encryptedId ?>" class="btn-det">تفاصيل</a>
+
+                            <?php $encryptedId = encrypt($con['con_id'], $secretKey); ?>
+                            <a href="c-pdf.php?id=<?= $encryptedId ?>" class="btn-prnt">PDF</a>
+
                         </td>
                     </tr>
                     <?php endforeach; ?>

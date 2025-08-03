@@ -3,11 +3,26 @@ session_start();
 require_once("db_connect.php");
 require_once("tcpdf/tcpdf.php");
 
-if (!isset($_GET['con_id'])) {
+function decrypt($data, $key) {
+    $data = base64_decode($data);
+    if ($data === false || strlen($data) <= 16) return false;
+    $iv = substr($data, 0, 16);
+    $encryptedData = substr($data, 16);
+    return openssl_decrypt($encryptedData, 'AES-256-CBC', $key, 0, $iv);
+}
+
+$secretKey = 'f7d9a2d91e47fcb2e3c98602c858c901'; // استخدم نفس المفتاح الذي استخدمته في التشفير
+
+$encryptedId = $_GET['id'] ?? null;
+
+if (!$encryptedId) {
     die("رقم العقد غير موجود.");
 }
 
-$con_id = intval($_GET['con_id']);
+$con_id = decrypt($encryptedId, $secretKey);
+if (!$con_id) {
+    die("فشل في فك تشفير رقم العقد.");
+}
 
 // 1. Fetch contract
 $stmt = $conn->prepare("SELECT * FROM contract WHERE con_id = ?");

@@ -2,7 +2,7 @@
 session_start();
 include 'db_connect.php';
 
-$con_id = $_GET['con_id'] ?? null;
+$con_id = $_GET['con_id'] ?? ($_SESSION['contract_code'] ?? null);
 
 if (!$con_id) {
     die("عذرًا، لم يتم تمرير رمز العقد.");
@@ -79,43 +79,52 @@ $firstParty= $result3->fetch_assoc();
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
-    // Make sure this comes BEFORE using $inviteEmail
     $inviteEmail = $_POST['invite_email'];
 
-    // Construct the contract link
-    $contractId = $contract_code; // Or however you identify the contract
-    $link = "http://localhost/COOP_System/c-guestContractDet.php?id=" . urlencode($contractId);
+    // 1. Encrypt the con_id
+    function encrypt($data, $key) {
+        $iv = openssl_random_pseudo_bytes(16);
+        $encrypted = openssl_encrypt($data, 'AES-256-CBC', $key, 0, $iv);
+        return urlencode(base64_encode($iv . $encrypted));
+    }
 
+    $secretKey = 'f7d9a2d91e47fcb2e3c98602c858c901';
+    $contractId = $con_id;  // Already set at the top of the page
+    $encryptedId = encrypt($contractId, $secretKey);
 
+    // 2. Build the guest page link
+    $link = "http://localhost/COOP_System/c-guestContractDet.php?id=" . $encryptedId;
+
+    // 3. Send email (no change here)
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'fatemah36618@gmail.com'; // Use your Gmail
-        $mail->Password   = 'yzat lisb xubr ggvq';    // Use your Gmail App Password
+        $mail->Username   = 'fatemah36618@gmail.com';
+        $mail->Password   = 'yzat lisb xubr ggvq';
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
         $mail->CharSet = 'UTF-8'; 
         $mail->Encoding = 'base64';
 
-        $mail->setFrom('fatemah36618@gmail.com', 'COOP System');
-        $mail->addAddress($inviteEmail); // ✅ make sure $inviteEmail is already set
-
+        $mail->setFrom('fatemah36618@gmail.com', 'IAU learning center');
+        $mail->addAddress($inviteEmail);
         $mail->Subject = 'دعوة لمراجعة العقد';
         $mail->Body    = "يرجى مراجعة العقد عبر الرابط التالي:\n\n" . $link;
 
         $mail->send();
         $_SESSION['success_message'] = "✅ تم إرسال الدعوة بنجاح.";
-        header("Location: " . $_SERVER['PHP_SELF']);
+        header("Location: " . $_SERVER['PHP_SELF'] . "?con_id=" . $contractId); // Refresh
         exit();
-
     } catch (Exception $e) {
         $_SESSION['error_message'] = "❌ حدث خطأ أثناء الإرسال: " . $mail->ErrorInfo;
-        header("Location: " . $_SERVER['PHP_SELF']);
-        exit();}
+        header("Location: " . $_SERVER['PHP_SELF'] . "?con_id=" . $contractId);
+        exit();
+    }
 }
+
 ?>
 
 <!DOCTYPE html>

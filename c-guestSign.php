@@ -1,13 +1,35 @@
 <?php
 include 'header.php';
 include 'db_connect.php';
+
+function decrypt($data, $key) {
+    $data = base64_decode($data);
+    if ($data === false || strlen($data) <= 16) return false;
+    $iv = substr($data, 0, 16);
+    $encryptedData = substr($data, 16);
+    return openssl_decrypt($encryptedData, 'AES-256-CBC', $key, 0, $iv);
+}
+
+function encrypt($data, $key) {
+    $iv = openssl_random_pseudo_bytes(16);
+    $encrypted = openssl_encrypt($data, 'AES-256-CBC', $key, 0, $iv);
+    return urlencode(base64_encode($iv . $encrypted));
+}
+
+$secretKey = 'f7d9a2d91e47fcb2e3c98602c858c901';
+
  
 $message = '';
-
-$contractId = $_GET['id'] ?? null;
-if (!$contractId) {
+$encryptedId = $_GET['id'] ?? null;
+if (!$encryptedId) {
     die("رمز العقد مفقود. الرجاء الرجوع إلى الصفحة السابقة.");
 }
+
+$contractId = decrypt($encryptedId, $secretKey);
+if (!$contractId) {
+    die("رمز العقد غير صالح أو مفقود.");
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $required = ['name', 'role', 'nationality', 'id_number', 'issue_place', 'expiry_date', 'address', 'phone', 'email', 'bank', 'iban', 'signature_date', 'hijri_date'];
@@ -71,7 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           'signature_path' => $destPath
         ];
 
-        header("Location: c-pdf.php?con_id=" . urlencode($contractId));
+        $encryptedForPdf = encrypt($contractId, $secretKey);
+        header("Location: c-pdf.php?id=" . $encryptedForPdf);
 
         exit;
       } else {
