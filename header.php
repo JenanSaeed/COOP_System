@@ -49,8 +49,8 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
       <ul class="nav-links">
         <?php if (!isset($role) || $role !== 'guest'): ?>
           <li><a href="index.php">الرئيسية</a></li>
-          <li><a href="<?= $contractsLink ?>">العقود</a></li>
           <li><a href="<?= $vacationsLink ?>">الإجازات</a></li>
+          <li><a href="<?= $contractsLink ?>">العقود</a></li>
         <?php else: ?>
           <li><a href="<?= $contractsLink ?>">العقود</a></li>
         <?php endif; ?>
