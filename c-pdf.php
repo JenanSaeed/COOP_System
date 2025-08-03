@@ -61,7 +61,19 @@ if (!empty($first_party_name)) {
 }
 
 // 3. Get 2nd party name
-$second_party_name = !empty($contract['2nd_party']) ? $contract['2nd_party'] : "غير متوفر";
+// 3. Get 2nd party name from second_party table
+$second_party_name = "غير متوفر";
+$stmt = $conn->prepare("SELECT name FROM second_party WHERE con_id = ? LIMIT 1");
+if ($stmt) {
+    $stmt->bind_param("i", $con_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        $second_party_name = $row['name'];
+    }
+    $stmt->close();
+}
+
 
 // 4. Fetch contract terms
 $con_type = $contract['con_type'] ?? null;
