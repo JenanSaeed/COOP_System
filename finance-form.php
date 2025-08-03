@@ -1,6 +1,12 @@
 <?php
 session_start();
 require_once("db_connect.php");
+// for sending notification email
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+require 'PHPMailer/src/Exception.php';
 
 // تحقق من تسجيل الدخول
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
@@ -15,21 +21,62 @@ if (!$vac_id) {
 }
 
 $error = '';
+//retirve managers email
+$mgrEmails = [];
+$stmt = $conn->prepare("SELECT email FROM employee WHERE role = 'manager'");
+$stmt->execute();
+$result = $stmt->get_result();
+while ($row = $result->fetch_assoc()) {
+    if (!empty($row['email'])) {
+        $mgrEmails[] = $row['email'];
+    }
+}
+$stmt->close();
 
 // معالجة التقديم
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $approval = $_POST['approval'] ?? null;
 
     if ($approval === 'مقبول' || $approval === 'مرفوض') {
-        $stmt = $conn->prepare("UPDATE vacation SET fin_approval = ? WHERE vac_id = ?");
-        $stmt->bind_param("si", $approval, $vac_id);
-        $stmt->execute();
-        $stmt->close();
-        header("Location: finMain.php");
-        exit();
-    } else {
-        $error = "الرجاء تحديد حالة الإجازة.";
+    $stmt = $conn->prepare("UPDATE vacation SET fin_approval = ? WHERE vac_id = ?");
+    $stmt->bind_param("si", $approval, $vac_id);
+    $stmt->execute();
+    $stmt->close();
+
+    // Send email BEFORE redirection
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'fatemah36618@gmail.com';
+        $mail->Password   = 'yzat lisb xubr ggvq'; // Ensure this app password is valid
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
+        $mail->CharSet    = 'UTF-8';
+        $mail->Encoding   = 'base64';
+
+        $mail->setFrom('fatemah36618@gmail.com', 'نظام الاجازات');
+        foreach ($mgrEmails as $email) {
+            $mail->addAddress($email);
+        }
+
+        $mail->isHTML(true);
+        $mail->Subject = 'طلب إجازة جديد';
+        $mail->Body    = '<b>تم تقديم طلب إجازة جديد من قبل أحد الموظفين.</b><br>يرجى مراجعة الطلب في النظام.';
+
+        $mail->send();
+    } catch (Exception $e) {
+        error_log("Mailer Error: {$mail->ErrorInfo}");
     }
+
+    // Only redirect AFTER sending
+    header("Location: finMain.php");
+    exit();
+} else {
+    $error = "الرجاء تحديد حالة الإجازة.";
+}
+
 }
 
 // جلب بيانات الإجازة + الموظف
