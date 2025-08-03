@@ -160,7 +160,7 @@ $conn->close();
                             id="days"
                             class="form-control"
                             value="<?= htmlspecialchars($_POST['days'] ?? '1') ?>"
-                            required
+                            oninput="calculateToDate()" required
                         />
                         <span class="input-group-text">يوم</span>
                     </div>
@@ -171,7 +171,7 @@ $conn->close();
                         <div class="form-group">
                             <label for="fromDate" class="form-label">من تاريخ:</label>
                             <input type="date" name="fromDate" id="fromDate" class="form-control" 
-                            value="<?= htmlspecialchars($_POST['fromDate'] ?? '') ?>" required>
+                            value="<?= htmlspecialchars($_POST['fromDate'] ?? '') ?>" onchange="calculateToDateOrDays()" required>
                             <small id="fromDateHijri" class="hijri-date"></small>
                         </div>
                     </div>
@@ -179,7 +179,7 @@ $conn->close();
                         <div class="form-group">
                             <label for="toDate" class="form-label">إلى تاريخ:</label>
                             <input type="date" name="toDate" id="toDate" class="form-control"
-                            value="<?= htmlspecialchars($_POST['toDate'] ?? '') ?>" required>
+                            value="<?= htmlspecialchars($_POST['toDate'] ?? '') ?>" onchange="calculateDays()" required>
                             <small id="toDateHijri" class="hijri-date"></small>
                         </div>
                     </div>
@@ -287,41 +287,29 @@ $conn->close();
             document.getElementById('days').value = diff + 1 > 0 ? diff + 1 : 1;
         }
 
-        // Sync min date on toDate and reset if invalid
-        document.getElementById('fromDate').addEventListener('change', function () {
-            const fromDateVal = this.value;
-            const toDateInput = document.getElementById('toDate');
-            toDateInput.min = fromDateVal;
-            if (toDateInput.value && toDateInput.value < fromDateVal) {
-                toDateInput.value = fromDateVal;
+        function calculateToDate() {
+            const days = parseInt(document.getElementById("days").value);
+            const fromDate = document.getElementById("fromDate").value;
+
+            if (!isNaN(days) && fromDate) {
+            let start = new Date(fromDate);
+            // Days count includes the first day, so subtract 1
+            start.setDate(start.getDate() + days - 1);
+
+            document.getElementById("toDate").value = start.toISOString().split('T')[0];
             }
-            calculateDays();
-        });
+        }
 
-        document.getElementById('toDate').addEventListener('change', calculateDays);
+        function calculateToDateOrDays() {
+            const days = document.getElementById("days").value;
+            const toDate = document.getElementById("toDate").value;
 
-
-        document.getElementById('days').addEventListener('input', function () {
-            const days = parseInt(this.value);
-            const fromDateInput = document.getElementById('fromDate');
-            const toDateInput = document.getElementById('toDate');
-
-            if (!fromDateInput.value || isNaN(days) || days < 1) {
-                return;
+            if (days) {
+                calculateToDate();
+            } else if (toDate) {
+                calculateDays();
             }
-
-            const fromDate = new Date(fromDateInput.value);
-            // نحسب تاريخ النهاية بإضافة (عدد الأيام - 1) لأن البداية محسوبة بيوم واحد
-            const newToDate = new Date(fromDate);
-            newToDate.setDate(fromDate.getDate() + days - 1);
-
-            // نحدث قيمة تاريخ النهاية بصيغة yyyy-mm-dd
-            toDateInput.value = newToDate.toISOString().split('T')[0];
-
-            // نحدّث الحد الأدنى لتاريخ النهاية أيضاً
-            toDateInput.min = fromDateInput.value;
-        });
-        document.getElementById('fromDate').addEventListener('change', calculateDays);
+        }   
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
