@@ -263,7 +263,7 @@ while ($row = mysqli_fetch_assoc($query)) {
 
       <div class="form-buttons" style="display: flex; flex-direction: column; align-items: center;">
         <div id="warningMsg"></div>
-        <button type="submit" id="submitBtn" class="buttons" disabled>إرسال</button>
+        <button type="submit" id="submitBtn" class="buttons">إرسال</button>
      </div>
 
     </form>
@@ -330,20 +330,45 @@ document.getElementById('startGregorian').addEventListener('change', function ()
 });
 
 document.getElementById('contractFormAll').addEventListener('submit', function (e) {
-  // امنع الإرسال مؤقتاً
-  e.preventDefault();
+ // التحقق من الحقول المطلوبة
+  const requiredFields = [
+    'gregorianDate',
+    'party1Name',
+    'program_name',
+    'program_code',
+    'contract_total',
+    'startGregorian',
+    'con_duration_value'
+  ];
 
-  // انسخ القيم من الحقول الظاهرة إلى الـ hidden fields
+  let missing = false;
+  for (let id of requiredFields) {
+    const el = document.getElementById(id);
+    if (!el || el.value.trim() === '') {
+      missing = true;
+      break;
+    }
+  }
+
+  const durationSelected = document.querySelector('[name="duration_type"]:checked');
+
+  if (missing || !durationSelected) {
+    e.preventDefault();
+    alert("⚠️ الرجاء تعبئة جميع الحقول المطلوبة قبل الإرسال.");
+    return;
+  }
+
+  // نسخ القيم للحقول الخفية
   document.getElementById('hidden_gregorian_date').value = document.getElementById('gregorianDate').value;
   document.getElementById('hidden_party1').value = document.getElementById('party1Name').value;
   document.getElementById('hidden_program_name').value = document.getElementById('program_name').value;
   document.getElementById('hidden_program_code').value = document.getElementById('program_code').value;
   document.getElementById('hidden_contract_total').value = document.getElementById('contract_total').value;
-  document.getElementById('hidden_duration').value = document.querySelector('[name="duration_type"]:checked')?.value || '';
+  document.getElementById('hidden_duration').value = durationSelected.value;
   document.getElementById('hidden_start_gregorian').value = document.getElementById('startGregorian').value;
-  document.getElementById('hidden_duration_value').value = document.querySelector('[name="con_duration_value"]').value || '';
+  document.getElementById('hidden_duration_value').value = document.getElementById('con_duration_value').value;
 
-  this.submit();
+  // بعد التحقق، الإرسال طبيعي
 });
 
 function validatePrice(input) {
@@ -403,62 +428,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
-<script>
-  const requiredFieldIds = [
-    'gregorianDate',
-    'party1Name',
-    'program_name',
-    'program_code',
-    'contract_total',
-    'startGregorian',
-    'con_duration_value'
-  ];
-
-  const submitBtn = document.getElementById('submitBtn');
-
-  function checkFormCompletion() {
-    const allFilled = requiredFieldIds.every(id => {
-      const el = document.getElementById(id);
-      return el && el.value.trim() !== '';
-    });
-
-    const durationSelected = document.querySelector('[name="duration_type"]:checked');
-
-    const warningMsg = document.getElementById('warningMsg');
-    const submitBtn = document.getElementById('submitBtn');
-
-     if (allFilled && durationSelected) {
-    submitBtn.disabled = false;
-    submitBtn.style.backgroundColor = 'green'; // زر أخضر
-    warningMsg.textContent = ''; // إخفاء الرسالة
-    warningMsg.classList.remove('visible');
-  } else {
-    submitBtn.disabled = true;
-    submitBtn.style.backgroundColor = ''; // يرجع للون الأصلي
-    warningMsg.textContent = '⚠️ الرجاء إدخال جميع البيانات للمتابعة.';
-    warningMsg.classList.add('visible');
-  }
-}
-
-  // أربط كل حقل بحدث oninput أو onchange
-  requiredFieldIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('input', checkFormCompletion);
-    }
-  });
-
-  // لحقل الراديو
-  document.querySelectorAll('[name="duration_type"]').forEach(radio => {
-    radio.addEventListener('change', checkFormCompletion);
-  });
-
-  // تشغيل الفحص مبدأيًا إذا في بيانات محفوظة
-  window.addEventListener('load', checkFormCompletion);
-  //document.addEventListener('DOMContentLoaded', checkFormCompletion);
-
-
-</script>
+ 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
