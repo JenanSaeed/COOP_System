@@ -1,10 +1,7 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL); 
-
 include 'db_connect.php';
 session_start();
+
 $success_message = $_SESSION['success_message'] ?? '';
 $error_message = $_SESSION['error_message'] ?? '';
 unset($_SESSION['success_message'], $_SESSION['error_message']);
@@ -199,8 +196,8 @@ if (!empty($contract_type)) {
 
     <!-- زر المتابعة دائم -->
     <div class="form-buttons">
-        <button class="buttons" onclick="location.href='c-adminForm.php'">عودة</button>
-        <button onclick="location.href='c-contractDet1.php'" class="buttons">متابعة</button>
+        <a class="buttons" href='c-adminForm.php'">عودة</a>
+        <a href='c-contractDet1.php?con_id=<?= urlencode($_SESSION['contract_code']); ?>'" class="buttons">متابعة</a>
         <?php if ($user_role === 'manager'): ?>
         <button id="showAddForm" class="buttons">
         <i class="fas fa-plus"></i> إضافة بند جديد
@@ -223,5 +220,7 @@ if (!empty($contract_type)) {
 </script>
 
 <?php include 'footer.php'; ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

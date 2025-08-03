@@ -49,8 +49,8 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
       <ul class="nav-links">
         <?php if (!isset($role) || $role !== 'guest'): ?>
           <li><a href="index.php">الرئيسية</a></li>
-          <li><a href="<?= $contractsLink ?>">العقود</a></li>
           <li><a href="<?= $vacationsLink ?>">الإجازات</a></li>
+          <li><a href="<?= $contractsLink ?>">العقود</a></li>
         <?php else: ?>
           <li><a href="<?= $contractsLink ?>">العقود</a></li>
         <?php endif; ?>
@@ -74,6 +74,7 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
 </div>
 
   </header>
+  <main class="page-content"></main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

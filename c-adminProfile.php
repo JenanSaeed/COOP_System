@@ -92,7 +92,7 @@ $conn->close();
 </div>
 
 <?php include 'footer.php'; ?>
-<script> //for invisible pass 
+<script> //for invisible password 
 function togglePassword() {
     const field = document.getElementById("passwordField");
     const icon = document.getElementById("eyeIcon");
