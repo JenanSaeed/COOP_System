@@ -1,4 +1,4 @@
-
+<main class="page-content"></main>
 <footer class="main-footer text-center py-3">
   جميع الحقوق محفوظة © مركز التعليم المستمر - جامعة الإمام عبدالرحمن بن فيصل
 </footer>
