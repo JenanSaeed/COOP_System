@@ -258,8 +258,7 @@ function isSelected($value, $selected) {
                         <td><?= htmlspecialchars($con['program_name']) ?></td>
                         <td><?= htmlspecialchars($con['program_id']) ?></td>
                         <td class="d-flex gap-2 justify-content-center flex-wrap">
-                            <?php $encryptedId = encrypt($con['con_id'], $secretKey); ?>
-                            <a href="c-contractDet1.php?id=<?= $encryptedId ?>" class="btn-det">تفاصيل</a>
+                            <a href="c-contractDet1.php?id=<?= $con['con_id'] ?>" class="btn-det">تفاصيل</a>
 
                             <?php $encryptedId = encrypt($con['con_id'], $secretKey); ?>
                             <a href="c-pdf.php?id=<?= $encryptedId ?>" class="btn-prnt">PDF</a>
