@@ -108,7 +108,29 @@ $current_query = http_build_query($_GET);
     <link href="style.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
+    <style>
+        .status-pending { background: #f0ad4e; color: #fff; padding: 3px 8px; border-radius: 4px; }
+        .status-approved { background: #5cb85c; color: #fff; padding: 3px 8px; border-radius: 4px; }
+        .status-rejected { background: #d9534f; color: #fff; padding: 3px 8px; border-radius: 4px; }
+        .btn-det, .btn-prnt {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 0.9rem;
+            color: white;
+            background-color: #0d6efd;
+            border-radius: 4px;
+            text-decoration: none;
+            margin: 2px;
+        }
+        .btn-prnt { background-color: #198754; }
+        .delete-button {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+    </style>
 </head>
 <body class="bg-light">
 <?php include 'header.php'; ?>
@@ -159,7 +181,7 @@ $current_query = http_build_query($_GET);
         <div class="alert alert-info">لا توجد طلبات إجازة مسجلة</div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="vacation-table table-bordered text-center">
+            <table class="vacation-table table table-bordered text-center">
                 <thead class="table-light">
                     <tr>
                         <th>رقم الطلب</th>
@@ -189,7 +211,7 @@ $current_query = http_build_query($_GET);
                                 <a href="empVacDet2.php?vac_id=<?= $vac['vac_id'] ?>&<?= $current_query ?>" class="btn-det">تفاصيل</a>
                                 <?php if (($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد') || 
                                         ($vac['fin_approval'] === 'مرفوض' && $vac['man_approval'] === 'معتمد')): ?>
-                                <a href="v-pdf.php?vac_id=<?= urlencode($vac['vac_id']) ?>" class="btn-prnt" target="_blank">PDF</a>
+                                <a href="v-pdf.php?vac_id=<?= urlencode($vacation['vac_id']) ?>" class="btn-prnt" target="_blank">PDF</a>
                                 <?php endif; ?>   
                                 <?php if ($vac['man_approval'] === 'معلق' && $vac['fin_approval'] === 'معلق'): ?>
                                 <form method="POST" style="margin: 0;">
