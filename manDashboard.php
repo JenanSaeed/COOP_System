@@ -10,104 +10,84 @@ require_once(__DIR__ . "/PHPMailer/src/Exception.php");
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Make sure user is logged in and is manager
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+// Ensure logged-in manager
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || $_SESSION['role'] !== 'manager') {
     header("Location: login.php");
     exit();
 }
-if ($_SESSION['role'] !== 'manager') {
-    header("Location: homepage.php");
-    exit();
-}
 
-// Initialize variables with a default value to prevent 'undefined' warnings
 $emp_message = "";
 $con_message = "";
-$emp_id = "";
-$name = "";
-$role = "";
-$email = "";
-$con_type = "";
-$con_terms = "";
+$emp_id = $name = $role = $email = "";
+$con_type = $con_terms = "";
 
-// Process form submission
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Handle add employee
     if (isset($_POST['add_employee'])) {
-        // Trim and get inputs safely
         $emp_id = trim($_POST['emp_id'] ?? '');
         $name = trim($_POST['name'] ?? '');
         $role = trim($_POST['role'] ?? '');
         $email = trim($_POST['email'] ?? '');
+        $displayName = htmlspecialchars($name ?: 'غير معروف');
 
         if (empty($emp_id) || empty($name) || empty($role) || empty($email)) {
             $emp_message = "<div class='alert alert-danger'>جميع الحقول مطلوبة.</div>";
         } else {
             try {
-                // Generate setup token and expiry (24h)
                 $token = bin2hex(random_bytes(16));
                 $expiry = date('Y-m-d H:i:s', time() + 86400);
 
-                // Prepare SQL insert statement
                 $stmt = $conn->prepare("INSERT INTO employee 
-                    (emp_id, name, role, email, setup_token, setup_expiry, password, signature, last_vac, used_days, remaining_days, address, phone)
-                    VALUES (?, ?, ?, ?, ?, ?, '', '', NULL, 0, 0, '', '')");
+                (emp_id, name, role, email, setup_token, setup_expiry, password, signature, last_vac, used_days, remaining_days, address, phone)
+                VALUES (?, ?, ?, ?, ?, ?, '', '', CURDATE(), 0, 0, '', '')");
+
                 if (!$stmt) throw new Exception("فشل تحضير الاستعلام: " . $conn->error);
 
                 $stmt->bind_param("ssssss", $emp_id, $name, $role, $email, $token, $expiry);
-                $stmt->execute();
-
-                if ($stmt->affected_rows === 0) {
-                    throw new Exception("فشل إضافة الموظف في قاعدة البيانات.");
+                if (!$stmt->execute()) {
+                    throw new Exception("فشل تنفيذ الاستعلام: " . $stmt->error);
                 }
 
-                // Construct setup password link
+                if ($stmt->affected_rows === 0) {
+                    throw new Exception("لم يتم إدخال الموظف (affected_rows = 0).");
+                }
+
                 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
                 $domain = $_SERVER['HTTP_HOST'];
                 $link = $protocol . $domain . "/COOP_System/setupPassword.php?token=" . urlencode($token);
 
-                // Send invitation email
                 $mail = new PHPMailer(true);
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
-                $mail->Username = 'fatemah36618@gmail.com'; // your SMTP email
-                $mail->Password = 'yzat lisb xubr ggvq'; // your SMTP app password
+                $mail->Username = 'fatemah36618@gmail.com';
+                $mail->Password = 'yzat lisb xubr ggvq';  // secure this
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = 587;
-
                 $mail->CharSet = 'UTF-8';
                 $mail->Encoding = 'base64';
 
                 $mail->setFrom('fatemah36618@gmail.com', 'COOP System');
                 $mail->addAddress($email, $name);
-
-                $mail->Subject = "إعداد حسابك - مركز التعليم المستمر";
+                $mail->Subject = "إعداد حسابك - نظام الموارد البشرية";
                 $mail->isHTML(true);
                 $mail->Body = "
                     <p>مرحباً $name،</p>
                     <p>تم تسجيلك في النظام، يمكنك إعداد كلمة المرور عبر الرابط التالي:</p>
                     <p><a href='$link'>$link</a></p>
                     <p>هذا الرابط صالح لمدة 24 ساعة.</p>
-                    <p>مع التحية</p>
-                ";
+                    <p>مع التحية،<br>فريق الموارد البشرية</p>";
 
                 $mail->send();
-
-                $emp_message = "<div class='alert alert-success'>تمت إضافة الموظف <strong>$name</strong> وإرسال رابط إعداد كلمة المرور بنجاح.</div>";
-
-                // Clear input fields after success
+                $emp_message = "<div class='alert alert-success'>تمت إضافة الموظف <strong>$displayName</strong> وإرسال رابط إعداد كلمة المرور بنجاح.</div>";
                 $emp_id = $name = $role = $email = "";
 
             } catch (Exception $e) {
-                // Use htmlspecialchars and fallback name to avoid undefined variable warning
-                $displayName = htmlspecialchars($name ?: 'غير معروف');
-                $emp_message = "<div class='alert alert-warning'>تمت إضافة الموظف $displayName ولكن فشل إرسال البريد: " . htmlspecialchars($e->getMessage()) . "</div>";
+                $emp_message = "<div class='alert alert-warning'>خطأ: " . htmlspecialchars($e->getMessage()) . "</div>";
             }
         }
     }
-    
-    // Handle add contract type
+
     if (isset($_POST['add_con_type'])) {
         $con_type = trim($_POST['con_type'] ?? '');
         $con_terms = trim($_POST['con_terms'] ?? '');
@@ -118,12 +98,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("جميع حقول العقد مطلوبة");
             }
 
-            $stmt = $conn->prepare("INSERT INTO contract_type (con_type, con_terms, extra_terms) VALUES (?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO terms (con_type, con_terms, extra_terms) VALUES (?, ?, ?)");
+            if (!$stmt) throw new Exception("تحضير الاستعلام فشل: " . $conn->error);
             $stmt->bind_param("sss", $con_type, $con_terms, $extra_terms);
-            $stmt->execute();
+            if (!$stmt->execute()) throw new Exception("فشل تنفيذ الاستعلام: " . $stmt->error);
+
             $con_message = "<div class='alert alert-success'>تمت إضافة نوع العقد بنجاح</div>";
         } catch (Exception $e) {
-            $con_message = "<div class='alert alert-danger'>خطأ في إضافة نوع العقد: " . htmlspecialchars($e->getMessage()) . "</div>";
+            $con_message = "<div class='alert alert-danger'>خطأ: " . htmlspecialchars($e->getMessage()) . "</div>";
         }
     }
 }

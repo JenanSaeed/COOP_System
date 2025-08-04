@@ -39,8 +39,6 @@ if ($status_filter === 'approved') {
     $where_clauses[] = "v.fin_approval = 'مقبول' AND v.man_approval = 'معتمد'";
 } elseif ($status_filter === 'rejected') {
     $where_clauses[] = "v.fin_approval = 'مرفوض' AND v.man_approval = 'معتمد'";
-} elseif ($status_filter === 'pending') {
-    $where_clauses[] = "v.fin_approval != 'معلق' AND v.man_approval = 'معلق'";
 }
 
 // Compose final WHERE clause
@@ -210,6 +208,10 @@ $current_query = http_build_query($_GET);
                 <tbody>
                 <?php foreach ($vacations as $vac): ?>
                     <?php
+
+                    if ($vac['fin_approval'] === 'معلق') {
+                        continue; // انتقل للسجل اللي بعده
+                    }
                         $fin_status = $vac['fin_approval'] === 'معلق' ? 
                             '<span class="status-badge status-pending">معلق</span>' :
                             ($vac['fin_approval'] === 'مقبول' ? 
