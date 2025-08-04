@@ -57,15 +57,17 @@ $name = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true
 <div class="index-buttons-container">
   <div class="index-buttons">
     <a href="<?= $vacationsLink ?>" class="index-btn">
-      🗓️ الإجازات
+      <i class="fas fa-calendar-alt"></i> الإجازات
     </a>
   </div>
   <div class="index-buttons">
     <a href="c-adminRec.php" class="index-btn">
-      📄 العقود
+      <i class="fas fa-file-contract"></i> العقود
     </a>
   </div>
 </div>
+
+
 </main>
 
 <?php include 'footer.php'; ?>
