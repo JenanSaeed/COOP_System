@@ -113,10 +113,10 @@ $conn->close();
             <p><strong>حالة الموافقة المالية:</strong> <?= htmlspecialchars($vacation['fin_approval']) ?></p>
         </div>
         <div class="form-buttons">
+            <button type="button" class="buttons" onclick="location.href='manMain.php'">إلغاء</button>
             <?php if ($vacation['man_approval'] === 'معلق'): ?>
             <button type="submit" name="approve" class="buttons">اعتماد</button>
             <?php endif; ?>
-            <button type="button" class="buttons" onclick="location.href='manMain.php'">إلغاء</button>
         </div>
     </form>
 </div>
