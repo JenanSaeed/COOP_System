@@ -189,7 +189,7 @@ $current_query = http_build_query($_GET);
                                 <a href="empVacDet2.php?vac_id=<?= $vac['vac_id'] ?>&<?= $current_query ?>" class="btn-det">تفاصيل</a>
                                 <?php if (($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد') || 
                                         ($vac['fin_approval'] === 'مرفوض' && $vac['man_approval'] === 'معتمد')): ?>
-                                <a href="v-pdf.php?vac_id=<?= urlencode($vacation['vac_id']) ?>" class="btn-prnt" target="_blank">PDF</a>
+                                <a href="v-pdf.php?vac_id=<?= urlencode($vac['vac_id']) ?>" class="btn-prnt" target="_blank">PDF</a>
                                 <?php endif; ?>   
                                 <?php if ($vac['man_approval'] === 'معلق' && $vac['fin_approval'] === 'معلق'): ?>
                                 <form method="POST" style="margin: 0;">

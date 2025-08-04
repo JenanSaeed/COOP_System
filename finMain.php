@@ -152,7 +152,7 @@ $current_query = http_build_query($_GET);
         <div class="alert alert-info">لا توجد طلبات إجازة</div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="vacation-table table table-bordered text-center" style="min-width: 600px;">
+            <table class="vacation-table table-bordered text-center" style="min-width: 600px;">
                 <thead class="table-light">
                     <tr>
                         <th>اسم الموظف</th>
@@ -183,8 +183,7 @@ $current_query = http_build_query($_GET);
                                 <a href="empVacDet1.php?vac_id=<?= $vac['vac_id'] ?>&<?= $current_query ?>" class="btn-det">تفاصيل</a>
                                 <?php if (($vac['fin_approval'] === 'مقبول' && $vac['man_approval'] === 'معتمد') || 
                                         ($vac['fin_approval'] === 'مرفوض' && $vac['man_approval'] === 'معتمد')): ?>
-                                <a href="v-pdf.php?vac_id=<?= urlencode($vacation['vac_id']) ?>" class="btn-prnt" target="_blank">PDF</a>
-                                <a href="empVacDet3.php?vac_id=<?= $vac['vac_id'] ?>&<?= $current_query ?>" class="btn-prnt" target="_blank">PDF</a>
+                                <a href="v-pdf.php?vac_id=<?= urlencode($vac['vac_id']) ?>" class="btn-prnt" target="_blank">PDF</a>
                                 <?php endif; ?>
                             </td>
                         </tr>
