@@ -1,6 +1,6 @@
 /*------------------------ General Styles ------------------------*/
 body {
-  background-color: #f0f2f5;
+  background-color: #ebe4e4;
   font-family: 'Tajawal', sans-serif;
   line-height: 1.6;
 
@@ -30,6 +30,7 @@ html, body {
 }
 /*------------------------ Header ------------------------*/
 header {
+  position: relative; /* مهم علشان يتمركز .main-nav داخله */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,8 +46,9 @@ header {
 
 /* Navigation */
 .main-nav {
-  display: flex;
-  gap: 40px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav-links,
@@ -56,14 +58,17 @@ header {
   gap: 30px;
   margin: 0;
   padding: 0;
+  gap: 30px;
 }
 
 .nav-links li a,
 .logging li a,
 .logged {
-  color: white;
   text-decoration: none;
+  color: white;
   font-size: 18px;
+  font-weight: bold;
+  transition: color 0.3s;
 }
 
 .nav-links li a:hover,
@@ -89,29 +94,59 @@ footer {
   justify-content: center;
   align-items: center;
   height: calc(100vh - 140px);
-  background-color: #f9f9f9;
+  background-color: #ebebeb;
 }
 
+.index-buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
 
 .index-buttons {
-  display: flex;
-  gap: 40px;
-  flex-wrap: wrap;
-  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
 }
 
 .index-btn {
-  padding: 5rem 6rem;
-  background-color: #2e4f49;
+  display: block;
+  background-color: #1f4e46;
   color: white;
+  padding: 60px 80px; /* أكبر حجم للزر */
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 20px;
   text-decoration: none;
-  border-radius: 10px;
-  font-size: 2rem;
-  transition: background-color 0.3s ease;
+  transition: 0.3s ease-in-out;
+  text-align: center;
+  min-width: 240px; /* ثبات الحجم */
+}
+
+.index-btn:hover {
+  background-color: #2f6b5e;
+  transform: translateY(-5px);
+}
+
+.index-btn {
+  display: block;
+  background-color: #1f4e46;
+  color: white;
+  padding: 60px 80px; /* أكبر حجم للزر */
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: 0.3s ease-in-out;
+  text-align: center;
+  min-width: 240px; /* ثبات الحجم */
 }
 
 .index-btn:hover {
   background-color: #856404;
+  transform: translateY(-5px);
 }
 
 /* -------------------------- Contracts Main ------------------*/
@@ -750,4 +785,20 @@ th {
 .dropdown-menu .dropdown-item:hover {
   background-color: #e0f0ff; /* لون عند الهوفر */
   color: #000; /* خط أوضح عند الهوفر */
+}
+
+.welcome-box {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.welcome-box h3 {
+  color: #184c45;
+  font-weight: bold;
+}
+.home-main {
+  margin-top: 0 !important;
+  padding-top: 10px; /* أو حسب ما يناسبك */
 }

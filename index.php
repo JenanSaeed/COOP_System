@@ -43,14 +43,31 @@
 ?>
 
 <main class="home-main">
+<?php
+$name = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true
+  ? ($_SESSION['name'] ?? 'المستخدم')
+  : 'الزائر';
+?>
+<div class="welcome-box text-center mb-4">
+  <h3>مرحبًا بك، <?= htmlspecialchars($name) ?> 👋</h3>
+   <p class="text-muted">مرحبًا بك في منصتنا الإلكترونية! هنا يمكنك تقديم الإجازات، ومتابعة حالة العقود، وكل ذلك بخطوات سهلة وآمنة!</p>
+  <p class="text-muted">ابدأ باختيار الخدمة المطلوبة أدناه.</p>
+</div>
+
+<div class="index-buttons-container">
   <div class="index-buttons">
     <a href="<?= $vacationsLink ?>" class="index-btn">
-      🗓️ الإجازات
-    </a>
-    <a href="c-adminRec.php" class="index-btn">
-      📄 العقود
+      <i class="fas fa-calendar-alt"></i> الإجازات
     </a>
   </div>
+  <div class="index-buttons">
+    <a href="c-adminRec.php" class="index-btn">
+      <i class="fas fa-file-contract"></i> العقود
+    </a>
+  </div>
+</div>
+
+
 </main>
 
 <?php include 'footer.php'; ?>
