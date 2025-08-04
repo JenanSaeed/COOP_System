@@ -2,26 +2,46 @@
 session_start();
 include 'db_connect.php';
 
-$con_id = $_GET['con_id'] ?? ($_SESSION['contract_code'] ?? null);
-
+$con_id = $_GET['id'] ?? ($_SESSION['contract_code'] ?? null);
 if (!$con_id) {
     die("عذرًا، لم يتم تمرير رمز العقد.");
 }
 
-// استعلام العقد
-$sql = "SELECT * FROM contract WHERE con_id = ?";
-$stmt = $conn->prepare($sql);
+// جلب بيانات العقد
+$stmt = $conn->prepare("SELECT * FROM contract WHERE con_id = ?");
 $stmt->bind_param("s", $con_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $contract = $result->fetch_assoc();
-
 if (!$contract) {
     die("عذرًا، لم يتم العثور على بيانات العقد.");
 }
+
 // حذف الرسائل بعد عرضها لمرة واحدة
 unset($_SESSION['success_message'], $_SESSION['error_message']);
 
+// جلب نوع العقد من بيانات العقد
+$contract_type = $contract['con_type'];
+
+// جلب الشروط
+$stmt2 = $conn->prepare("SELECT con_terms, extra_terms FROM terms WHERE con_type = ?");
+$stmt2->bind_param("s", $contract_type);
+$stmt2->execute();
+$result2 = $stmt2->get_result();
+$terms = $result2->fetch_assoc();
+
+// جلب بيانات الطرف الأول
+$firstParty = null;
+if (!empty($contract['1st_party'])) {
+    $stmt3 = $conn->prepare("SELECT * FROM employee WHERE name = ?");
+    $stmt3->bind_param("s", $contract['1st_party']);
+    $stmt3->execute();
+    $result3 = $stmt3->get_result();
+    $firstParty = $result3->fetch_assoc();
+}
+?>
+
+<?php
 //----- reqiured for sending invite via email----
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
@@ -29,54 +49,7 @@ require 'PHPMailer/src/Exception.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$contract_code = $_SESSION['contract_code'] ?? null;
-$contract_type = $_SESSION['contract_type'] ?? null;
-$emp_id=$_SESSION['emp_id']??null;
 
-
-if(!empty($contract_code)&&!empty($contract_type)){
-$stmt = $conn->prepare("SELECT * FROM contract WHERE con_id = ?");
-$stmt->bind_param("s", $contract_code);
-$stmt->execute();
-$result = $stmt->get_result();
-$contract_code = $_SESSION['contract_code'] ?? null;
-$contract_type = $_SESSION['contract_type'] ?? null;
-$emp_id = $_SESSION['emp_id'] ?? null;
-
-// لا تعيدي جلب بيانات العقد إن كانت موجودة مسبقًا
-if (!empty($contract_code) && !empty($contract_type) && $contract_code == $con_id) {
-    // لا حاجة لإعادة جلب $contract، لأنه جُلب مسبقًا من $_GET['con_id']
-
-    // جلب الشروط
-    $stmt2 = $conn->prepare("SELECT con_terms, extra_terms FROM terms WHERE con_type = ?");
-    $stmt2->bind_param("s", $contract_type);
-    $stmt2->execute();
-    $result2 = $stmt2->get_result();
-    $terms = $result2->fetch_assoc();
-
-    // جلب الطرف الأول
-    $stmt3 = $conn->prepare("SELECT * FROM employee  WHERE name = ?");
-    $stmt3->bind_param("s", $contract['1st_party']);
-    $stmt3->execute();
-    $result3 = $stmt3->get_result();
-    $firstParty = $result3->fetch_assoc();
-}
-
-
-// --- Get contract terms based on type ---
-$stmt2 = $conn->prepare("SELECT con_terms, extra_terms FROM terms WHERE con_type = ?");
-$stmt2->bind_param("s", $contract_type);
-$stmt2->execute();
-$result2 = $stmt2->get_result();
-$terms = $result2->fetch_assoc();
-
-$stmt3 = $conn->prepare("SELECT * FROM employee  WHERE name = ?");
-$stmt3->bind_param("s", $contract['1st_party']);
-$stmt3->execute();
-$result3 = $stmt3->get_result();
-$firstParty= $result3->fetch_assoc();
-
-}
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
     $inviteEmail = $_POST['invite_email'];
@@ -99,28 +72,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
+        $mail->Host       = 'smtp.gmail.com'; //replace with your smpt
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'fatemah36618@gmail.com';
-        $mail->Password   = 'yzat lisb xubr ggvq';
+        $mail->Username   = 'fatemah36618@gmail.com'; //replace with your designated email
+        $mail->Password   = 'yzat lisb xubr ggvq';//replace with your password
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
         $mail->CharSet = 'UTF-8'; 
         $mail->Encoding = 'base64';
 
-        $mail->setFrom('fatemah36618@gmail.com', 'IAU learning center');
+        $mail->setFrom('fatemah36618@gmail.com', 'مركز التعليم المستمر');
         $mail->addAddress($inviteEmail);
         $mail->Subject = 'دعوة لمراجعة العقد';
         $mail->Body    = "يرجى مراجعة العقد عبر الرابط التالي:\n\n" . $link;
 
         $mail->send();
         $_SESSION['success_message'] = "✅ تم إرسال الدعوة بنجاح.";
-        header("Location: " . $_SERVER['PHP_SELF'] . "?con_id=" . $contractId); // Refresh
+        header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $contractId); // Refresh
         exit();
     } catch (Exception $e) {
         $_SESSION['error_message'] = "❌ حدث خطأ أثناء الإرسال: " . $mail->ErrorInfo;
-        header("Location: " . $_SERVER['PHP_SELF'] . "?con_id=" . $contractId);
+        header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $contractId);
         exit();
     }
 }

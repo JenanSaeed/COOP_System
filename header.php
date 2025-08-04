@@ -64,9 +64,15 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
         <i class="fa-solid fa-user"></i> <?= htmlspecialchars($_SESSION['name']) ?>
       </a>
       <ul class="dropdown-menu dropdown-menu-end text-end" aria-labelledby="userDropdown">
-        <li><a class="dropdown-item" href="c-adminProfile.php">الملف الشخصي</a></li>
-        <li><a class="dropdown-item" href="logout.php">تسجيل الخروج</a></li>
-      </ul>
+    <li><a class="dropdown-item" href="c-adminProfile.php">الملف الشخصي</a></li>
+
+    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'manager'): ?>
+        <li><a class="dropdown-item" href="manDashboard.php">إعدادات المدير</a></li>
+    <?php endif; ?>
+
+    <li><a class="dropdown-item" href="logout.php">تسجيل الخروج</a></li>
+</ul>
+
     </div>
   <?php else: ?>
     <a class="logged" href="login.php"><i class="fa-solid fa-user"></i></a>

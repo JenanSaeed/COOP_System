@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("جميع حقول العقد مطلوبة");
             }
 
-            $stmt = $conn->prepare("INSERT INTO contract_type (con_type, con_terms, extra_terms) VALUES (?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO terms (con_type, con_terms, extra_terms) VALUES (?, ?, ?)");
             if (!$stmt) throw new Exception("تحضير الاستعلام فشل: " . $conn->error);
             $stmt->bind_param("sss", $con_type, $con_terms, $extra_terms);
             if (!$stmt->execute()) throw new Exception("فشل تنفيذ الاستعلام: " . $stmt->error);
