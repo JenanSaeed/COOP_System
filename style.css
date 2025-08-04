@@ -30,6 +30,7 @@ html, body {
 }
 /*------------------------ Header ------------------------*/
 header {
+  position: relative; /* مهم علشان يتمركز .main-nav داخله */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,8 +46,9 @@ header {
 
 /* Navigation */
 .main-nav {
-  display: flex;
-  gap: 40px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav-links,
@@ -56,14 +58,17 @@ header {
   gap: 30px;
   margin: 0;
   padding: 0;
+  gap: 30px;
 }
 
 .nav-links li a,
 .logging li a,
 .logged {
-  color: white;
   text-decoration: none;
+  color: white;
   font-size: 18px;
+  font-weight: bold;
+  transition: color 0.3s;
 }
 
 .nav-links li a:hover,
