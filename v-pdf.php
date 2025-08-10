@@ -59,6 +59,10 @@ $eligibility = match($vac['fin_approval']) {
 $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8');
 $pdf->SetTitle('نموذج الإجازة');
 $pdf->SetMargins(10, 10, 10);
+
+$pdf->setPrintHeader(false);
+$pdf->setPrintFooter(false); 
+
 $pdf->AddPage();
 $pdf->SetFont('aealarabiya', '', 11);
 
@@ -76,6 +80,9 @@ $mgr_sig_path = createImageFile($manager_signature, 'mgr');
 // HTML
 ob_start();
 ?>
+<div style="height: 90px;"> <br><br><br></div>
+<hr style="margin:20px 0; border:1px solid #666;">
+
 <div style="direction: rtl; text-align: right; font-size: 11px;">
     <h4>خاص بالموظفـ/ـة:</h4>
     <p>
@@ -92,13 +99,11 @@ ob_start();
     <p>توقيع الموظف:</p>
     <?php if ($emp_sig_path): ?>
         <img src="<?= $emp_sig_path ?>" width="60">
-    <?php else: ?>
-        ____________
     <?php endif; ?>
     <p>تاريخ التقديم: <?= $vac['application_date'] ?></p>
     <p>الشخص المكلف أثناء الإجازة: <?= $vac['assigned_emp'] ?> | التوقيع: ______________</p>
 
-    <hr>
+<hr style="margin:20px 0; border:1px solid #666;">
 
     <h4>خاص بالشؤون الإدارية والمالية:</h4>
     <p>رصيد الإجازات المستخدم: <?= $vac['used_days'] ?> يوم</p>
@@ -112,20 +117,19 @@ ob_start();
     <p>مدير الشؤون الإدارية والمالية:</p>
     <?php if ($fin_sig_path): ?>
         <img src="<?= $fin_sig_path ?>" width="60">
-    <?php else: ?>
-        ___________________________________________
     <?php endif; ?>
 
-    <hr>
+<hr style="margin:20px 0; border:1px solid #666;">
 
     <h4>اعتماد صاحب الصلاحية:</h4>
     <p>مديرة مركز التعليم المستمر:</p>
     <?php if ($mgr_sig_path): ?>
         <img src="<?= $mgr_sig_path ?>" width="60">
-    <?php else: ?>
-        ___________________________________________
     <?php endif; ?>
+        <hr style="margin:100px 0; border:1px solid #666;">
+    <div style="height: 80px;"> <br><br><br></div>
 </div>
+
 <?php
 $html = ob_get_clean();
 $pdf->writeHTML($html, true, false, true, false, '');

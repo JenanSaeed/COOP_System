@@ -100,12 +100,15 @@ $pdf->SetAuthor('نظام العقود');
 $pdf->SetTitle('عقد');
 $pdf->SetMargins(15, 15, 15);
 $pdf->setRTL(true);
+$pdf->setPrintHeader(false);
+$pdf->setPrintFooter(false); 
 $pdf->AddPage();
 $pdf->SetFont('aealarabiya', '', 14);
 
 // 6. Content
 $html = '
-<h2 align="center">جامعة الإمام عبدالرحمن بن فيصل<br>مركز التعليم المستمر</h2>
+    <div style="height: 70px;"><br></div>
+    <hr style="margin:100px 0; border:1px solid #666;">
 <h3 align="center">نموذج عقد</h3>
 
 <table border="1" cellpadding="6" cellspacing="0" width="100%">
@@ -175,6 +178,8 @@ $html .= '
     </td>
 </tr>
 </table>
+    <hr style="margin:100px 0; border:1px solid #666;">
+    <div style="height: 80px;"> <br><br><br></div>
 ';
 
 $pdf->writeHTML($html, true, false, true, false, '');

@@ -6,13 +6,24 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit();
 }
 
+require_once "db_connect.php"; // make sure this file connects to your DB
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contract_type'])) {
     $_SESSION['contract_type'] = trim($_POST['contract_type']);
     header("Location: c-adminForm.php");
     exit();
 }
-?>
 
+// Retrieve contract types from DB
+$contracts = [];
+$sql = "SELECT con_type FROM terms ORDER BY con_type ASC";
+$result = $conn->query($sql);
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $contracts[] = $row['con_type'];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -23,30 +34,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contract_type'])) {
 </head>
 <body>
 
-<?php
-  include 'header.php';
-?>
+<?php include 'header.php'; ?>
 
 <main class="home-main">
-  <!-- The heading placed outside of the button groups -->
   <div style="text-align: center; margin-bottom: 20px;">
     <h2>الرجاء اختيار نوع العقد:</h2>
   </div>
 
   <form action="" method="POST" style="display:inline-block;">
     <div class="form-buttons">
-      <button type="submit" name="contract_type" value="عقد تقديم خدمات" class="home-btn">عقد تقديم خدمات</button>
-      
-      <button type="submit" name="contract_type" value="(عقد تقديم خدمات (الدبلومات المهنية" class="home-btn">عقد تقديم خدمات (الدبلومات المهنية)</button>
-        
-      <button type="submit" name="contract_type" value="عقد عمل تعاوني (منسوبي الجامعة)" class="home-btn">عقد عمل تعاوني (منسوبي الجامعة)</button>
-        
-      <button type="submit" name="contract_type" value="عقد تدريب بنظام المكافأة الشهرية" class="home-btn">عقد تدريب بنظام المكافأة الشهرية</button>
-        
-      <button type="submit" name="contract_type" value="عقد التدريب (الدورات)" class="home-btn">عقد  التدريب (الدورات)</button>
+      <?php foreach ($contracts as $type): ?>
+        <button type="submit" name="contract_type" value="<?php echo htmlspecialchars($type); ?>" class="home-btn">
+          <?php echo htmlspecialchars($type); ?>
+        </button>
+      <?php endforeach; ?>
     </div>
   </form>
-
 </main>
 
 <?php include 'footer.php'; ?>
