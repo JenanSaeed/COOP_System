@@ -52,6 +52,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $destPath = $uploadDir . 'sign.png'; // Always save as 'sign.png'
 
     if (move_uploaded_file($fileTmpPath, $destPath)) {
+        // ✅ تحويل الصورة PNG إلى JPEG (لإزالة الشفافية)
+            $image = imagecreatefrompng($destPathPng);
+            if ($image) {
+                $bg = imagecreatetruecolor(imagesx($image), imagesy($image));
+                $white = imagecolorallocate($bg, 255, 255, 255);
+                imagefilledrectangle($bg, 0, 0, imagesx($image), imagesy($image), $white);
+                imagecopy($bg, $image, 0, 0, 0, 0, imagesx($image), imagesy($image));
+                imagejpeg($bg, $destPathJpg, 100);
+                imagedestroy($image);
+                imagedestroy($bg);
+                unlink($destPathPng); // حذف نسخة PNG
+            }
       // Prepare data from POST
       $con_id = $_POST['con_id'];
       $id_number = $_POST['id_number'];
