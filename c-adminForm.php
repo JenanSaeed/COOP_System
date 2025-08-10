@@ -106,7 +106,7 @@ while ($row = mysqli_fetch_assoc($query)) {
   <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
 </head>
 
-<body>
+<body class="bg-light">
 <?php include 'header.php' ?>
 
 <!-- القسم الأول -->

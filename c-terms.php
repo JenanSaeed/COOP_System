@@ -117,7 +117,7 @@ if (!empty($contract_type)) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
-<body>
+<body class="bg-light">
 <?php include 'header.php'; ?>
 <div class="t-container">
     <h3 class="mb-4">بنود العقد - <?= htmlspecialchars($contract_type) ?></h3>

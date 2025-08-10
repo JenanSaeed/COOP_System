@@ -193,7 +193,7 @@ $current_query = http_build_query($_GET);
         <div class="alert alert-info">لا توجد طلبات</div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="vacation-table">
+            <table class="vacation-table table-bordered text-center">
                 <thead>
                     <tr>
                         <th>رقم الطلب</th>

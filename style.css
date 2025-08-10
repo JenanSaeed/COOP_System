@@ -493,10 +493,6 @@ a.buttons:hover,
   margin-bottom: 20px;
 }
 
-.new-request-btn:hover {
-  background-color: #0056b3;
-}
-
 /*------------------------ Responsive ------------------------*/
 @media (max-width: 768px) {
   .vacation-table {

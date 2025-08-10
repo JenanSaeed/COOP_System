@@ -236,7 +236,7 @@ function isSelected($value, $selected) {
         <div class="alert alert-info">لا توجد عقود حاليًا</div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="vacation-table">
+            <table class="vacation-table table-bordered text-center">
                 <thead>
                     <tr>
                         <th>رقم العقد</th>

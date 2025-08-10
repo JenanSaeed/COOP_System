@@ -55,7 +55,7 @@ $conn->close();
 </head>
 
 
-<body>
+<body class="bg-light">
 <?php include 'header.php'; ?>
 
 <div class="r-container">

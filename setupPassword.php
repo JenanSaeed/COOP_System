@@ -67,7 +67,7 @@ $conn->close();
         .container { max-width: 600px; margin: auto; padding: 2rem; }
     </style>
 </head>
-<body>
+<body class="bg-light">
 <div class="container">
     <h2 class="mb-4 text-center">إعداد كلمة المرور</h2>
     <?= $message ?>

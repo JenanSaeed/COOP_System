@@ -68,7 +68,7 @@ $encryptedForNextPage = encrypt($contract['con_id'], $secretKey);
   <link rel="stylesheet" href="style.css" />
 </head>
 <?php include 'header.php' ?>
-<body>
+<body class="bg-light">
 <section id="contractFullView">
     <div class="form-box">
         <h2 class="form-title">مراجعة بيانات العقد</h2>

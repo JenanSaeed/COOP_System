@@ -129,7 +129,7 @@ $conn->close();
         textarea.form-control { min-height: 120px; }
     </style>
 </head>
-<body>
+<body class="bg-light">
 
 <?php include 'header.php'; ?>
 
@@ -167,7 +167,7 @@ $conn->close();
                         <input type="email" name="email" class="form-control" required value="<?= htmlspecialchars($email) ?>">
                     </div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary">إضافة الموظف</button>
+                        <button type="submit" class="new-request-btn">إضافة الموظف</button>
                     </div>
                 </div>
             </form>
@@ -192,7 +192,7 @@ $conn->close();
                         <textarea name="con_terms" class="form-control" required><?= htmlspecialchars($con_terms) ?></textarea>
                     </div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary">إضافة نوع العقد</button>
+                        <button type="submit" class="new-request-btn">إضافة نوع العقد</button>
                     </div>
                 </div>
             </form>

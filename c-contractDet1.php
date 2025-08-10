@@ -2,6 +2,12 @@
 session_start();
 include 'db_connect.php';
 
+$success_message = $_SESSION['success_message'] ?? '';
+$error_message = $_SESSION['error_message'] ?? '';
+
+// حذف الرسائل من السيشن بعد الحفظ
+unset($_SESSION['success_message'], $_SESSION['error_message']);
+
 $con_id = $_GET['id'] ?? ($_SESSION['contract_code'] ?? null);
 if (!$con_id) {
     die("عذرًا، لم يتم تمرير رمز العقد.");
@@ -112,13 +118,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
 </head>
-<body>
+<body class="bg-light">
 
 
 <?php include 'header.php' ?>
 
 <section id="contractFullView">
   <div class="r-container">
+
+   <!-- رسائل النجاح والخطأ --> 
+<div>
+<?php if (!empty($success_message)): ?>
+  <div class="alert alert-success text-center mt-3">
+    <?= $success_message ?>
+  </div>
+<?php endif; ?>
+
+<?php if (!empty($error_message)): ?>
+  <div class="alert alert-danger text-center mt-3">
+    <?= $error_message ?>
+  </div>
+<?php endif; ?>
+</div>
+
     <h2 class="form-title">مراجعة بيانات العقد</h2>
 
     <!-- التاريخ واليوم -->
@@ -242,26 +264,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['send_invite'])) {
 <a class="buttons" href="c-adminRec.php">متابعة إلى سجل العقود</a>
 <button id="showInviteBtn" class="buttons">إرسال دعوة</button>
 </div>
- <!-- رسائل النجاح والخطأ --> 
-<div>
-<?php if (!empty($success_message)): ?>
-  <div class="alert alert-success text-center mt-3">
-    <?= $success_message ?>
-  </div>
-<?php endif; ?>
 
-<?php if (!empty($error_message)): ?>
-  <div class="alert alert-danger text-center mt-3">
-    <?= $error_message ?>
-  </div>
-<?php endif; ?>
-</div>
 </section> 
 
 
 <!---جزء الدعوة---->
 <section id="inviteSection" style="display:none;">
-  <div class="form-box">
+  <div class="r-container">
     <h2 class="form-title">إرسال دعوة للطرف الثاني</h2>
     <form method="POST" action="" accept-charset="UTF-8">
       <div class="form-group">
