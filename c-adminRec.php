@@ -109,6 +109,33 @@ try {
     $error = "حدث خطأ أثناء تحميل العقود: " . $e->getMessage();
 }
 
+//fetch second party
+try {
+    $sql = "SELECT 
+        id,
+        id_number,
+        con_id,
+        name,
+        role,
+        nationality,
+        issue_place,
+        expiry_date,
+        address,
+        phone,
+        email,
+        bank,
+        iban
+    FROM second_party";
+
+    $result = $conn->query($sql);
+    $secondParty = [];
+    while ($row = $result->fetch_assoc()) {
+        $secondParty[$row['con_id']] = $row; // نخزن حسب con_id لسهولة الوصول
+    }
+} catch (Exception $e) {
+    $error = "حدث خطأ أثناء تحميل بيانات الطرف الثاني: " . $e->getMessage();
+}
+
 $conn->close();
 
 $role = $_SESSION['role'] ?? null;
@@ -254,7 +281,7 @@ function isSelected($value, $selected) {
                         <td><?= htmlspecialchars($con['con_id']) ?></td>
                         <td><?= htmlspecialchars($con['con_date']) ?></td>
                         <td><?= htmlspecialchars($con['1st_party']) ?></td>
-                        <td><?= htmlspecialchars($con['2nd_party']) ?></td>
+                        <td><?= isset($secondParty[$con['con_id']]) ? htmlspecialchars($secondParty[$con['con_id']]['name']) : '' ?></td>
                         <td><?= htmlspecialchars($con['program_name']) ?></td>
                         <td><?= htmlspecialchars($con['program_id']) ?></td>
                         <td class="d-flex gap-2 justify-content-center flex-wrap">
