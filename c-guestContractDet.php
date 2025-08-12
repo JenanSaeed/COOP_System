@@ -87,37 +87,38 @@ $encryptedForNextPage = encrypt($contract['con_id'], $secretKey);
         <p>العنوان: <?= htmlspecialchars($firstParty['address']) ?></p>
         <p>رقم الهاتف: <?= htmlspecialchars($firstParty['phone']) ?></p>
         <p>البريد الإلكتروني: <?= htmlspecialchars($firstParty['email']) ?></p>
- <!-- الشروط -->
-    <hr>
-    <h3>بنود العقد</h3>
-    <div class="form-group">
-  <ul>
-    <?php
-    if (!empty($terms['con_terms'])) {
-      $conTermsList = preg_split('/\r\n|\n|\r|•|-/', $terms['con_terms']);
-      foreach ($conTermsList as $term) {
-        $term = trim($term);
-        if (!empty($term)) {
-          echo '<li>' . htmlspecialchars($term) . '</li>';
-        }
-      }
-    }
-    if (!empty($terms['extra_terms'])) {
-      $extraTermsList = preg_split('/\r\n|\n|\r|•|-/', $terms['extra_terms']);
-      foreach ($extraTermsList as $term) {
-        $term = trim($term);
-        if (!empty($term)) {
-          echo '<li>' . htmlspecialchars($term) . '</li>';
-        }
-      }
-    }
-    ?>
-  </ul>
+    <!-- الشروط -->
+        <hr>
+        <h3>بنود العقد</h3>
+        <div class="form-group">
+        <ul>
+          <?php
+          if (!empty($terms['con_terms'])) {
+            $conTermsList = preg_split('/\r\n|\n|\r|•|-/', $terms['con_terms']);
+            foreach ($conTermsList as $term) {
+              $term = trim($term);
+              if (!empty($term)) {
+                echo '<li>' . htmlspecialchars($term) . '</li>';
+              }
+            }
+          }
+          if (!empty($terms['extra_terms'])) {
+            $extraTermsList = preg_split('/\r\n|\n|\r|•|-/', $terms['extra_terms']);
+            foreach ($extraTermsList as $term) {
+              $term = trim($term);
+              if (!empty($term)) {
+                echo '<li>' . htmlspecialchars($term) . '</li>';
+              }
+            }
+          }
+          ?>
+        </ul>
+        <div class="form-buttons">
+        <a href="c-guestSign.php?id=<?= $encryptedForNextPage ?>" class="nextCD">التالي</a>
+        </div> 
     </div>
 </section>  
-<div class="button-container">
-  <a href="c-guestSign.php?id=<?= $encryptedForNextPage ?>" class="nextCD">التالي</a>
-</div>  
+ 
 </br>
 
 </body>

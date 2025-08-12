@@ -277,11 +277,11 @@ function isSelected($value, $selected) {
                 </thead>
                 <tbody>
                     <?php foreach ($contracts as $con): ?>
-                    <tr data-href="c-adminForm1.php?con_id=<?= urlencode($con['con_id']) ?>&return_url=c-adminRec.php" onclick="window.location=this.dataset.href" style="cursor:pointer;">
+                    <tr>
                         <td><?= htmlspecialchars($con['con_id']) ?></td>
                         <td><?= htmlspecialchars($con['con_date']) ?></td>
                         <td><?= htmlspecialchars($con['1st_party']) ?></td>
-                        <td><?= isset($secondParty[$con['con_id']]) ? htmlspecialchars($secondParty[$con['con_id']]['name']) : '' ?></td>
+                        <td><a href="c-guestDet.php?id=<?= $con['con_id'] ?>" class="btn-det">بيانات الطرف الثاني</a></td>
                         <td><?= htmlspecialchars($con['program_name']) ?></td>
                         <td><?= htmlspecialchars($con['program_id']) ?></td>
                         <td class="d-flex gap-2 justify-content-center flex-wrap">
